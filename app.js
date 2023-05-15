@@ -11,11 +11,11 @@ const db = require('./config/db');
 db.connect();
 
 //Config notification
-// const admin = require('firebase-admin');
-// const serviceAccount = require('./firebaseAdminSdk.json');
-// admin.initializeApp({
-//   credential: admin.credential.cert(serviceAccount),
-// });
+const admin = require('firebase-admin');
+const serviceAccount = require('./firebaseAdminSdk.json');
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
