@@ -5,6 +5,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 var app = express();
+//Anh moi them dong nay
 
 //Connect db from config/db
 const db = require('./config/db');
