@@ -6,9 +6,9 @@ const get_picture = async (_idPic) => {
     return picture;
 };
 
-//Lay pictures theo idProduct
-const get_pictures_by_idProduct = async (idProduct) => {
-    const pictures = await picture_model.find({ idProduct: idProduct });
+//Lay pictures theo idSubProduct
+const get_pictures_by_idProduct = async (idSubProduct) => {
+    const pictures = await picture_model.find({ idSubProduct: idSubProduct });
     return pictures;
 };
 
@@ -19,8 +19,8 @@ const get_pictures_by_idReview = async (idReview) => {
 };
 
 // Them picture
-const add_picture = async (url, idProduct, idReview) => {
-    const picture = new picture_model({ url, idProduct, idReview });
+const add_picture = async (url, idSubProduct, idReview) => {
+    const picture = new picture_model({ url, idSubProduct, idReview });
     await picture.save();
     return picture;
 };

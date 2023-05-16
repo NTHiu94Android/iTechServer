@@ -12,6 +12,16 @@ const add_review = async (req, res) => {
     }
 };
 
+//Lat tat ca review
+const get_all_review = async () => {
+    try {
+        const review = await reviewService.get_all_review();
+        return review;
+    } catch (error) {
+        console.log("Error get all review: " + error.message);
+    }
+};
+
 //Lay review theo idProduct
 const get_review_by_idProduct = async (idProduct) => {
     try {
@@ -23,5 +33,5 @@ const get_review_by_idProduct = async (idProduct) => {
 };
 
 module.exports = {
-    add_review, get_review_by_idProduct,
+    add_review, get_review_by_idProduct, get_all_review
 };

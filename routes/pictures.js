@@ -22,10 +22,10 @@ router.get('/api/get-picture-by-id/:id', [authen], async (req, res) => {
 
 //Lay pictures theo idProduct
 //http://localhost:3000/picture//get-pictures-by-idProduct/5f9f1b0b0b2b2c2b8c8c8c8c
-router.get('/api/get-pictures-by-idProduct/:idProduct', [authen], async (req, res) => {
+router.get('/api/get-pictures-by-idSubProduct/:idSubProduct', [authen], async (req, res) => {
    try{
-      const idProduct = req.params.idProduct;
-      const pictures = await picture_controller.get_pictures_by_idProduct(idProduct);
+      const idSubProduct = req.params.idSubProduct;
+      const pictures = await picture_controller.get_pictures_by_idProduct(idSubProduct);
       res.json({ error: false, responeTime: new Date(), statusCode: 200, data: pictures });
    }catch(error){
       console.log('Error get pictures by idProduct: ' + error.message);
@@ -46,10 +46,10 @@ router.get('/api/get-pictures-by-idReview/:idReview', [authen], async (req, res)
 
 // Them picture
 //http://localhost:3000/picture/api/add-picture
-router.post('/api/add-picture', [authen], async (req, res) => {
+router.post('/api/add-picture', async (req, res) => {
    try{
-      const { url, idProduct, idReview } = req.body;
-      const picture = await picture_controller.add_picture(url, idProduct, idReview);
+      const { url, idSubProduct, idReview } = req.body;
+      const picture = await picture_controller.add_picture(url, idSubProduct, idReview);
       res.json({ error: false, responeTime: new Date(), statusCode: 200, data: picture });
    }catch(error){
       console.log('Error add picture: ' + error.message);

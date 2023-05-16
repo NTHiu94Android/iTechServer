@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const picture_model = new Schema({
   url: { type: String },
-  idProduct: { type: String },
+  idSubProduct: { type: String },
   idReview: { type: String }
 });
 

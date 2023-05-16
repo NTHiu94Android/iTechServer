@@ -11,9 +11,9 @@ const get_picture = async (_idPic) => {
 };
 
 //Lay pictures theo idProduct
-const get_pictures_by_idProduct = async (idProduct) => {
+const get_pictures_by_idProduct = async (idSubProduct) => {
     try {
-        const pictures = await picture_service.get_pictures_by_idProduct(idProduct);
+        const pictures = await picture_service.get_pictures_by_idProduct(idSubProduct);
         return pictures;
     } catch (error) {
         console.log('Error get pictures by idProduct: ' + error.message);
@@ -31,9 +31,9 @@ const get_pictures_by_idReview = async (idReview) => {
 };
 
 // Them picture
-const add_picture = async (url, idProduct, idReview, idMessage) => {
+const add_picture = async (url, idSubProduct, idReview, idMessage) => {
     try {
-        const picture = await picture_service.add_picture(url, idProduct, idReview, idMessage);
+        const picture = await picture_service.add_picture(url, idSubProduct, idReview, idMessage);
         return picture;
     } catch (error) {
         console.log('Error add picture: ' + error.message);

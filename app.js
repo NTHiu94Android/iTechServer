@@ -5,7 +5,6 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 var app = express();
-//Anh moi them dong nay
 
 //Connect db from config/db
 const db = require('./config/db');
@@ -31,14 +30,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/users', require('./routes/users'));
 app.use('/address', require('./routes/address'));
 app.use('/brands', require('./routes/brands'));
-app.use('/category', require('./routes/categories'));
+app.use('/categories', require('./routes/categories'));
 app.use('/order-details', require('./routes/order-details'));
 app.use('/orders', require('./routes/orders'));
 app.use('/pictures', require('./routes/pictures'));
 app.use('/products', require('./routes/products'));
 app.use('/promotions', require('./routes/promotions'));
 app.use('/reviews', require('./routes/reviews'));
-app.use('sub-products', require('./routes/sub-products'));
+app.use('/sub-products', require('./routes/sub-products'));
 
 
 

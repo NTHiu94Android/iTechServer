@@ -5,10 +5,22 @@ const sub_product_controller = require('../models/sub-product/subProductControll
 const authen = require('../middleware/auth');
 
 //----------------------Api-----------------------------------------
-//Lay subProducts theo idProduct
-router.get('/api/getSubProductsByIdProduct', [authen], async (req, res) => {
+
+//Lay tat ca subProducts
+router.get('/api/get-all-sub-products', [authen], async (req, res) => {
     try {
-        const subProducts = await sub_product_controller.onGetSubProductsByIdProduct();
+        const subProducts = await sub_product_controller.onGetSubProducts();
+        res.json({ error: false, responeTime: new Date(), statusCode: 200, data: subProducts });
+    } catch (error) {
+        console.log('Error get products: ' + error.message);
+    }
+});
+
+//Lay subProducts theo idProduct
+router.get('/api/get-sub-products-by-id-product/:idProduct', [authen], async (req, res) => {
+    try {
+        const idProduct = req.params.idProduct;
+        const subProducts = await sub_product_controller.onGetSubProductsByIdProduct(idProduct);
         res.json({ error: false, responeTime: new Date(), statusCode: 200, data: subProducts });
     } catch (error) {
         console.log('Error get products: ' + error.message);
@@ -17,7 +29,7 @@ router.get('/api/getSubProductsByIdProduct', [authen], async (req, res) => {
 
 //----------------------Admin cpanel (res.render)-----------------------------------------
 //Cap nhat subProduct
-router.post('/cpanel/updateSubProduct', [authen], async (req, res) => {
+router.post('/cpanel/update-sub-product', [authen], async (req, res) => {
     try {
         const {
             _id, price, description, quantity, color, sale,
@@ -34,7 +46,7 @@ router.post('/cpanel/updateSubProduct', [authen], async (req, res) => {
 });
 
 //Add subProduct
-router.post('/cpanel/addProduct', [authen], async (req, res) => {
+router.post('/cpanel/add-sub-product',  async (req, res) => {
     try {
         const {
             price, description, quantity, color, sale,

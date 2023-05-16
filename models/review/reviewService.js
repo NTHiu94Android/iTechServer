@@ -12,6 +12,12 @@ const add_review = async (content, rating, idUser, idProduct) => {
     return result;
 };
 
+//Lat tat ca review
+const get_all_review = async () => {
+    const result = await reviewModel.find();
+    return result;
+};
+
 //Lay review theo idProduct
 const get_review_by_idProduct = async (idProduct) => {
     const result = await reviewModel.find({ idProduct: idProduct });
@@ -19,5 +25,5 @@ const get_review_by_idProduct = async (idProduct) => {
 };
 
 module.exports = {
-    add_review, get_review_by_idProduct,
+    add_review, get_review_by_idProduct, get_all_review
 };
