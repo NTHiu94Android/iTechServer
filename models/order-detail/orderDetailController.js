@@ -13,10 +13,10 @@ const get_order_detail_by_idOrder = async (_idOrder) => {
 
 
 //Add order_detail
-const add_order_detail = async (quantity, idOrder, idProduct) => {
+const add_order_detail = async (quantity, idOrder, idSubProduct) => {
     try {
         const order_detail = await order_detail_service
-            .add_order_detail(quantity, idOrder, idProduct);
+            .add_order_detail(quantity, idOrder, idSubProduct);
         return order_detail;
     } catch (error) {
         console.log('Error add order detail: ' + error.message);
@@ -34,10 +34,10 @@ const delete_order_detail = async (_id) => {
 };
 
 //Update order_detail
-const update_order_detail = async (_id, quantity, idOrder, idProduct) => {
+const update_order_detail = async (_id, quantity, idOrder, idSubProduct) => {
     try {
         const order_detail_update = await order_detail_service
-            .update_order_detail(_id, quantity, idOrder, idProduct);
+            .update_order_detail(_id, quantity, idOrder, idSubProduct);
         return order_detail_update;
     } catch (error) {
         console.log('Error update order detail: ' + error.message);

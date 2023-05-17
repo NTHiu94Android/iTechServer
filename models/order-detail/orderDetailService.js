@@ -7,8 +7,8 @@ const get_order_detail_by_idOrder = async (_idOrder) => {
 };
 
 //Add order_detail
-const add_order_detail = async (quantity, idOrder, idProduct) => {
-    const order_detail = new order_detail_model({ quantity, idOrder, idProduct });
+const add_order_detail = async (quantity, idOrder, idSubProduct) => {
+    const order_detail = new order_detail_model({ quantity, idOrder, idSubProduct });
     await order_detail.save();
     return order_detail;
 };
@@ -20,9 +20,9 @@ const delete_order_detail = async (_id) => {
 };
 
 //Update order_detail
-const update_order_detail = async (_id, quantity, idOrder, idProduct) => {
+const update_order_detail = async (_id, quantity, idOrder, idSubProduct) => {
     const order_detail_update = order_detail_model.findByIdAndUpdate(_id,
-        { quantity, idOrder, idProduct }
+        { quantity, idOrder, idSubProduct }
     );
     return order_detail_update;
 };

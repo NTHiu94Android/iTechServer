@@ -11,10 +11,10 @@ const get_order_by_idUser = async (_idUser) => {
 };
 
 // add order
-const add_order = async (orderDate, totalPrice, status, quantity, idUser) => {
+const add_order = async (dateCreate, totalPrice, status, paymentMethod, address, idUser) => {
     try {
         const order = await order_service
-            .add_order(orderDate, totalPrice, status, quantity, idUser);
+            .add_order(dateCreate, totalPrice, status, paymentMethod, address, idUser);
         return order;
     } catch (error) {
         console.log('Error add order: ' + error.message);
@@ -22,10 +22,10 @@ const add_order = async (orderDate, totalPrice, status, quantity, idUser) => {
 };
 
 //update order
-const update_order = async (_id, orderDate, totalPrice, status, quantity, idUser) => {
+const update_order = async (_id, dateCreate, totalPrice, status, paymentMethod, address, idUser) => {
     try {
         const order_update = await order_service
-            .update_order(_id, orderDate, totalPrice, status, quantity, idUser);
+            .update_order(_id, dateCreate, totalPrice, status, paymentMethod, address, idUser);
         return order_update;
     } catch (error) {
         console.log('Error update order: ' + error.message);
