@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 
 const order_model = new Schema({
   dateCreate: { type: String },
+  datePayment: { type: String, default: '' },
   totalPrice: { type: Number },
   status: { type: String },
   paymentMethod: { type: String },

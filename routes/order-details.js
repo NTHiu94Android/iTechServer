@@ -19,7 +19,7 @@ router.get('/api/get-order-detail-by-idOrder/:idOrder', authen, async (req, res)
 router.post('/api/add-order-detail', authen, async (req, res) => {
     try {
         const order_detail = await order_detail_controller
-            .add_order_detail(req.body.quantity, req.body.idOrder, req.body.idSubProduct);
+            .add_order_detail(req.body.quantity, req.body.price, req.body.idOrder, req.body.idSubProduct);
         res.json({ error: false, responeTime: new Date(), statusCode: 200, data: order_detail });
     } catch (error) {
         res.json({ error: true, responeTime: new Date(), statusCode: 500, message: error.message });

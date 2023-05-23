@@ -13,10 +13,10 @@ const get_order_detail_by_idOrder = async (_idOrder) => {
 
 
 //Add order_detail
-const add_order_detail = async (quantity, idOrder, idSubProduct) => {
+const add_order_detail = async (quantity, price, idOrder, idSubProduct) => {
     try {
         const order_detail = await order_detail_service
-            .add_order_detail(quantity, idOrder, idSubProduct);
+            .add_order_detail(quantity, price, idOrder, idSubProduct);
         return order_detail;
     } catch (error) {
         console.log('Error add order detail: ' + error.message);

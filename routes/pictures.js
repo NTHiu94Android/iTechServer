@@ -8,6 +8,17 @@ const authen = require('../middleware/auth');
 
 const picture_controller = require('../models/picture/pictureController');
 
+//Lay tat ca picture
+//http://localhost:3000/picture/api/get-all-picture
+router.get('/api/get-all-picture', [authen], async (req, res) => {
+   try{
+      const pictures = await picture_controller.get_all_picture();
+      res.json({ error: false, responeTime: new Date(), statusCode: 200, data: pictures });
+   }catch(error){
+      console.log('Error get all picture: ' + error.message);
+   }
+});
+
 //Lay picture theo id
 //http://localhost:3000/picture/api/get_picture_by_id/5f9f1b0b0b2b2c2b8c8c8c8c
 router.get('/api/get-picture-by-id/:id', [authen], async (req, res) => {

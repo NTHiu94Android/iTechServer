@@ -72,8 +72,9 @@ router.post('/api/register', async function (req, res, next) {
       let today = day + '/' + month + '/' + year;
 
       //Tao cart va favorite
-      const cart = await order_controller.add_order(today, 0, 'cart', 0, user._id);
-      const favorite = await order_controller.add_order(today, 0, 'favorite', 0, user._id);
+      //dateCreate, datePayment, totalPrice, status, paymentMethod, address, idUser
+      const cart = await order_controller.add_order(today, today, 0, 'cart', '', '', user._id);
+      const favorite = await order_controller.add_order(today, today, 0, 'favorite', '', '', user._id);
       user.idCart = cart._id;
       user.idFavorite = favorite._id;
       user.save();

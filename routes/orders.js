@@ -7,9 +7,9 @@ const order_controller = require('../models/order/orderController');
 //http://localhost:3000/order/api/create-order
 router.post('/api/add-order', [authen], async function (req, res, next) {
     try {
-        const { dateCreate, totalPrice, status, paymentMethod, address, idUser } = req.body;
+        const { dateCreate, datePayment, totalPrice, status, paymentMethod, address, idUser } = req.body;
         const order = await order_controller
-            .add_order(dateCreate, totalPrice, status, paymentMethod, address, idUser);
+            .add_order(dateCreate, datePayment, totalPrice, status, paymentMethod, address, idUser);
         res.json({ error: false, responeTime: new Date(), statusCode: 200, data: order });
     } catch (error) {
         res.json({ error: true, responeTime: new Date(), statusCode: 500, message: error.message });
@@ -31,9 +31,9 @@ router.get('/api/get-orders-by-idUser/:idUser', [authen], async function (req, r
 //Cập nhật order
 router.post('/api/update-order', [authen], async function (req, res, next) {
     try {
-        const { _id, dateCreate, totalPrice, status, paymentMethod, address, idUser } = req.body;
+        const { _id, datePayment, status } = req.body;
         const order = await order_controller
-            .update_order( _id, dateCreate, totalPrice, status, paymentMethod, address, idUser);
+            .update_order( _id, datePayment, status);
         res.json({ error: false, responeTime: new Date(), statusCode: 200, data: order });
     } catch (error) {
         res.json({ error: true, responeTime: new Date(), statusCode: 500, message: error.message });

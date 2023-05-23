@@ -7,8 +7,8 @@ const get_order_detail_by_idOrder = async (_idOrder) => {
 };
 
 //Add order_detail
-const add_order_detail = async (quantity, idOrder, idSubProduct) => {
-    const order_detail = new order_detail_model({ quantity, idOrder, idSubProduct });
+const add_order_detail = async (quantity, price, idOrder, idSubProduct) => {
+    const order_detail = new order_detail_model({ quantity, price, idOrder, idSubProduct });
     await order_detail.save();
     return order_detail;
 };

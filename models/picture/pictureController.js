@@ -1,5 +1,15 @@
 const picture_service = require('../picture/pictureService');
 
+//Lay tat ca picture
+const get_all_picture = async () => {
+    try {
+        const pictures = await picture_service.get_all_picture();
+        return pictures;
+    } catch (error) {
+        console.log('Error get all picture: ' + error.message);
+    }
+};
+
 //Lay picture theo id
 const get_picture = async (_idPic) => {
     try {
@@ -41,5 +51,5 @@ const add_picture = async (url, idSubProduct, idReview, idMessage) => {
 };
 
 module.exports = {
-    add_picture, get_picture, get_pictures_by_idProduct, get_pictures_by_idReview
+    add_picture, get_picture, get_pictures_by_idProduct, get_pictures_by_idReview, get_all_picture
 }

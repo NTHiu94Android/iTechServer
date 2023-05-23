@@ -12,7 +12,7 @@ router.get('/api/get-all-sub-products', [authen], async (req, res) => {
         const subProducts = await sub_product_controller.onGetSubProducts();
         res.json({ error: false, responeTime: new Date(), statusCode: 200, data: subProducts });
     } catch (error) {
-        console.log('Error get products: ' + error.message);
+        res.json({ error: true, responeTime: new Date(), statusCode: 500, message: error.message });
     }
 });
 
@@ -23,7 +23,18 @@ router.get('/api/get-sub-products-by-id-product/:idProduct', [authen], async (re
         const subProducts = await sub_product_controller.onGetSubProductsByIdProduct(idProduct);
         res.json({ error: false, responeTime: new Date(), statusCode: 200, data: subProducts });
     } catch (error) {
-        console.log('Error get products: ' + error.message);
+        res.json({ error: true, responeTime: new Date(), statusCode: 500, message: error.message });
+    }
+});
+
+//Cap nhat subProduct
+router.post('/api/update-sub-product', [authen], async (req, res) => {
+    try {
+        const {_id, description} = req.body;
+        const subProduct = await sub_product_controller.onUpdateSubProduct(_id, description);
+        res.json({ error: false, responeTime: new Date(), statusCode: 200, data: subProduct });
+    } catch (error) {
+        res.json({ error: true, responeTime: new Date(), statusCode: 500, message: error.message });
     }
 });
 
@@ -46,7 +57,7 @@ router.post('/cpanel/update-sub-product', [authen], async (req, res) => {
 });
 
 //Add subProduct
-router.post('/cpanel/add-sub-product',  async (req, res) => {
+router.post('/cpanel/add-sub-product', async (req, res) => {
     try {
         const {
             price, description, quantity, color, sale,

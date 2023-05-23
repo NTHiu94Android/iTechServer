@@ -8,10 +8,10 @@ const get_order_by_idUser = async (_idUser) => {
 
 // add order
 const add_order = async (
-    dateCreate, totalPrice, status, paymentMethod, address, idUser
+    dateCreate, datePayment, totalPrice, status, paymentMethod, address, idUser
 ) => {
     const order = new order_model(
-        { dateCreate, totalPrice, status, paymentMethod, address, idUser }
+        { dateCreate, datePayment, totalPrice, status, paymentMethod, address, idUser }
     );
     await order.save();
     return order;
@@ -19,10 +19,10 @@ const add_order = async (
 
 //cap nhat order
 const update_order = async (
-    _id, dateCreate, totalPrice, status, paymentMethod, address, idUser
+    _id, datePayment, status
 ) => {
     const order_update = await order_model.findByIdAndUpdate(
-        _id, { dateCreate, totalPrice, status, paymentMethod, address, idUser }, { new: true }
+        _id, { datePayment, status }, { new: true }
     );
     return order_update;
 };

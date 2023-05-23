@@ -42,9 +42,9 @@ router.post('/api/update-address', [authen], async function (req, res, next) {
 
 //Xoa address
 //http://localhost:3000/address/api/delete-address
-router.post('/api/delete-address', [authen], async function (req, res, next) {
+router.get('/api/delete-address/:_id', [authen], async function (req, res, next) {
     try {
-        const { _id } = req.body;
+        const { _id } = req.params;
         const address = await address_controller.delete_address(_id);
         res.json({ error: false, responeTime: new Date(), statusCode: 200, data: address });
     } catch (error) {
