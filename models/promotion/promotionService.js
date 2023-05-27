@@ -7,12 +7,19 @@ const getAllPromotionByIdUser = async (idUser) => {
 };
 
 //Them moi promotion
-const addPromotion = async (content, sale, code, expirationDate, condition, idUser) => {
+const addPromotion = async (content, sale, code, dayStart, dayEnd, condition, idUser) => {
     const promotion = new promotion_model({
-        content, sale, code, expirationDate, condition, idUser
+        content, sale, code, dayStart, dayEnd, condition, idUser
     });
     await promotion.save();
     return promotion;
+};
+
+//Cap nhat promotion khi submit
+const updatePromotionSubmit = async (_id, isSubmit) => {
+    const promotion = await promotion_model.findById(_id);
+    promotion.isSubmit = isSubmit;
+    await promotion.save();
 };
 
 //Xoa promotion
@@ -22,5 +29,5 @@ const deletePromotion = async (_id) => {
 };
 
 module.exports = {
-    getAllPromotionByIdUser, addPromotion, deletePromotion
+    getAllPromotionByIdUser, addPromotion, deletePromotion, updatePromotionSubmit
 }
