@@ -20,12 +20,23 @@ router.get('/api/get-user-by-id/:id', [authen], async function (req, res, next) 
   }
 });
 
+//Lay danh sach user
+//http://localhost:3000/users/api/get-all-user  
+router.get('/api/get-all-user', [authen], async function (req, res, next) {
+  try {
+    const users = await user_controller.get_users();
+    res.json({ error: false, responeTime: new Date(), statusCode: 200, data: users });
+  } catch (error) {
+    res.json({ error: true, responeTime: new Date(), statusCode: 500, message: error.message });
+  }
+});
+
 //Đăng nhập user
 //http://localhost:3000/users/api/login
 router.post('/api/login', async function (req, res, next) {
   try {
-    const { email, password, fcmToken } = req.body;
-    const user = await user_controller.login(email, password, fcmToken);
+    const { username, email, password, fcmToken } = req.body;
+    const user = await user_controller.login(username, email, password, fcmToken);
     const accessToken = jwt.sign({ user }, 'shhhhh', { expiresIn: 80 * 24 * 60 * 60 });
     const refreshToken = jwt.sign({ user }, 'shhhhh', { expiresIn: 90 * 24 * 60 * 60 });
     if (user) {
@@ -60,9 +71,9 @@ router.post('/api/update-fcm-token', [authen], async function (req, res, next) {
 //http://localhost:3000/users/api/register
 router.post('/api/register', async function (req, res, next) {
   try {
-    const { email, password, name, birthday, numberPhone, avatar } = req.body;
+    const {username,  email, password, name, birthday, numberPhone, avatar } = req.body;
     const user = await user_controller
-      .register(email, password, name, birthday, numberPhone, avatar);
+      .register(username, email, password, name, birthday, numberPhone, avatar);
     if(user){
       //Lay ngay hien tai
       let date = new Date();
@@ -104,8 +115,8 @@ router.post('/api/update-profile', [authen], async function (req, res, next) {
 //http://localhost:3000/users/api/change-password
 router.post('/api/change-password', [authen], async function (req, res, next) {
   try {
-    const { id, new_password, confirm_password } = req.body;
-    const user = await user_controller.change_password(id, new_password, confirm_password);
+    const { id, password, new_password, confirm_password } = req.body;
+    const user = await user_controller.change_password(id, password, new_password, confirm_password);
     res.json({ error: false, responeTime: new Date(), statusCode: 200, data: user });
   } catch (error) {
     res.json({ error: true, responeTime: new Date(), statusCode: 500, message: error.message });

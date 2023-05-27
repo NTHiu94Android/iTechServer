@@ -1,10 +1,10 @@
 const reviewService = require('./reviewService');
 
 //Them review
-const add_review = async (req, res) => {
+const add_review = async (time, content, rating, idUser, idProduct) => {
     try {
         const review = await reviewService.add_review(
-            content, rating, idUser, idProduct
+            time, content, rating, idUser, idProduct
         );
         return review;
     } catch (error) {

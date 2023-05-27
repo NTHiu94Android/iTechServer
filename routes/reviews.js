@@ -8,7 +8,7 @@ const authen = require('../middleware/auth');
 router.post('/api/add-review', authen, async (req, res) => {
     try {
         const review = await review_controller.add_review(
-            req.body.content, req.body.rating, req.body.idUser, req.body.idProduct
+            req.body.time, req.body.content, req.body.rating, req.body.idUser, req.body.idProduct
         );
         res.json({ error: false, responeTime: new Date(), statusCode: 200, data: review });
     } catch (error) {

@@ -15,6 +15,16 @@ router.get('/api/get-order-detail-by-idOrder/:idOrder', authen, async (req, res)
     }
 });
 
+//Lay tat ca order_detail
+router.get('/api/get-all-order-detail', authen, async (req, res) => {
+    try {
+        const order_details = await order_detail_controller.get_all_order_detail();
+        res.json({ error: false, responeTime: new Date(), statusCode: 200, data: order_details });
+    } catch (error) {
+        res.json({ error: true, responeTime: new Date(), statusCode: 500, message: error.message });
+    }
+});
+
 //Add order_detail
 router.post('/api/add-order-detail', authen, async (req, res) => {
     try {
@@ -39,9 +49,9 @@ router.get('/api/delete-order-detail/:id', authen, async (req, res) => {
 //Update order_detail
 router.post('/api/update-order-detail', authen, async (req, res) => {
     try {
-        const { _id, quantity, idOrder, idSubProduct } = req.body;
+        const { _id, quantity, price, isCmt, idOrder, idSubProduct } = req.body;
         const order_detail_update = await order_detail_controller
-            .update_order_detail(_id, quantity, idOrder, idSubProduct);
+            .update_order_detail(_id, quantity, price, isCmt, idOrder, idSubProduct);
         res.json({ error: false, responeTime: new Date(), statusCode: 200, data: order_detail_update });
     } catch (error) {
         res.json({ error: true, responeTime: new Date(), statusCode: 500, message: error.message });

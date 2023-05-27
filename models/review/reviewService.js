@@ -1,8 +1,9 @@
 const reviewModel = require('./reviewModel');
 
 //Them review
-const add_review = async (content, rating, idUser, idProduct) => {
+const add_review = async (time, content, rating, idUser, idProduct) => {
     const review = new reviewModel({
+        time: time,
         content: content,
         rating: rating,
         idUser: idUser,

@@ -29,9 +29,21 @@ const get_user = async (_idUser) => {
     }
 };
 
-const login = async (email, password, fcmtoken) => {
+// const login = async (email, password, fcmtoken) => {
+//     try {
+//         const user = await userService.login(email, password, fcmtoken);
+//         if (user) {
+//             return user;
+//         }
+//         return null;
+//     } catch (error) {
+//         console.log('Error login: ' + error.message);
+//     }
+// };
+
+const login = async (username, email, password, fcmtoken) => {
     try {
-        const user = await userService.login(email, password, fcmtoken);
+        const user = await userService.login(username, email, password, fcmtoken);
         if (user) {
             return user;
         }
@@ -50,10 +62,10 @@ const updateFcmToken = async (_idUser, tokenFcm) => {
     }
 };
 
-const register = async (email, password, name, birthday, numberPhone, avatar) => {
+const register = async (username, email, password, name, birthday, numberPhone, avatar) => {
     try {
         const user = await userService.register(
-            email, password, name, birthday, numberPhone, avatar
+            username, email, password, name, birthday, numberPhone, avatar
         );
         return user;
     } catch (error) {
@@ -136,12 +148,12 @@ const reset_password = async (token, password, confirm_password) => {
     return null;
 };
 
-const change_password = async ( id, new_password, confirm_password) => {
-    if(new_password != confirm_password) {
+const change_password = async ( id, password, new_password, confirm_password) => {
+    if(new_password != confirm_password || password == new_password) {
         console.log('Password and confirm password not match');
         return false;
     }
-    const user = await userService.change_password(id, new_password);
+    const user = await userService.change_password(id, password, new_password);
     return user;
 };
 

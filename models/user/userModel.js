@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const user_model = new Schema({
-  email: { type: String, require: true },
+  email: { type: String, unique: true },
   password: { type: String, require: true },
   name: { type: String },
   birthday: { type: String, default: '' },
@@ -12,6 +12,9 @@ const user_model = new Schema({
   //updateAt: { type: Date, default: Date.now },
   idCart: {type: Object},
   idFavorite: {type: Object},
+
+  loginType: { type: String },
+  username: { type: String, },
 
   //token
   resetPasswordToken: { type: String, require: false, default: null },
