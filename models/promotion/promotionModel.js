@@ -6,7 +6,7 @@ const promotion_model = new Schema({
   isSubmit: { type: Boolean, default: false },
   sale: { type: Number },
   code: { type: String },
-  dayStart: { type: String },
+  dayStart: { type: String},
   dayEnd: { type: String },
   condition: { type: Number },
   idUser: { type: String },

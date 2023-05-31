@@ -39,6 +39,12 @@ app.use('/promotions', require('./routes/promotions'));
 app.use('/reviews', require('./routes/reviews'));
 app.use('/sub-products', require('./routes/sub-products'));
 
+app.use('/', require('./routes/cpanel'));
+
+
+//CKEditor
+app.use('/ckeditor', express.static(__dirname + '/node_modules/ckeditor'));
+
 
 
 // catch 404 and forward to error handler

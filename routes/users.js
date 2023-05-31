@@ -8,6 +8,11 @@ const order_controller = require('../models/order/orderController');
 
 const authen = require('../middleware/auth');
 
+//--------------------------------------------------------------cpanel-----------------------------------------------------------
+
+
+
+//--------------------------------------------------------------api--------------------------------------------------------------
 
 //lay user theo id
 router.get('/api/get-user-by-id/:id', [authen], async function (req, res, next) {
@@ -160,7 +165,6 @@ router.get('/cpanel/reset-password/:token', async function (req, res, next) {
     res.json({ error: true, responeTime: new Date(), statusCode: 500, message: error.message });
   }
 });
-
 
 // Handle the password reset form submission
 router.post('/cpanel/reset-successfully', async (req, res) => {
