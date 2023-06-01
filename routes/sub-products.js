@@ -17,7 +17,7 @@ router.get('/api/get-all-sub-products', [authen], async (req, res) => {
 });
 
 //Lay subProducts theo idProduct
-router.get('/api/get-sub-products-by-id-product/:idProduct', [authen], async (req, res) => {
+router.get('/api/get-sub-products-by-id-product/:idProduct', async (req, res) => {
     try {
         const idProduct = req.params.idProduct;
         const subProducts = await sub_product_controller.onGetSubProductsByIdProduct(idProduct);

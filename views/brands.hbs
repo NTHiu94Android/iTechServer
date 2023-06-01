@@ -38,8 +38,9 @@
       </a>
     </div>
     <hr class="horizontal dark mt-0">
-    <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
+    <div class="  w-auto " id="sidenav-collapse-main">
       <ul class="navbar-nav">
+
         <li class="nav-item">
           <a class="nav-link " href="/home">
             <div
@@ -49,8 +50,29 @@
             <span class="nav-link-text ms-1">Trang chủ</span>
           </a>
         </li>
+
         <li class="nav-item">
-          <a class="nav-link active" href="/products">
+          <a class="nav-link  " href="/categories">
+            <div
+              class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"></i>
+            </div>
+            <span class="nav-link-text ms-1">Loại sản phẩm</span>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link active " href="/brands">
+            <div
+              class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"></i>
+            </div>
+            <span class="nav-link-text ms-1">Thương hiệu</span>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link " href="/products">
             <div
               class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"></i>
@@ -58,6 +80,7 @@
             <span class="nav-link-text ms-1">Sản phẩm</span>
           </a>
         </li>
+
         <li class="nav-item">
           <a class="nav-link " href="/sub-product">
             <div
@@ -67,6 +90,7 @@
             <span class="nav-link-text ms-1">Chi tiết sản phẩm</span>
           </a>
         </li>
+
         <li class="nav-item">
           <a class="nav-link " href="/customers">
             <div
@@ -76,6 +100,7 @@
             <span class="nav-link-text ms-1">Khách hàng</span>
           </a>
         </li>
+
         <li class="nav-item">
           <a class="nav-link " href="/orders">
             <div
@@ -98,6 +123,7 @@
 
       </ul>
     </div>
+
   </aside>
 
   <!-- Main -->
@@ -109,19 +135,9 @@
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
             <li class="breadcrumb-item text-sm"><a class="opacity-5 text-white" href="javascript:;">Trang chủ</a></li>
-            <li class="breadcrumb-item text-sm text-white active" aria-current="page">Sản phẩm</li>
+            <li class="breadcrumb-item text-sm text-white active" aria-current="page">Thương hiệu</li>
           </ol>
         </nav>
-        <form action="/products">
-          <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
-            <div class="ms-md-auto pe-md-3 d-flex align-items-center">
-              <div class="input-group">
-                <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
-                <input type="text" name="name" class="form-control" placeholder="Tìm kiếm sản phẩm ..">
-              </div>
-            </div>
-          </div>
-        </form>
       </div>
     </nav>
     <!-- End Navbar -->
@@ -131,11 +147,11 @@
           <div class="card mb-4">
             <div class="card-header pb-3 p-3 d-flex">
               <div class="row">
-                <h4 class="m-3 text-end">Danh sách sản phẩm</h4>
+                <h4 class="m-3 text-end">Danh sách thương hiệu</h4>
               </div>
               <div class="col-9 text-end">
                 <button class="btn btn-outline-primary btn-sm mb-0">
-                  <a href="/products/product-insert">Thêm sản phẩm mới</a></button>
+                  <a href="/brands/insert">Thêm thương hiệu</a></button>
               </div>
             </div>
             <div class="card-body px-0 pt-0 pb-2">
@@ -143,20 +159,15 @@
                 <table class="table align-items-center mb-0">
                   <thead>
                     <tr>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ID sản phẩm</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Tên sản phẩm</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Màu sắc</th>
-                      {{!-- text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 --}}
-                      {{!-- text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2 --}}
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Số lượng</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Khuyến mãi
-                      </th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Giá bán</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ID thương hiệu</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Hình ảnh</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Tên thương hiệu</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Loại sản phẩm</th>
                     </tr>
                   </thead>
 
                   <tbody>
-                    {{#each products}}
+                    {{#each brands}}
                     
                     <tr>
                       <td style="white-space:pre-line">
@@ -168,57 +179,26 @@
                           <div>
                             <img src="{{this.image}}" class="avatar avatar-sm me-3" alt="user1">
                           </div>
-                          <div class="d-flex flex-column justify-content-center" style="width: 400px;">
-                            <h6 class="mb-0 text-sm" style="display: inline-block;
-                              width: 250px;
-                              white-space: nowrap;
-                              overflow: hidden !important;
-                              text-overflow: ellipsis;">{{this.name}}</h6>
-                          </div>
                         </div>
                       </td>
                       {{!-- white-space:pre-line --}}
                       {{!-- align-middle text-center text-sm --}}
                       <td style="white-space:pre-line">
-                        {{#each this.subProducts}}
                         <span class="text-secondary text-xs font-weight-bold"
-                          style="margin-top: 8px; margin-bottom: 8px;">{{this.color}}</span>
-                        {{/each}}
+                          style="margin-top: 8px; margin-bottom: 8px;">{{this.name}}</span>
                       </td>
+
                       <td style="white-space:pre-line">
-                        {{#each this.subProducts}}
-                        <span class="text-secondary text-xs font-weight-bold">{{this.quantity}}</span>
-                        {{/each}}
+                        <span class="text-secondary text-xs font-weight-bold"
+                          style="margin-top: 8px; margin-bottom: 8px;">{{this.nameCategory}}</span>
                       </td>
-                      <td style="white-space:pre-line">
-                        {{#each this.subProducts}}
-                        <span class="text-secondary text-xs font-weight-bold">-{{this.sale}}%</span>
-                        {{/each}}
-                      </td>
-                      <td style="white-space:pre-line">
-                        {{#each this.subProducts}}
-                        <span class="text-secondary text-xs font-weight-bold">{{this.price}}$</span>
-                        {{/each}}
-                      </td>
+                      
 
                       <td style="">
-                        {{!-- {{#each this.subProducts}}
-                        <div style="">
-                          <button onclick="editSubProduct('{{this._id}}')"
-                            style="border-radius: 8px; width: 100px; margin-right: 10px;">
-                            Chỉnh sửa
-                          </button>
-                          <button onclick="addPicture('{{this._id}}')"
-                            style="border-radius: 8px; width: 100px; margin-right: 10px;">
-                            Thêm ảnh
-                          </button>
-                        </div>
-                        {{/each}} --}}
-
-                        <button onclick="edit('{{this._id}}')" class="btn btn-xs mb-3 mt-3 btn-outline-secondary">
+                        <button onclick="editBrand('{{this._id}}')" class="btn btn-xs mb-3 mt-3 btn-outline-secondary">
                           Edit
                         </button>
-                        <button onclick="onDelete('{{this._id}}')" class="btn btn-xs mb-3 mt-3 btn-outline-danger">
+                        <button onclick="deleteBrand('{{this._id}}')" class="btn btn-xs mb-3 mt-3 btn-outline-danger">
                           Delete
                         </button>
                       </td>
@@ -312,6 +292,9 @@
       Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
     }
   </script>
+
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
   <!-- Github buttons -->
   <script async defer src="https://buttons.github.io/buttons.js"></script>
   <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->

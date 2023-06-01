@@ -21,7 +21,7 @@ const authen = require('../middleware/auth');
 
 //---------------------------------Dang nhap---------------------------------
 router.get('/', function (req, res, next) {
-    res.render('login', { title: 'iTechPro - Admin login' });
+    res.render('login', { title: 'iTech - Admin login' });
 });
 
 router.post('/', async function (req, res, next) {
@@ -47,10 +47,227 @@ router.post('/', async function (req, res, next) {
 
 //----------------------------------Trang chu----------------------------------
 router.get('/home', function (req, res, next) {
-    res.render('home', { title: 'iTechPro - Admin Dashboard' });
+    res.render('home', { title: 'iTech - Admin Dashboard' });
 });
 
-//-------------------Danh sach san pham---------------------------------------
+//----------------------------------category----------------------------------
+//-Danh sach category
+router.get('/categories', async function (req, res, next) {
+    try {
+        const categories = await category_controller.get_all_category();
+        if (!categories) {
+            res.status(401).render('Error', { message: 'Not authorization' });
+            return;
+        }
+        res.render('categories', { title: 'iTech - Category', categories: categories });
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
+//Cap nhat category theo id
+router.get('/categories/:_id/update', async function (req, res, next) {
+    try {
+        const categories = await category_controller.get_all_category();
+        for (let i = 0; i < categories.length; i++) {
+            if (categories[i]._id == req.params._id) {
+                res.render('category-update', { title: 'iTech - Category', category: categories[i] });
+                return;
+            }
+        }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
+router.post('/categories/:_id/update', multer.single('picture'), async function (req, res, next) {
+    try {
+        const { _id } = req.params;
+        const { name } = req.body;
+        const result = await cloudinary.uploader.upload(req.file.path);
+        const image = result.secure_url;
+        //console.log('Info: ', name, image, idCategory, idBrand);
+        if (!name || !image || !_id) {
+            res.status(401).render('Error', { message: 'Not authorization' });
+            return;
+        }
+        const category = await category_controller.update_category(_id, name, image);
+        if (!category) {
+            res.status(401).render('Error', { message: 'Not authorization' });
+            return;
+        }else{
+            res.redirect('/categories');
+        }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
+//Xoa category theo id
+router.get('/categories/:_id/delete', async function (req, res, next) {
+    try {
+        const { _id } = req.params;
+        if (!_id) {
+            res.status(401).render('Error', { message: 'Not authorization' });
+            return;
+        }else{
+            await category_controller.delete_category(_id);
+            res.json({status: true});
+        }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
+//Them category
+router.get('/categories/insert', async function (req, res, next) {
+    try {
+        res.render('category-insert', { title: 'iTech - Category insert' });
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+router.post('/categories/insert', multer.single('picture'), async function (req, res, next) {
+    try {
+        const { name } = req.body;
+        const result = await cloudinary.uploader.upload(req.file.path);
+        const image = result.secure_url;
+        //console.log('Info: ', name, image, idCategory, idBrand);
+        if (!name || !image) {
+            res.status(401).render('Error', { message: 'Not authorization' });
+            return;
+        }
+        const category = await category_controller.add_category(name, image);
+        if (!category) {
+            res.status(401).render('Error', { message: 'Not authorization' });
+            return;
+        }
+        res.redirect('/categories');
+
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
+//----------------------------------Brand----------------------------------
+//-Danh sach brand
+router.get('/brands', async function (req, res, next) {
+    try {
+        const brands = await brand_controller.get_all_brand();
+        if (!brands) {
+            res.status(401).render('Error', { message: 'Not authorization' });
+            return;
+        }
+        let list = [];
+        for (let i = 0; i < brands.length; i++) {
+            const category = await category_controller.get_category_by_id(brands[i].idCategory);
+            brands[i].nameCategory = category.name;
+            list.push(brands[i]);
+        }
+        res.render('brands', { title: 'iTech - Brand', brands: list });
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
+//Cap nhat brand theo id
+router.get('/brands/:_id/update', async function (req, res, next) {
+    try {
+        const brand = await brand_controller.get_brand_by_id(req.params._id);
+        const categories = await category_controller.get_all_category();
+        if (!brand || !categories) {
+            res.status(401).render('Error', { message: 'Not authorization' });
+            return;
+        }
+        if (categories) {
+            for (let i = 0; i < categories.length; i++) {
+                if (categories[i]._id == brand.idCategory) {
+                    categories[i].isSelected = true;
+                } else {
+                    categories[i].isSelected = false;
+                }
+            }
+        }
+        res.render('brand-update', { title: 'iTech - Brand', brand: brand, categories: categories });
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
+router.post('/brands/:_id/update', multer.single('picture'), async function (req, res, next) {
+    try {
+        const { _id } = req.params;
+        const { name, idCategory } = req.body;
+        const result = await cloudinary.uploader.upload(req.file.path);
+        const image = result.secure_url;
+        //console.log('Info: ', name, image, idCategory, idBrand);
+        if (!name || !image || !_id || !idCategory) {
+            res.status(401).render('Error', { message: 'Not authorization' });
+            return;
+        }
+        const brand = await brand_controller.update_brand(_id, name, image, idCategory);
+        if (!brand) {
+            res.status(401).render('Error', { message: 'Not authorization' });
+            return;
+        }
+        res.redirect('/brands');
+        
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
+//Xoa brand theo id
+router.get('/brands/:_id/delete', async function (req, res, next) {
+    try {
+        const { _id } = req.params;
+        if (!_id) {
+            res.status(401).render('Error', { message: 'Not authorization' });
+            return;
+        }else{
+            await brand_controller.delete_brand(_id);
+            res.json({status: true});
+        }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
+//Them brands
+router.get('/brands/insert', async function (req, res, next) {
+    try {
+        const categories = await category_controller.get_all_category();
+        res.render('brand-insert', { title: 'iTech - Brand insert', categories: categories });
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
+router.post('/brands/insert', multer.single('picture'), async function (req, res, next) {
+    try {
+        const { name, idCategory } = req.body;
+        const result = await cloudinary.uploader.upload(req.file.path);
+        const image = result.secure_url;
+        //console.log('Info: ', name, image, idCategory, idBrand);
+        if (!name || !image || !idCategory) {
+            res.status(401).render('Error', { message: 'Not authorization' });
+            return;
+        }
+        const brand = await brand_controller.add_brand(name, image, idCategory);
+        if (!brand) {
+            res.status(401).render('Error', { message: 'Not authorization' });
+            return;
+        }
+        res.redirect('/brands');
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
+
+
+//----------------------------------San pham----------------------------------
+//-Danh sach san pham
 router.get('/products', async function (req, res, next) {
     try {
         const products = await product_controller.onGetProducts();
@@ -71,7 +288,7 @@ router.get('/products', async function (req, res, next) {
     }
 });
 
-//-------------------Cap nhat san pham---------------------------------------
+//Cap nhat san pham theo id
 router.get('/products/:_id/product-update', async function (req, res, next) {
     try {
         const products = await product_controller.onGetProducts();
@@ -124,6 +341,7 @@ router.get('/products/:_id/product-update', async function (req, res, next) {
     }
 });
 
+//Cap nhat san pham theo id
 router.post('/products/:_id/product-update', multer.single('image'), async function (req, res, next) {
     try {
         const { _id } = req.params;
@@ -146,7 +364,7 @@ router.post('/products/:_id/product-update', multer.single('image'), async funct
     }
 });
 
-//-------------------Them san pham---------------------------------------
+//Them san pham
 router.get('/products/product-insert', async function (req, res, next) {
     try {
         //Lay danh sach danh muc
@@ -171,13 +389,18 @@ router.get('/products/product-insert', async function (req, res, next) {
     }
 });
 
+//Them san pham
 router.post('/products/product-insert', multer.single('picture'), async function (req, res, next) {
     try {
         const {
-            name, idCategory, idBrand, price, description, quantity, color, sale, ram, rom, cpu,
+            name, idCategory, idBrand, price, description, quantity, color, sale, ram, rom, cpu, screen
         } = req.body
         const result = await cloudinary.uploader.upload(req.file.path);
         const image = result.secure_url;
+        if(!image){
+            res.status(401).render('Error', { message: 'Upload image fail' });
+            return;
+        }
         const product = await product_controller.onAddroduct(name, image, idCategory, idBrand);
         const subProduct = await sub_product_controller
             .onAddSubProduct(price, description, quantity, color, sale, ram, rom, screen, cpu, "", "", "", product._id);
@@ -189,6 +412,7 @@ router.post('/products/product-insert', multer.single('picture'), async function
 });
 
 //-------------------------------------------San pham chi tiet-----------------------------------
+//Lay danh sach san pham chi tiet
 router.get('/sub-product', async function (req, res, next) {
     try {
         const subProducts = await sub_product_controller.onGetSubProducts();
@@ -212,12 +436,12 @@ router.get('/sub-product', async function (req, res, next) {
     }
 });
 
-//-------------------------------------------Them san pham chi tiet-----------------------------------
-router.get('/sub-products/sub-product-insert', multer.single('image'), async function (req, res, next) {
+//Them san pham chi tiet
+router.get('/sub-products/sub-product-insert', async function (req, res, next) {
     try {
         const products = await product_controller.onGetProducts();
         if (products) {
-            res.render('sub-product-insert', { title: 'iTechPro - Thêm sản phẩm chi tiết', products });
+            res.render('sub-product-insert', { title: 'iTech - Thêm sản phẩm chi tiết', products });
         } else {
             res.status(401).render('Error', { message: 'Not authorization' });
             return;
@@ -227,8 +451,33 @@ router.get('/sub-products/sub-product-insert', multer.single('image'), async fun
     }
 });
 
-//-------------------------------------------Cap nhat san pham chi tiet-------------------------------
-router.get('/sub-products/:_id/sub-product-update', multer.single('image'), async function (req, res, next) {
+router.post('/sub-products/sub-product-insert', multer.array('pictures', 10), async function (req, res, next) {
+    try {
+        const { idProduct, price, description, quantity, color, sale, ram, rom, screen, cpu } = req.body;
+        const subProduct = await sub_product_controller
+            .onAddSubProduct(price, description, quantity, color, sale, ram, rom, screen, cpu, "", "", "", idProduct);
+        if (!subProduct) {
+            res.status(401).render('Error', { message: 'Not authorization' });
+            return;
+        }
+        const files = req.files;
+        if (!files) {
+            res.status(401).render('Error', { message: 'Not authorization' });
+            return;
+        }
+        for (let i = 0; i < files.length; i++) {
+            const result = await cloudinary.uploader.upload(files[i].path);
+            const image = result.secure_url;
+            await picture_controller.add_picture(image, subProduct._id, "", "");
+        }
+        res.redirect('/sub-products');
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
+//Cap nhat san pham chi tiet
+router.get('/sub-products/:_id/sub-product-update', async function (req, res, next) {
     try {
         const { _id } = req.params;
         const subProducts = await sub_product_controller.onGetSubProducts();
@@ -290,6 +539,60 @@ router.post('/sub-products/:_id/sub-product-update', multer.array('pictures', 10
     }
 });
 
+//-------------------------------------------Don hang-----------------------------------
+//Lay danh sach don hang
+router.get('/orders', async function (req, res, next) {
+    try {
+        const orders = await order_controller.get_all_order();
+        
+        if(orders){
+            let list = [];
+            for (let i = 0; i < orders.length; i++) {
+                const user = await user_controller.get_user(orders[i].idUser);
+                console.log('User', user.name);
+                orders[i].nameUser = user.name;
+                orders[i].avatarUser = user.avatar;
+                orders[i].phoneUser = user.numberPhone;
+                list.push(orders[i]);
+                // if(orders[i].status == 'cart' || orders[i].status == 'favorite'){
+                //     continue;
+                // }else{
+                //     const user = await user_controller.get_user(orders[i].idUser);
+                //     orders[i].nameUser = user.name;
+                //     orders[i].avatarUser = user.avatar;
+                //     list.push(orders[i]);
+                // }
+            }
+            res.render('orders', { title: 'iTech - Orders', orders: list });
+        }else{
+            res.status(401).render('Error', { message: 'Not authorization' });
+            return;
+        }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
+
+//-----------------------------Don hang chi tiet----------------------------------
+//Lay danh sach don hang chi tiet
+router.get('/orders/:_idOrder/order-detail', async function (req, res, next) {
+    try {
+        // const { _idOrder } = req.params;
+        // if(_idOrder){
+        //     console.log('ID order', _idOrder);
+        // }
+        res.render('order-detail', { title: 'iTech - Order detail'});
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
+
+
+
+
+//Xoa hinh anh
 router.get('/cpanel/delete-image', async function (req, res, next) {
     try {
         await picture_controller.deletePictures();

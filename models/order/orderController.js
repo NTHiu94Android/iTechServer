@@ -1,5 +1,16 @@
 const order_service = require('../order/orderService');
 
+//Lay tat ca don hang
+const get_all_order = async () => {
+    try {
+        const orders = await order_service.get_all_order();
+        return orders;
+    } catch (error) {
+        console.log('Error get all order: ' + error.message);
+    }
+};
+
+
 //Lay order theo idUser
 const get_order_by_idUser = async (_idUser) => {
     try {
@@ -33,5 +44,5 @@ const update_order = async ( _id, datePayment, status) => {
 };
 
 module.exports = {
-    add_order, get_order_by_idUser, update_order,
+    add_order, get_order_by_idUser, update_order, get_all_order
 };
