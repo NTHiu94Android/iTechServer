@@ -17,9 +17,35 @@ const review_controller = require('../models/review/reviewController');
 const address_controller = require('../models/address/addressController');
 const picture_controller = require('../models/picture/pictureController');
 
-const authen = require('../middleware/auth');
+//------------------ Middleware để kiểm tra accessToken --------------------
+const checkAccessTokenMiddleware = (req, res, next) => {
+    //Lay accessToken tu session
+    const accessToken = req.session.accessToken;
+    console.log('accessToken check: ', accessToken);
+    if (!accessToken) {
+        // Chuyển hướng đến trang đăng nhập
+        return res.redirect('/');
+    }
+    try {
+        const decoded = jwt.verify(accessToken, 'shhhhh');
+        const expiresAt = decoded.exp * 1000; // Đổi giây thành milliseconds
 
-//---------------------------------Dang nhap---------------------------------
+        // Kiểm tra thời gian hết hạn của accessToken
+        if (expiresAt < Date.now()) {
+            // Thực hiện đăng xuất
+            req.session.accessToken = null; // Xóa accessToken từ session hoặc lưu trữ khác
+            return res.redirect('/'); // Chuyển hướng đến trang đăng nhập
+        }
+    } catch (err) {
+        // Xử lý khi accessToken không hợp lệ
+        console.error(err);
+        return res.redirect('/');
+    }
+    // Nếu có accessToken, tiếp tục
+    next();
+};
+
+//---------------------------------Login---------------------------------
 router.get('/', function (req, res, next) {
     res.render('login', { title: 'iTech - Admin login' });
 });
@@ -28,14 +54,17 @@ router.post('/', async function (req, res, next) {
     try {
         const { username, password } = req.body;
         //username, email, password, fcmtoken
-        const user = await user_controller.login(username, '', password, '');
-        // const accessToken = jwt.sign({ user }, 'shhhhh', { expiresIn: 80 * 24 * 60 * 60 });
-        // const refreshToken = jwt.sign({ user }, 'shhhhh', { expiresIn: 90 * 24 * 60 * 60 });
+        const user = await user_controller.login(username, null, password, '');
+
         if (!user) {
             res.status(401).render('Error', { message: 'Not authorization' });
             return;
         }
         if (user.role == 'admin') {
+            //Luu accessToken vao session
+            const accessToken = jwt.sign({ user }, 'shhhhh', { expiresIn: 80 * 24 * 60 * 60 });
+            req.session.accessToken = accessToken;
+            console.log('accessToken: ', req.session.accessToken);
             res.redirect('home');
         } else {
             res.status(401).render('/', { message: 'Not authorization' });
@@ -45,14 +74,14 @@ router.post('/', async function (req, res, next) {
     }
 });
 
-//----------------------------------Trang chu----------------------------------
-router.get('/home', function (req, res, next) {
+//----------------------------------Home----------------------------------
+router.get('/home', checkAccessTokenMiddleware, function (req, res, next) {
     res.render('home', { title: 'iTech - Admin Dashboard' });
 });
 
 //----------------------------------category----------------------------------
 //-Danh sach category
-router.get('/categories', async function (req, res, next) {
+router.get('/categories', checkAccessTokenMiddleware, async function (req, res, next) {
     try {
         const categories = await category_controller.get_all_category();
         if (!categories) {
@@ -66,7 +95,7 @@ router.get('/categories', async function (req, res, next) {
 });
 
 //Cap nhat category theo id
-router.get('/categories/:_id/update', async function (req, res, next) {
+router.get('/categories/:_id/update', checkAccessTokenMiddleware, async function (req, res, next) {
     try {
         const categories = await category_controller.get_all_category();
         for (let i = 0; i < categories.length; i++) {
@@ -80,7 +109,7 @@ router.get('/categories/:_id/update', async function (req, res, next) {
     }
 });
 
-router.post('/categories/:_id/update', multer.single('picture'), async function (req, res, next) {
+router.post('/categories/:_id/update', checkAccessTokenMiddleware, multer.single('picture'), async function (req, res, next) {
     try {
         const { _id } = req.params;
         const { name } = req.body;
@@ -95,7 +124,7 @@ router.post('/categories/:_id/update', multer.single('picture'), async function 
         if (!category) {
             res.status(401).render('Error', { message: 'Not authorization' });
             return;
-        }else{
+        } else {
             res.redirect('/categories');
         }
     } catch (error) {
@@ -104,15 +133,15 @@ router.post('/categories/:_id/update', multer.single('picture'), async function 
 });
 
 //Xoa category theo id
-router.get('/categories/:_id/delete', async function (req, res, next) {
+router.get('/categories/:_id/delete', checkAccessTokenMiddleware, async function (req, res, next) {
     try {
         const { _id } = req.params;
         if (!_id) {
             res.status(401).render('Error', { message: 'Not authorization' });
             return;
-        }else{
+        } else {
             await category_controller.delete_category(_id);
-            res.json({status: true});
+            res.json({ status: true });
         }
     } catch (error) {
         res.status(500).send(error.message);
@@ -120,14 +149,15 @@ router.get('/categories/:_id/delete', async function (req, res, next) {
 });
 
 //Them category
-router.get('/categories/insert', async function (req, res, next) {
+router.get('/categories/insert', checkAccessTokenMiddleware, async function (req, res, next) {
     try {
         res.render('category-insert', { title: 'iTech - Category insert' });
     } catch (error) {
         res.status(500).send(error.message);
     }
 });
-router.post('/categories/insert', multer.single('picture'), async function (req, res, next) {
+
+router.post('/categories/insert', checkAccessTokenMiddleware, multer.single('picture'), async function (req, res, next) {
     try {
         const { name } = req.body;
         const result = await cloudinary.uploader.upload(req.file.path);
@@ -151,7 +181,7 @@ router.post('/categories/insert', multer.single('picture'), async function (req,
 
 //----------------------------------Brand----------------------------------
 //-Danh sach brand
-router.get('/brands', async function (req, res, next) {
+router.get('/brands', checkAccessTokenMiddleware, async function (req, res, next) {
     try {
         const brands = await brand_controller.get_all_brand();
         if (!brands) {
@@ -171,7 +201,7 @@ router.get('/brands', async function (req, res, next) {
 });
 
 //Cap nhat brand theo id
-router.get('/brands/:_id/update', async function (req, res, next) {
+router.get('/brands/:_id/update', checkAccessTokenMiddleware, async function (req, res, next) {
     try {
         const brand = await brand_controller.get_brand_by_id(req.params._id);
         const categories = await category_controller.get_all_category();
@@ -194,7 +224,7 @@ router.get('/brands/:_id/update', async function (req, res, next) {
     }
 });
 
-router.post('/brands/:_id/update', multer.single('picture'), async function (req, res, next) {
+router.post('/brands/:_id/update', checkAccessTokenMiddleware, multer.single('picture'), async function (req, res, next) {
     try {
         const { _id } = req.params;
         const { name, idCategory } = req.body;
@@ -211,22 +241,22 @@ router.post('/brands/:_id/update', multer.single('picture'), async function (req
             return;
         }
         res.redirect('/brands');
-        
+
     } catch (error) {
         res.status(500).send(error.message);
     }
 });
 
 //Xoa brand theo id
-router.get('/brands/:_id/delete', async function (req, res, next) {
+router.get('/brands/:_id/delete', checkAccessTokenMiddleware, async function (req, res, next) {
     try {
         const { _id } = req.params;
         if (!_id) {
             res.status(401).render('Error', { message: 'Not authorization' });
             return;
-        }else{
+        } else {
             await brand_controller.delete_brand(_id);
-            res.json({status: true});
+            res.json({ status: true });
         }
     } catch (error) {
         res.status(500).send(error.message);
@@ -234,7 +264,7 @@ router.get('/brands/:_id/delete', async function (req, res, next) {
 });
 
 //Them brands
-router.get('/brands/insert', async function (req, res, next) {
+router.get('/brands/insert', checkAccessTokenMiddleware, async function (req, res, next) {
     try {
         const categories = await category_controller.get_all_category();
         res.render('brand-insert', { title: 'iTech - Brand insert', categories: categories });
@@ -243,7 +273,7 @@ router.get('/brands/insert', async function (req, res, next) {
     }
 });
 
-router.post('/brands/insert', multer.single('picture'), async function (req, res, next) {
+router.post('/brands/insert', checkAccessTokenMiddleware, multer.single('picture'), async function (req, res, next) {
     try {
         const { name, idCategory } = req.body;
         const result = await cloudinary.uploader.upload(req.file.path);
@@ -265,10 +295,9 @@ router.post('/brands/insert', multer.single('picture'), async function (req, res
 });
 
 
-
 //----------------------------------San pham----------------------------------
 //-Danh sach san pham
-router.get('/products', async function (req, res, next) {
+router.get('/products', checkAccessTokenMiddleware, async function (req, res, next) {
     try {
         const products = await product_controller.onGetProducts();
         if (!products) {
@@ -289,7 +318,7 @@ router.get('/products', async function (req, res, next) {
 });
 
 //Cap nhat san pham theo id
-router.get('/products/:_id/product-update', async function (req, res, next) {
+router.get('/products/:_id/product-update', checkAccessTokenMiddleware, async function (req, res, next) {
     try {
         const products = await product_controller.onGetProducts();
         let product = null;
@@ -341,8 +370,7 @@ router.get('/products/:_id/product-update', async function (req, res, next) {
     }
 });
 
-//Cap nhat san pham theo id
-router.post('/products/:_id/product-update', multer.single('image'), async function (req, res, next) {
+router.post('/products/:_id/product-update', checkAccessTokenMiddleware, multer.single('image'), async function (req, res, next) {
     try {
         const { _id } = req.params;
         const { name, idCategory, idBrand } = req.body;
@@ -365,7 +393,7 @@ router.post('/products/:_id/product-update', multer.single('image'), async funct
 });
 
 //Them san pham
-router.get('/products/product-insert', async function (req, res, next) {
+router.get('/products/product-insert', checkAccessTokenMiddleware, async function (req, res, next) {
     try {
         //Lay danh sach danh muc
         const categories = await category_controller.get_all_category();
@@ -389,15 +417,14 @@ router.get('/products/product-insert', async function (req, res, next) {
     }
 });
 
-//Them san pham
-router.post('/products/product-insert', multer.single('picture'), async function (req, res, next) {
+router.post('/products/product-insert', checkAccessTokenMiddleware, multer.single('picture'), async function (req, res, next) {
     try {
         const {
             name, idCategory, idBrand, price, description, quantity, color, sale, ram, rom, cpu, screen
         } = req.body
         const result = await cloudinary.uploader.upload(req.file.path);
         const image = result.secure_url;
-        if(!image){
+        if (!image) {
             res.status(401).render('Error', { message: 'Upload image fail' });
             return;
         }
@@ -413,21 +440,21 @@ router.post('/products/product-insert', multer.single('picture'), async function
 
 //-------------------------------------------San pham chi tiet-----------------------------------
 //Lay danh sach san pham chi tiet
-router.get('/sub-product', async function (req, res, next) {
+router.get('/sub-product', checkAccessTokenMiddleware, async function (req, res, next) {
     try {
         const subProducts = await sub_product_controller.onGetSubProducts();
-        if(subProducts){
+        if (subProducts) {
             for (let i = 0; i < subProducts.length; i++) {
                 const product = await product_controller.onGetProductById(subProducts[i].idProduct);
-                if(product){
+                if (product) {
                     subProducts[i].nameProduct = product.name;
                     subProducts[i].image = product.image;
                 }
             }
 
             res.render('sub-product', { title: 'iTechPro - Sub Product', subProducts });
-            
-        }else{
+
+        } else {
             res.status(401).render('Error', { message: 'Not authorization' });
             return;
         }
@@ -437,7 +464,7 @@ router.get('/sub-product', async function (req, res, next) {
 });
 
 //Them san pham chi tiet
-router.get('/sub-products/sub-product-insert', async function (req, res, next) {
+router.get('/sub-products/sub-product-insert', checkAccessTokenMiddleware, async function (req, res, next) {
     try {
         const products = await product_controller.onGetProducts();
         if (products) {
@@ -451,7 +478,7 @@ router.get('/sub-products/sub-product-insert', async function (req, res, next) {
     }
 });
 
-router.post('/sub-products/sub-product-insert', multer.array('pictures', 10), async function (req, res, next) {
+router.post('/sub-products/sub-product-insert', checkAccessTokenMiddleware, multer.array('pictures', 10), async function (req, res, next) {
     try {
         const { idProduct, price, description, quantity, color, sale, ram, rom, screen, cpu } = req.body;
         const subProduct = await sub_product_controller
@@ -477,7 +504,7 @@ router.post('/sub-products/sub-product-insert', multer.array('pictures', 10), as
 });
 
 //Cap nhat san pham chi tiet
-router.get('/sub-products/:_id/sub-product-update', async function (req, res, next) {
+router.get('/sub-products/:_id/sub-product-update', checkAccessTokenMiddleware, async function (req, res, next) {
     try {
         const { _id } = req.params;
         const subProducts = await sub_product_controller.onGetSubProducts();
@@ -505,9 +532,9 @@ router.get('/sub-products/:_id/sub-product-update', async function (req, res, ne
     }
 });
 
-router.post('/sub-products/:_id/sub-product-update', multer.array('pictures', 10), async function (req, res, next) {
+router.post('/sub-products/:_id/sub-product-update', checkAccessTokenMiddleware, multer.array('pictures', 10), async function (req, res, next) {
     try {
-        const {price, ram, rom, quantity, sale, cpu, screen, subProduct } = req.body;
+        const { price, ram, rom, quantity, sale, cpu, screen, subProduct } = req.body;
         const { _id } = req.params;
         const files = req.files; // Danh sách các tệp đã được tải lên
         const result = await Promise.all(
@@ -527,10 +554,10 @@ router.post('/sub-products/:_id/sub-product-update', multer.array('pictures', 10
             .onUpdateSubProduct(_id, price, subProduct.description, quantity, subProduct.color,
                 sale, ram, rom, screen, cpu, subProduct.pin, "", "", subProduct.idProduct);
 
-        if(!subProductUpdate){
+        if (!subProductUpdate) {
             res.status(401).render('Error', { message: 'Not authorization' });
             return;
-        }else{
+        } else {
             res.redirect('/products');
         }
 
@@ -541,11 +568,11 @@ router.post('/sub-products/:_id/sub-product-update', multer.array('pictures', 10
 
 //-------------------------------------------Don hang-----------------------------------
 //Lay danh sach don hang
-router.get('/orders', async function (req, res, next) {
+router.get('/orders', checkAccessTokenMiddleware, async function (req, res, next) {
     try {
         const orders = await order_controller.get_all_order();
-        
-        if(orders){
+
+        if (orders) {
             let list = [];
             for (let i = 0; i < orders.length; i++) {
                 const user = await user_controller.get_user(orders[i].idUser);
@@ -553,18 +580,18 @@ router.get('/orders', async function (req, res, next) {
                 orders[i].nameUser = user.name;
                 orders[i].avatarUser = user.avatar;
                 orders[i].phoneUser = user.numberPhone;
-                list.push(orders[i]);
-                // if(orders[i].status == 'cart' || orders[i].status == 'favorite'){
-                //     continue;
-                // }else{
-                //     const user = await user_controller.get_user(orders[i].idUser);
-                //     orders[i].nameUser = user.name;
-                //     orders[i].avatarUser = user.avatar;
-                //     list.push(orders[i]);
-                // }
+                //list.push(orders[i]);
+                if(orders[i].status == 'cart' || orders[i].status == 'favorite'){
+                    continue;
+                }else{
+                    const user = await user_controller.get_user(orders[i].idUser);
+                    orders[i].nameUser = user.name;
+                    orders[i].avatarUser = user.avatar;
+                    list.push(orders[i]);
+                }
             }
             res.render('orders', { title: 'iTech - Orders', orders: list });
-        }else{
+        } else {
             res.status(401).render('Error', { message: 'Not authorization' });
             return;
         }
@@ -576,13 +603,13 @@ router.get('/orders', async function (req, res, next) {
 
 //-----------------------------Don hang chi tiet----------------------------------
 //Lay danh sach don hang chi tiet
-router.get('/orders/:_idOrder/order-detail', async function (req, res, next) {
+router.get('/orders/:_idOrder/order-detail', checkAccessTokenMiddleware, async function (req, res, next) {
     try {
         // const { _idOrder } = req.params;
         // if(_idOrder){
         //     console.log('ID order', _idOrder);
         // }
-        res.render('order-detail', { title: 'iTech - Order detail'});
+        res.render('order-detail', { title: 'iTech - Order detail' });
     } catch (error) {
         res.status(500).send(error.message);
     }
@@ -596,7 +623,7 @@ router.get('/orders/:_idOrder/order-detail', async function (req, res, next) {
 router.get('/cpanel/delete-image', async function (req, res, next) {
     try {
         await picture_controller.deletePictures();
-        res.json({data: true});
+        res.json({ data: true });
     } catch (error) {
         console.log(error);
     }

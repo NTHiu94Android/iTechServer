@@ -3,8 +3,15 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var session = require('express-session')
 
 var app = express();
+
+app.use(session({
+  secret: 'itech_webadmin_secret',
+  resave: false,
+  saveUninitialized: true
+}))
 
 //Connect db from config/db
 const db = require('./config/db');
