@@ -10,6 +10,17 @@ const get_all_order = async () => {
     }
 };
 
+//Lay order theo id
+const get_order_by_id = async (_id) => {
+    try {
+        const orders = await order_service.get_all_order();
+        const order = orders.find(order => order._id == _id);
+        return order;
+    } catch (error) {
+        console.log('Error get order by id: ' + error.message);
+    }
+};
+
 
 //Lay order theo idUser
 const get_order_by_idUser = async (_idUser) => {
@@ -44,5 +55,5 @@ const update_order = async ( _id, datePayment, status) => {
 };
 
 module.exports = {
-    add_order, get_order_by_idUser, update_order, get_all_order
+    add_order, get_order_by_idUser, update_order, get_all_order, get_order_by_id
 };

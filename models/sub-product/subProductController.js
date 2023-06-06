@@ -11,6 +11,17 @@ const onGetSubProducts = async () => {
     }
 };
 
+//Lay subProduct theo id
+const onGetSubProductById = async (_id) => {
+    try {
+        const subProducts = await sub_product_service.getSubProducts(_id);
+        const subProduct = subProducts.find(subProduct => subProduct._id == _id);
+        return subProduct;
+    } catch (error) {
+        console.log('Error get sub product by id: ' + error.message);
+    }
+}
+
 //Lay subProducts theo idProduct
 const onGetSubProductsByIdProduct = async (idProduct) => {
     try {
@@ -54,5 +65,5 @@ const onAddSubProduct = async (
 };
 
 module.exports = {
-    onGetSubProducts, onGetSubProductsByIdProduct, onAddSubProduct, onUpdateSubProduct
+    onGetSubProducts, onGetSubProductsByIdProduct, onAddSubProduct, onUpdateSubProduct, onGetSubProductById
 };

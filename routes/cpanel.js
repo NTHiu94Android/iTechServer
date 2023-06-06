@@ -16,6 +16,7 @@ const brand_controller = require('../models/brand/brandController');
 const review_controller = require('../models/review/reviewController');
 const address_controller = require('../models/address/addressController');
 const picture_controller = require('../models/picture/pictureController');
+const promotion_controller = require('../models/promotion/promotionController');
 
 //------------------ Middleware để kiểm tra accessToken --------------------
 const checkAccessTokenMiddleware = (req, res, next) => {
@@ -57,8 +58,7 @@ router.post('/', async function (req, res, next) {
         const user = await user_controller.login(username, null, password, '');
 
         if (!user) {
-            res.status(401).render('Error', { message: 'Not authorization' });
-            return;
+            return res.redirect('/');
         }
         if (user.role == 'admin') {
             //Luu accessToken vao session
@@ -67,10 +67,10 @@ router.post('/', async function (req, res, next) {
             console.log('accessToken: ', req.session.accessToken);
             res.redirect('home');
         } else {
-            res.status(401).render('/', { message: 'Not authorization' });
+            return res.redirect('/');
         }
     } catch (error) {
-        res.status(500).send(error.message);
+        return res.redirect('/');
     }
 });
 
@@ -592,7 +592,7 @@ router.get('/orders', checkAccessTokenMiddleware, async function (req, res, next
             }
             res.render('orders', { title: 'iTech - Orders', orders: list });
         } else {
-            res.status(401).render('Error', { message: 'Not authorization' });
+            res.status(401).render('error', { message: 'Not authorization' });
             return;
         }
     } catch (error) {
@@ -603,13 +603,62 @@ router.get('/orders', checkAccessTokenMiddleware, async function (req, res, next
 
 //-----------------------------Don hang chi tiet----------------------------------
 //Lay danh sach don hang chi tiet
-router.get('/orders/:_idOrder/order-detail', checkAccessTokenMiddleware, async function (req, res, next) {
+router.get('/orders/:_idOrder/order-detail', async function (req, res, next) {
     try {
-        // const { _idOrder } = req.params;
-        // if(_idOrder){
-        //     console.log('ID order', _idOrder);
-        // }
-        res.render('order-detail', { title: 'iTech - Order detail' });
+        const { _idOrder } = req.params;
+        const order = await order_controller.get_order_by_id(_idOrder);
+        if (!order) {
+            return res.status(401).render('error', { message: 'Not authorization' });
+        }
+        const user = await user_controller.get_user(order.idUser);
+        if (!user) {
+            return res.status(401).render('error', { message: 'Not authorization' });
+        }
+        //Lay danh sach don hang chi tiet
+        const orderDetails = await order_detail_controller.get_order_detail_by_idOrder(_idOrder);
+        if (!orderDetails) {
+            return res.status(401).render('error', { message: 'Not authorization' });
+        }
+        //Lay san pham theo idOrderDetail
+        let list = [];
+        let total = 0;
+        let totalSale = 0;
+        for (let i = 0; i < orderDetails.length; i++) {
+            const subProduct = await sub_product_controller.onGetSubProductById(orderDetails[i].idSubProduct);
+            if (!subProduct) {
+                return res.status(401).render('error', { message: 'Not authorization' });
+            }
+            
+            const product = await product_controller.onGetProductById(subProduct.idProduct);
+            if (!product) {
+                return res.status(401).render('error', { message: 'Not authorization' });
+            }
+            //console.log('SubProduct', subProduct.price);
+            list.push(
+                {
+                    image: product.image,
+                    color: subProduct.color,
+                    nameProduct: product.name,
+                    priceProduct: subProduct.price,
+                    priceSale: subProduct.price - subProduct.price * subProduct.sale/100,
+                    quantity: orderDetails[i].quantity,
+                    inventory: subProduct.quantity,
+                }
+            );
+            total += subProduct.price * orderDetails[i].quantity;
+            totalSale += (subProduct.price - subProduct.price * subProduct.sale/100) * orderDetails[i].quantity;
+        }
+        //console.log('List', list);
+        order.total = total;
+        order.totalSale = totalSale;
+        order.codeSale = order.totalPrice - order.totalSale;
+        if(order.status == 'Delivered' || order.status == 'Canceled'){
+            order.check = false;
+        }else{
+            order.check = true;
+        }
+        
+        res.render('order-detail', { title: 'iTech - Order detail', order, orderDetails: list, user });
     } catch (error) {
         res.status(500).send(error.message);
     }

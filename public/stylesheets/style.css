@@ -28,3 +28,32 @@ a {
   align-self: center;
 }
 
+.row-spbw {
+  display: flex;
+  flex-direction: row; justify-content: space-between;
+  flex: 1;
+}
+
+.row-center {
+  display: flex;
+  flex-direction: row; justify-content: center; align-items: center;
+}
+
+.fl1 {
+  display: flex;
+  flex: 1;
+}
+
+.top10 {
+  margin-top: 10px;
+}
+
+.total {
+  font-size: 20px;
+  font-weight: bold;
+  color: red;
+}
+
+.red {
+  color: red;
+}

@@ -3,7 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var session = require('express-session')
+var session = require('express-session');
 
 var app = express();
 
@@ -27,6 +27,12 @@ admin.initializeApp({
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
+
+const Handlebars = require('./ultils/helper'); // Đường dẫn đến file helper.js
+
+// Sử dụng Handlebars và đăng ký helper 'eq'
+const hbs = Handlebars.create();
+hbs.registerHelper('eq', Handlebars.helpers.eq);
 
 app.use(logger('dev'));
 app.use(express.json());

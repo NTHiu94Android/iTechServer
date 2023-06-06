@@ -1,12 +1,289 @@
-<!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="apple-touch-icon" sizes="76x76" href="images/apple-icon.png">
+  <link rel="icon" type="image/png" href="images/favicon.png">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+  <title>
+    iTech
+  </title> 
+  <!--     Fonts and icons     -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
+  <!-- Nucleo Icons -->
+  <link href="/assets/css/nucleo-icons.css" rel="stylesheet" />
+  <link href="/assets/css/nucleo-svg.css" rel="stylesheet" />
+  <!-- Font Awesome Icons -->
+  <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+  <link href="/assets/css/nucleo-svg.css" rel="stylesheet" />
+  <!-- CSS Files -->
+  <link id="pagestyle" href="/assets/css/argon-dashboard.css?v=2.0.4" rel="stylesheet" />
+  <script language="javascript" src="/javascripts/delete.js"></script>
+  <script language="javascript" src="/javascripts/update.js"></script>
+  <link id="pagestyle" href="/stylesheets/style.css" rel="stylesheet" />
 </head>
-<body>
-    order detail
+
+<body class="g-sidenav-show   bg-gray-100">
+  <div class="min-height-300 bg-primary position-absolute w-100"></div>
+  <aside
+    class="sidenav bg-white navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-4 "
+    id="sidenav-main">
+    <div class="sidenav-header">
+      <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none"
+        aria-hidden="true" id="iconSidenav"></i>
+      <a class="navbar-brand m-0" href=" https://demos.creative-tim.com/argon-dashboard/pages/dashboard.html "
+        target="_blank">
+        <img src="/images/logo-ct-dark.png" class="navbar-brand-img h-100" alt="main_logo">
+        <span class="ms-1 font-weight-bold">iTech</span>
+      </a>
+    </div>
+    <hr class="horizontal dark mt-0">
+    <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link " href="/home">
+            <div
+              class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="ni ni-tv-2 text-primary text-sm opacity-10"></i>
+            </div>
+            <span class="nav-link-text ms-1">Trang chủ</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link " href="/products">
+            <div
+              class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"></i>
+            </div>
+            <span class="nav-link-text ms-1">Sản phẩm</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link " href="/sub-product">
+            <div
+              class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="ni ni-collection text-info text-sm opacity-10"></i>
+            </div>
+            <span class="nav-link-text ms-1">Chi tiết sản phẩm</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link " href="/customers">
+            <div
+              class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="ni ni-credit-card text-success text-sm opacity-10"></i>
+            </div>
+            <span class="nav-link-text ms-1">Khách hàng</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active " href="/orders">
+            <div
+              class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="ni ni-app text-info text-sm opacity-10"></i>
+            </div>
+            <span class="nav-link-text ms-1">Đơn hàng</span>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link " href="/profile.html">
+            <div
+              class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="ni ni-single-02 text-dark text-sm opacity-10"></i>
+            </div>
+            <span class="nav-link-text ms-1">Profile</span>
+          </a>
+        </li>
+
+      </ul>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="main-content position-relative border-radius-lg ">
+    <!-- Navbar -->
+    <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl " id="navbarBlur"
+      data-scroll="false">
+      <div class="container-fluid py-1 px-3">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
+            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-white" href="javascript:;">Trang chủ</a></li>
+            <li class="breadcrumb-item text-sm text-white active" aria-current="page">Đơn hàng chi tiết</li>
+          </ol>
+        </nav>
+        <form action="/products">
+          <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
+            <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+              <div class="input-group">
+                <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
+                <input type="text" name="name" class="form-control" placeholder="Tìm kiếm ..">
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </nav>
+    <!-- End Navbar -->
+    <div class="container-fluid py-4">
+      <div class="row">
+        <div class="col-12">
+          <div class="card mb-4">
+
+            <div class="card-body px-0 pt-0 pb-2">
+              <div class="table-responsive p-4">
+
+                {{!-- Thong tin nguoi nhan --}}
+                <h6>Thông tin người nhận</h6>
+                <div class="row-spbw">
+                    <span class="fl1">Họ tên: {{user.name}}</span>
+                    <span class="fl1">Số điện thoại: {{user.numberPhone}}</span>
+                    <span class="fl1">Địa chỉ: {{order.address}}</span>
+                </div>
+
+                <h6 style="margin-top: 30px;">Thông tin đơn hàng</h6>
+                <div class="row-spbw">
+                    <span class="fl1">Mã DH: {{order._id}}</span>
+                    <span class="fl1" style="margin-left: 10px;">Ngày đặt hàng: {{order.dateCreate}}</span>
+                    <span class="fl1">Trạng thái: {{order.status}}</span>
+                </div>
+
+                {{!-- DHCT --}}
+                <div style="margin-top: 30px;">
+                    <h6>Thông tin sản phẩm</h6>
+                    <table class="table align-items-center mb-0">
+                  <thead>
+                    <tr>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Tên sản phẩm</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Màu sắc</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Số lượng</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Số lượng còn lại</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Giá tiền</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Giá khuyến mãi</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    {{#each orderDetails}}
+                    <tr>
+                      <td style="column-width: 200px;">
+                        <div class="d-flex px-2 py-1">
+                          <div>
+                            <img src="{{this.image}}" class="avatar avatar-sm me-3" alt="user1">
+                          </div>
+                          <div class="d-flex flex-column justify-content-center" style="width: 400px;">
+                            <h6 class="mb-0 text-sm" style="display: inline-block;
+                              width: 250px;
+                              white-space: nowrap;
+                              overflow: hidden !important;
+                              text-overflow: ellipsis;">{{this.nameProduct}}</h6>
+                          </div>
+                        </div>
+                      </td>
+                      <td style="white-space:pre-line">
+                        <span class="text-secondary text-xs font-weight-bold"
+                          style="margin-top: 8px; margin-bottom: 8px;">{{this.color}}</span>
+                      </td>
+                      {{!-- white-space:pre-line --}}
+                      {{!-- align-middle text-center text-sm --}}
+                      <td style="white-space:pre-line">
+                        <span class="text-secondary text-xs font-weight-bold"
+                          style="margin-top: 8px; margin-bottom: 8px;">{{this.quantity}}</span>
+                      </td>
+                      <td style="white-space:pre-line">
+                        <span class="text-secondary text-xs font-weight-bold"
+                          style="margin-top: 8px; margin-bottom: 8px;">{{this.inventory}}</span>
+                      </td>
+                      <td style="white-space:pre-line">
+                        <span class="text-secondary text-xs font-weight-bold" style="text-decoration: line-through;">{{this.priceProduct}}$</span>
+                      </td>
+                      <td style="white-space:pre-line">
+                        <span class="text-secondary text-xs font-weight-bold red">{{this.priceSale}}$</span>
+                      </td>
+                    </tr>
+                    {{/each}}
+                  </tbody>
+                </table>
+                </div>
+
+                {{!-- Tong tien --}}
+                <div style="margin-top: 30px; display: flex; flex-direction: row; justify-content: space-between; align-items: flex-end;">
+                    {{#if order.check}}
+                    <button style="width: 200px; height: 50px; padding: 10px; border-radius: 10px; 
+                                    background-color: #f5365c; color: white; border: none;" 
+                            onclick="handleDelivered('{{order._id}}')">
+                        Xác nhận đơn hàng
+                    </button>
+                    {{else}}
+                    <div style="margin-top: 20px; color: red; font-weight: bold; font-size: 16px;">
+                        Đơn hàng đã được xác nhận
+                    </div>
+                    {{/if}}
+                    <div style="display: flex; flex-direction: column; align-items: flex-end;">
+                        <span class="fl1 top10">Tổng tiền: {{order.total}}$</span>
+                        <span class="fl1 top10">Tổng tiền khuyến mãi: {{order.totalSale}}$</span>
+                        <span class="fl1 top10">Mã giảm giá: {{order.codeSale}}$</span>
+                        <span class="fl1 top10">Phương thức thanh toán: {{order.paymentMethod}}</span>
+                        <span class="fl1 top10 total">Tổng tiền thanh toán: {{order.totalPrice}}$
+                            {{!-- <span>88$</span> --}}
+                        </span>
+                    
+                     </div>
+                </div>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  </div>
+
+  <!--   Core JS Files   -->
+  <script src="/assets/js/core/popper.min.js"></script>
+  <script src="/assets/js/core/bootstrap.min.js"></script>
+  <script src="/assets/js/plugins/perfect-scrollbar.min.js"></script>
+  <script src="/assets/js/plugins/smooth-scrollbar.min.js"></script>
+  <script>
+    const handleDelivered = (_id) => {
+        fetch(`http://localhost:3000/orders/${_id}/order-detail`, {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({status: 'Delivered'})
+        })
+        .then(res => res.json())
+        .then(res => {
+            if (res.status === 'success') {
+            alert('Xác nhận đơn hàng thành công');
+            window.location.href = 'http://localhost:3000/orders';
+            }
+        })
+        .catch(err => console.log(err));
+    }
+  </script>
+  <script>
+    var win = navigator.platform.indexOf('Win') > -1;
+    if (win && document.querySelector('#sidenav-scrollbar')) {
+      var options = {
+        damping: '0.5'
+      }
+      Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
+    }
+  </script>
+
+  <script>
+    function gotoOrderDetail(_idOrder) {
+      window.location.href = `http://localhost:3000/orders/${_idOrder}/order-detail`;
+    }
+  </script>
+  <!-- Github buttons -->
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+  <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
+  <script src="../assets/js/argon-dashboard.min.js?v=2.0.4"></script>
 </body>
+
 </html>
