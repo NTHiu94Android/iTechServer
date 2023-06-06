@@ -210,20 +210,22 @@
                 {{!-- Tong tien --}}
                 <div style="margin-top: 30px; display: flex; flex-direction: row; justify-content: space-between; align-items: flex-end;">
                     {{#if order.check}}
-                    <button style="width: 200px; height: 50px; padding: 10px; border-radius: 10px; 
+                    <button id="btn-delivered" style="width: 200px; height: 50px; padding: 10px; border-radius: 10px; 
                                     background-color: #f5365c; color: white; border: none;" 
                             onclick="handleDelivered('{{order._id}}')">
                         Xác nhận đơn hàng
                     </button>
                     {{else}}
+                    
                     <div style="margin-top: 20px; color: red; font-weight: bold; font-size: 16px;">
                         Đơn hàng đã được xác nhận
                     </div>
+                    
                     {{/if}}
                     <div style="display: flex; flex-direction: column; align-items: flex-end;">
                         <span class="fl1 top10">Tổng tiền: {{order.total}}$</span>
                         <span class="fl1 top10">Tổng tiền khuyến mãi: {{order.totalSale}}$</span>
-                        <span class="fl1 top10">Mã giảm giá: {{order.codeSale}}$</span>
+                        <span class="fl1 top10">Giảm giá(voucher): {{order.codeSale}}$</span>
                         <span class="fl1 top10">Phương thức thanh toán: {{order.paymentMethod}}</span>
                         <span class="fl1 top10 total">Tổng tiền thanh toán: {{order.totalPrice}}$
                             {{!-- <span>88$</span> --}}
@@ -246,25 +248,7 @@
   <script src="/assets/js/core/bootstrap.min.js"></script>
   <script src="/assets/js/plugins/perfect-scrollbar.min.js"></script>
   <script src="/assets/js/plugins/smooth-scrollbar.min.js"></script>
-  <script>
-    const handleDelivered = (_id) => {
-        fetch(`http://localhost:3000/orders/${_id}/order-detail`, {
-            method: 'POST',
-            headers: {
-            'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({status: 'Delivered'})
-        })
-        .then(res => res.json())
-        .then(res => {
-            if (res.status === 'success') {
-            alert('Xác nhận đơn hàng thành công');
-            window.location.href = 'http://localhost:3000/orders';
-            }
-        })
-        .catch(err => console.log(err));
-    }
-  </script>
+
   <script>
     var win = navigator.platform.indexOf('Win') > -1;
     if (win && document.querySelector('#sidenav-scrollbar')) {
@@ -279,6 +263,7 @@
     function gotoOrderDetail(_idOrder) {
       window.location.href = `http://localhost:3000/orders/${_idOrder}/order-detail`;
     }
+    
   </script>
   <!-- Github buttons -->
   <script async defer src="https://buttons.github.io/buttons.js"></script>

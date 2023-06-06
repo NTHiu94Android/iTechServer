@@ -1,5 +1,6 @@
 
-
+//const domain = 'http://localhost:3000';
+const domain = 'https://itech-server-hiuntps.onrender.com';
 
 
 const fetchApi = async (url, option) => {
@@ -8,11 +9,11 @@ const fetchApi = async (url, option) => {
 }
 
 const edit = (_id) => {
-    window.location.href = `http://localhost:3000/products/${_id}/product-update`
+    window.location.href = `${domain}/products/${_id}/product-update`
 }
 
 const editCategory = (id) => {
-    window.location.href = `http://localhost:3000/categories/${id}/update`;
+    window.location.href = `${domain}/categories/${id}/update`;
 }
 
 const deleteCategory = (id) => {
@@ -49,7 +50,7 @@ const deleteCategory = (id) => {
 }
 
 const editBrand = (id) => {
-    window.location.href = `http://localhost:3000/brands/${id}/update`;
+    window.location.href = `${domain}/brands/${id}/update`;
 }
 
 const deleteBrand = (id) => {
@@ -86,11 +87,25 @@ const deleteBrand = (id) => {
 }
 
 const editSubProduct = (_id) => {
-    window.location.href = `http://localhost:3000/sub-products/${_id}/sub-product-update`
+    window.location.href = `${domain}/sub-products/${_id}/sub-product-update`
 }
 
 const addPicture = (_id) => {
-    window.location.href = `http://localhost:3000/sub-products/${_id}/add-picture`
+    window.location.href = `${domain}/sub-products/${_id}/add-picture`
+}
+
+const handleDelivered = async (_idOrder) => {
+    //Them hieu ung loading cho button
+    const button = document.getElementById('btn-delivered');
+    button.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...`;
+    button.disabled = true;
+    
+    const url = `${domain}/orders/${_idOrder}/update`;
+    await fetch(url);
+    setTimeout(() => {
+        window.location.reload();
+    }, 1000);
+
 }
 
 const onChangeFile = () => {
@@ -125,3 +140,21 @@ const onChangeFiles = () => {
         reader.readAsDataURL(file);
     }
 };
+
+// const handleDelivered = (_id) => {
+//     fetch(`${domain}/orders/${_id}/order-detail`, {
+//         method: 'POST',
+//         headers: {
+//         'Content-Type': 'application/json'
+//         },
+//         body: JSON.stringify({status: 'Delivered'})
+//     })
+//     .then(res => res.json())
+//     .then(res => {
+//         if (res.status === 'success') {
+//         alert('Xác nhận đơn hàng thành công');
+//         window.location.href = 'http://localhost:3000/orders';
+//         }
+//     })
+//     .catch(err => console.log(err));
+// }

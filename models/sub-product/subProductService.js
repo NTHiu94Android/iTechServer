@@ -26,6 +26,12 @@ const updateSubProduct = async (
     return subProduct;
 };
 
+//Cap nhat so luong subProduct
+const updateQuantitySubProduct = async (_id, quantity) => {
+    const subProduct = await sub_product_model.findByIdAndUpdate(_id, { quantity });
+    return subProduct;
+};
+
 //Add subProduct
 const addSubProduct = async (
     price, description, quantity, color, sale,
@@ -40,5 +46,5 @@ const addSubProduct = async (
 };
 
 module.exports = {
-    getSubProducts, getSubProductsByIdProduct, addSubProduct, updateSubProduct
+    getSubProducts, getSubProductsByIdProduct, addSubProduct, updateSubProduct, updateQuantitySubProduct
 };

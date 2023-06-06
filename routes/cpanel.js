@@ -5,6 +5,7 @@ const cloudinary = require('cloudinary').v2;
 const multer = require('../middleware/multer');
 
 const jwt = require("jsonwebtoken");
+const notification = require('../ultils/send-notifi');
 
 const user_controller = require('../models/user/userController');
 const order_controller = require('../models/order/orderController');
@@ -22,7 +23,7 @@ const promotion_controller = require('../models/promotion/promotionController');
 const checkAccessTokenMiddleware = (req, res, next) => {
     //Lay accessToken tu session
     const accessToken = req.session.accessToken;
-    console.log('accessToken check: ', accessToken);
+    //console.log('accessToken check: ', accessToken);
     if (!accessToken) {
         // Chuyển hướng đến trang đăng nhập
         return res.redirect('/');
@@ -576,7 +577,7 @@ router.get('/orders', checkAccessTokenMiddleware, async function (req, res, next
             let list = [];
             for (let i = 0; i < orders.length; i++) {
                 const user = await user_controller.get_user(orders[i].idUser);
-                console.log('User', user.name);
+                //console.log('User', user.name);
                 orders[i].nameUser = user.name;
                 orders[i].avatarUser = user.avatar;
                 orders[i].phoneUser = user.numberPhone;
@@ -600,10 +601,56 @@ router.get('/orders', checkAccessTokenMiddleware, async function (req, res, next
     }
 });
 
+//Cap nhat don hang (XAc nhan/ Huy don hang)
+router.get('/orders/:_idOrder/update', checkAccessTokenMiddleware, async function (req, res, next) {
+    try {
+        const { _idOrder } = req.params;
+        //Lay chi tiet don hang
+        const orderDetails = await order_detail_controller.get_order_detail_by_idOrder(_idOrder);
+        if (!orderDetails) {
+            return res.status(401).render('error', { message: 'Not authorization' });
+        }
+        //Cap nhat so luong san pham
+        for (let i = 0; i < orderDetails.length; i++) {
+            const subProduct = await sub_product_controller.onGetSubProductById(orderDetails[i].idSubProduct);
+            if (!subProduct) {
+                return res.status(401).render('error', { message: 'Not authorization' });
+            }
+            if (subProduct.quantity < orderDetails[i].quantity) {
+                return res.status(401).render('error', { message: 'Not authorization' });
+            }
+            await sub_product_controller.onUpdateQuantitySubProduct(orderDetails[i].idSubProduct, subProduct.quantity - orderDetails[i].quantity);
+        }
+
+        //Cap nhat don hang
+        const date = new Date();
+        const day = date.getDate();
+        const month = date.getMonth() + 1;
+        const year = date.getFullYear();
+        const dayNow = day + '/' + month + '/' + year;
+        const orderUpdate = await order_controller.update_order(_idOrder, dayNow, 'Delivered');
+        if (!orderUpdate) {
+            return res.status(401).render('error', { message: 'Not authorization' });
+        }
+
+        //Gui thong bao den nguoi dung
+        const data = {
+            title: 'iTech - Order',
+            body: `Đơn hàng ${_idOrder} đã được xác nhận`,
+            image: ''
+        }
+        await notification.onSendData(orderUpdate.idUser, data);
+        
+        return res.redirect('/orders');
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
 
 //-----------------------------Don hang chi tiet----------------------------------
 //Lay danh sach don hang chi tiet
-router.get('/orders/:_idOrder/order-detail', async function (req, res, next) {
+router.get('/orders/:_idOrder/order-detail', checkAccessTokenMiddleware, async function (req, res, next) {
     try {
         const { _idOrder } = req.params;
         const order = await order_controller.get_order_by_id(_idOrder);
@@ -663,6 +710,8 @@ router.get('/orders/:_idOrder/order-detail', async function (req, res, next) {
         res.status(500).send(error.message);
     }
 });
+
+
 
 
 

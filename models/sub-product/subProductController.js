@@ -48,6 +48,16 @@ const onUpdateSubProduct = async (
     }
 };
 
+//Cap nhat so luong subProduct
+const onUpdateQuantitySubProduct = async (_id, quantity) => {
+    try {
+        const subProduct = await sub_product_service.updateQuantitySubProduct(_id, quantity);
+        return subProduct;
+    } catch (error) {
+        console.log('Error update quantity sub product: ' + error.message);
+    }
+};
+
 //Add subProduct
 const onAddSubProduct = async (
     price, description, quantity, color, sale,
@@ -65,5 +75,6 @@ const onAddSubProduct = async (
 };
 
 module.exports = {
-    onGetSubProducts, onGetSubProductsByIdProduct, onAddSubProduct, onUpdateSubProduct, onGetSubProductById
+    onGetSubProducts, onGetSubProductsByIdProduct, onAddSubProduct, 
+    onUpdateSubProduct, onGetSubProductById, onUpdateQuantitySubProduct
 };
