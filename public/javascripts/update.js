@@ -1,6 +1,6 @@
 
-//const domain = 'http://localhost:3000';
-const domain = 'https://itech-server-hiuntps.onrender.com';
+const domain = 'http://localhost:3000';
+//const domain = 'https://itech-server-hiuntps.onrender.com';
 
 
 const fetchApi = async (url, option) => {
@@ -136,6 +136,7 @@ const onChangeFiles = () => {
             image.height = 200;
             image.src = e.target.result;
             imageContainer.appendChild(image);
+            image.style.display = 'block';
         };
         reader.readAsDataURL(file);
     }

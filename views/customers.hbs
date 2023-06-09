@@ -50,7 +50,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link " href="/categories">
+                    <a class="nav-link  " href="/categories">
                         <div
                             class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                             <i class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"></i>
@@ -60,7 +60,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link " href="/brands">
+                    <a class="nav-link  " href="/brands">
                         <div
                             class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                             <i class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"></i>
@@ -70,7 +70,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link  " href="/products">
+                    <a class="nav-link " href="/products">
                         <div
                             class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                             <i class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"></i>
@@ -80,7 +80,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link active " href="/sub-product">
+                    <a class="nav-link " href="/sub-product">
                         <div
                             class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                             <i class="ni ni-collection text-info text-sm opacity-10"></i>
@@ -90,7 +90,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link " href="/customers">
+                    <a class="nav-link active " href="/customers">
                         <div
                             class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                             <i class="ni ni-credit-card text-success text-sm opacity-10"></i>
@@ -121,6 +121,7 @@
 
             </ul>
         </div>
+
     </aside>
 
     <!-- Main -->
@@ -131,21 +132,11 @@
             <div class="container-fluid py-1 px-3">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
-                        <li class="breadcrumb-item text-sm"><a class="opacity-5 text-white" href="javascript:;">Trang chủ</a></li>
-                        <li class="breadcrumb-item text-sm text-white active" aria-current="page">Chi tiết sản phẩm</li>
+                        <li class="breadcrumb-item text-sm"><a class="opacity-5 text-white" href="javascript:;">Trang
+                                chủ</a></li>
+                        <li class="breadcrumb-item text-sm text-white active" aria-current="page">Khách hàng</li>
                     </ol>
                 </nav>
-                {{!-- <form action="/products">
-                    <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
-                        <div class="ms-md-auto pe-md-3 d-flex align-items-center">
-                            <div class="input-group">
-                                <span class="input-group-text text-body"><i class="fas fa-search"
-                                        aria-hidden="true"></i></span>
-                                <input type="text" name="name" class="form-control" placeholder="Tìm kiếm ..">
-                            </div>
-                        </div>
-                    </div>
-                </form> --}}
             </div>
         </nav>
         <!-- End Navbar -->
@@ -153,89 +144,72 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card mb-4">
-                        <div class="card-header pb-3 p-3 d-flex" style="display: flex; flex-direction: row; justify-content: flex-end;">
-                            <div class="col-9 text-end">
-                                <button class="btn btn-outline-primary btn-sm mb-0">
-                                    <a href="/sub-products/sub-product-insert">Thêm sản phẩm chi tiết</a></button>
-                            </div>
-                        </div>
                         <div class="card-body px-0 pt-0 pb-2">
                             <div class="table-responsive p-4">
-
-
                                 <table class="table align-items-center mb-0">
                                     <thead>
                                         <tr>
                                             <th
                                                 class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                                ID Sản phẩm chi tiết</th>
+                                                ID khách hàng</th>
                                             <th
                                                 class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                                Tên sản phẩm</th>
+                                                Tên khách hàng</th>
                                             <th
                                                 class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                                Màu sắc</th>
+                                                Email</th>
                                             <th
                                                 class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                                Số lượng</th>
+                                                Số điện thoại</th>
                                             <th
                                                 class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                                Khuyến mãi
-                                            </th>
-                                            <th
-                                                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                                Giá bán</th>
+                                                Địa chỉ</th>
                                         </tr>
                                     </thead>
 
                                     <tbody>
-                                        {{#each subProducts}}
+                                        {{#each customers}}
+
                                         <tr>
                                             <td style="align-middle text-center text-sm">
                                                 <span class="text-secondary text-xs font-weight-bold"
                                                     style="margin-top: 8px; margin-bottom: 8px;">ID: {{this._id}}</span>
                                             </td>
-                                            <td style="align-middle text-center text-sm">
-                                                <div class="d-flex px-2 py-1">
-                                                    <div>
-                                                        <img src="{{this.image}}" class="avatar avatar-sm me-3"
-                                                            alt="user1">
-                                                    </div>
-                                                    <div class="d-flex flex-column justify-content-center"
-                                                        style="width: 200px;">
-                                                        <h6 class="mb-0 text-sm" style="display: inline-block;
-                                                            width: 200px;
-                                                            white-space: nowrap;
-                                                            overflow: hidden !important;
-                                                            text-overflow: ellipsis;">{{this.nameProduct}}</h6>
-                                                    </div>
-                                                </div>
+                                            <td style="column-width: 160px;">
+                                                <img src="{{this.avatar}}" class="avatar avatar-sm me-3" alt="user1">
+                                                <span class="text-secondary text-xs font-weight-bold"
+                                                    style="margin-top: 8px; margin-bottom: 8px;">{{this.name}}</span>
+
                                             </td>
                                             {{!-- white-space:pre-line --}}
                                             {{!-- align-middle text-center text-sm --}}
                                             <td style="align-middle text-center text-sm">
                                                 <span class="text-secondary text-xs font-weight-bold"
-                                                    style="margin-top: 8px; margin-bottom: 8px;">{{this.color}}</span>
-                                            </td>
-                                            <td style="align-middle text-center text-sm">
-                                                <span
-                                                    class="text-secondary text-xs font-weight-bold">{{this.quantity}}</span>
-                                            </td>
-                                            <td style="align-middle text-center text-sm">
-                                                <span
-                                                    class="text-secondary text-xs font-weight-bold">-{{this.sale}}%</span>
-                                            </td>
-                                            <td style="align-middle text-center text-sm">
-                                                <span
-                                                    class="text-secondary text-xs font-weight-bold">{{this.price}}$</span>
+                                                    style="">{{this.email}}</span>
                                             </td>
 
                                             <td style="align-middle text-center text-sm">
-                                                <button onclick="editSubProduct('{{this._id}}')"
+                                                <span class="text-secondary text-xs font-weight-bold"
+                                                    style="margin-top: 8px; margin-bottom: 8px;">{{this.numberPhone}}</span>
+                                            </td>
+
+                                            <td style="align-middle; text-center; text-sm; max-width: 100px;">
+                                                <span class="text-secondary text-xs font-weight-bold" style="display: inline-block;
+                                                            width: 100px;
+                                                            white-space: nowrap;
+                                                            overflow: hidden !important;
+                                                            text-overflow: ellipsis;">
+                                                    {{this.address}}
+                                                </span>
+                                            </td>
+
+
+                                            <td style="align-middle text-center text-sm">
+                                                <button onclick="editBrand('{{this._id}}')"
                                                     class="btn btn-xs mb-3 mt-3 btn-outline-secondary">
                                                     Sửa
                                                 </button>
-                                                <button onclick="editSubProduct('{{this._id}}')"
+                                                <button onclick="deleteBrand('{{this._id}}')"
                                                     class="btn btn-xs mb-3 mt-3 btn-outline-danger">
                                                     Xóa
                                                 </button>
@@ -244,7 +218,6 @@
                                         {{/each}}
                                     </tbody>
                                 </table>
-
                             </div>
                         </div>
                     </div>
@@ -252,6 +225,7 @@
             </div>
         </div>
     </main>
+
 
     <!--   Core JS Files   -->
     <script src="../assets/js/core/popper.min.js"></script>
@@ -267,6 +241,9 @@
             Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
         }
     </script>
+
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
     <!-- Github buttons -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->

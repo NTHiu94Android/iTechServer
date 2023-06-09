@@ -277,11 +277,15 @@ router.get('/brands/insert', checkAccessTokenMiddleware, async function (req, re
 router.post('/brands/insert', checkAccessTokenMiddleware, multer.single('picture'), async function (req, res, next) {
     try {
         const { name, idCategory } = req.body;
+        if (!req.file) {
+            res.status(401).redirect('/brands/insert');
+            return;
+        }
         const result = await cloudinary.uploader.upload(req.file.path);
         const image = result.secure_url;
         //console.log('Info: ', name, image, idCategory, idBrand);
         if (!name || !image || !idCategory) {
-            res.status(401).render('Error', { message: 'Not authorization' });
+            res.status(401).redirect('/brands/insert')
             return;
         }
         const brand = await brand_controller.add_brand(name, image, idCategory);
@@ -582,9 +586,9 @@ router.get('/orders', checkAccessTokenMiddleware, async function (req, res, next
                 orders[i].avatarUser = user.avatar;
                 orders[i].phoneUser = user.numberPhone;
                 //list.push(orders[i]);
-                if(orders[i].status == 'cart' || orders[i].status == 'favorite'){
+                if (orders[i].status == 'cart' || orders[i].status == 'favorite') {
                     continue;
-                }else{
+                } else {
                     const user = await user_controller.get_user(orders[i].idUser);
                     orders[i].nameUser = user.name;
                     orders[i].avatarUser = user.avatar;
@@ -640,7 +644,7 @@ router.get('/orders/:_idOrder/update', checkAccessTokenMiddleware, async functio
             image: ''
         }
         await notification.onSendData(orderUpdate.idUser, data);
-        
+
         return res.redirect('/orders');
     } catch (error) {
         res.status(500).send(error.message);
@@ -675,7 +679,7 @@ router.get('/orders/:_idOrder/order-detail', checkAccessTokenMiddleware, async f
             if (!subProduct) {
                 return res.status(401).render('error', { message: 'Not authorization' });
             }
-            
+
             const product = await product_controller.onGetProductById(subProduct.idProduct);
             if (!product) {
                 return res.status(401).render('error', { message: 'Not authorization' });
@@ -687,25 +691,57 @@ router.get('/orders/:_idOrder/order-detail', checkAccessTokenMiddleware, async f
                     color: subProduct.color,
                     nameProduct: product.name,
                     priceProduct: subProduct.price,
-                    priceSale: subProduct.price - subProduct.price * subProduct.sale/100,
+                    priceSale: subProduct.price - subProduct.price * subProduct.sale / 100,
                     quantity: orderDetails[i].quantity,
                     inventory: subProduct.quantity,
                 }
             );
             total += subProduct.price * orderDetails[i].quantity;
-            totalSale += (subProduct.price - subProduct.price * subProduct.sale/100) * orderDetails[i].quantity;
+            totalSale += (subProduct.price - subProduct.price * subProduct.sale / 100) * orderDetails[i].quantity;
         }
         //console.log('List', list);
         order.total = total;
         order.totalSale = totalSale;
         order.codeSale = order.totalPrice - order.totalSale;
-        if(order.status == 'Delivered' || order.status == 'Canceled'){
+        if (order.status == 'Delivered' || order.status == 'Canceled') {
             order.check = false;
-        }else{
+        } else {
             order.check = true;
         }
-        
+
         res.render('order-detail', { title: 'iTech - Order detail', order, orderDetails: list, user });
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
+//-----------------------------Customer----------------------------------
+//Lay danh sach khach hang
+router.get('/customers', checkAccessTokenMiddleware, async function (req, res, next) {
+    try {
+        let list = [];
+        const customers = await user_controller.get_users();
+        for (let i = 0; i < customers.length; i++) {
+            if (customers[i].role == 'user') {
+                list.push(customers[i]);
+                const address = await address_controller.get_address_by_idUser(customers[i]._id);
+                if (!address) {
+                    return res.status(401).render('error', { message: 'Not authorization' });
+                }
+                for (let j = 0; j < address.length; j++) {
+                    if (address[j].status == true) {
+                        customers[i].address = address[j].body;
+                        break;
+                    }
+                }
+            }
+
+        }
+
+        if (!customers) {
+            return res.status(401).render('error', { message: 'Not authorization' });
+        }
+        res.render('customers', { title: 'iTech - Customers', customers: list });
     } catch (error) {
         res.status(500).send(error.message);
     }

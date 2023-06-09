@@ -6,9 +6,7 @@
   <link rel="apple-touch-icon" sizes="76x76" href="images/apple-icon.png">
   <link rel="icon" type="image/png" href="images/favicon.png">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-  <title>
-    iTechPro - Quản lý sản phẩm
-  </title>
+  <title>iTech</title>
   <!--     Fonts and icons     -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
   <!-- Nucleo Icons -->
@@ -33,7 +31,7 @@
         aria-hidden="true" id="iconSidenav"></i>
       <a class="navbar-brand m-0" href=" https://demos.creative-tim.com/argon-dashboard/pages/dashboard.html "
         target="_blank">
-        <img src="/images/logo-ct-dark.png" class="navbar-brand-img h-100" alt="main_logo">
+        <img src="/images/logos/logo.png" class="navbar-brand-img h-100" alt="main_logo">
         <span class="ms-1 font-weight-bold">iTech</span>
       </a>
     </div>
@@ -135,58 +133,53 @@
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
             <li class="breadcrumb-item text-sm"><a class="opacity-5 text-white" href="javascript:;">Trang chủ</a></li>
-            <li class="breadcrumb-item text-sm text-white active" aria-current="page">Loại sản phẩm</li>
+            <li class="breadcrumb-item text-sm text-white active" aria-current="page">Cập nhật loại sản phẩm</li>
           </ol>
         </nav>
       </div>
     </nav>
     <!-- End Navbar -->
     <div class="container-fluid py-2">
-            <div class="row ">
-                <form role="form" method="post" action="/categories/{{category._id}}/update"
-                    enctype="multipart/form-data">
-                    <div class="col-md-8">
-                        <div class="card">
-                            <div class="card-header pb-0">
-                                <div class="d-flex align-items-center">
-                                    <h4 class="mb-0">Chỉnh sửa loai sản phẩm</h4>
-                                    <button class="btn btn-primary btn-sm ms-auto" type="submit"
-                                        id="submit">Lưu</button>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <p class="text-uppercase text-sm">Thông tin loại sản phẩm</p>
-                                <div class="col-md-10">
-                                    <div class="form-group">
-                                        <label for="example-text-input" class="form-control-label">Tên loại sản phẩm</label>
-                                        <input required class="form-control" type="text" id="name" name="name"
-                                            minlength="8" value="{{category.name}}" />
-                                    </div>
-                                </div>
+      <div class="row ">
+        <form role="form" method="post" action="/categories/{{category._id}}/update" enctype="multipart/form-data">
+          <div class="col-md-8">
+            <div class="card">
+              <div class="card-body">
+                <div class="col-md-10">
+                  <div class="form-group">
+                    <label for="example-text-input" class="form-control-label">Tên loại sản phẩm</label>
+                    <input required class="form-control" type="text" id="name" name="name" minlength="8"
+                      value="{{category.name}}" />
+                  </div>
+                </div>
 
-                                <div class="row">
+                <div class="row">
 
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="example-text-input" class="form-control-label">Hình ảnh</label>
-                                            <input type="file" id="image-file" onchange="onChangeFile()" name="picture"
-                                                placeholder="click" />
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="example-text-input" class="form-control-label">Hình ảnh</label>
+                      <input type="file" id="image-file" onchange="onChangeFile()" name="picture" placeholder="click" />
 
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="form-group" style="flex-direction: row;">
-                                            <label for="example-text-input" class="form-control-label">Xem trước</label>
-                                            <img id="image-view" width="200" height="200" src="{{category.image}}" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
-                </form>
+                  </div>
+
+                  <div class="col-md-12">
+                    <div class="form-group" style="display: flex; flex-direction: column;">
+                      <label for="example-text-input" class="form-control-label">Xem trước</label>
+                      <img id="image-view" width="200" height="200" src="{{category.image}}" />
+                      <input type="hidden" id="image" name="image" value="{{category.image}}" />
+                    </div>
+                  </div>
+
+                </div>
+
+                <button class="btn btn-primary btn-sm them-sp" type="submit" id="submit">Lưu</button>
+              </div>
             </div>
-        </div>
+          </div>
+        </form>
+      </div>
+    </div>
   </main>
   <div class="fixed-plugin">
     <a class="fixed-plugin-button text-dark position-fixed px-3 py-2">
@@ -268,9 +261,9 @@
     }
   </script>
 
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
   <script>
-    
+
   </script>
   <!-- Github buttons -->
   <script async defer src="https://buttons.github.io/buttons.js"></script>
