@@ -173,6 +173,10 @@ router.get('/categories/insert', checkAccessTokenMiddleware, async function (req
 router.post('/categories/insert', checkAccessTokenMiddleware, multer.single('picture'), async function (req, res, next) {
     try {
         const { name } = req.body;
+        if (!req.file) {
+            res.status(401).redirect('/categories/insert');
+            return;
+        }
         const result = await cloudinary.uploader.upload(req.file.path);
         const image = result.secure_url;
         //console.log('Info: ', name, image, idCategory, idBrand);
