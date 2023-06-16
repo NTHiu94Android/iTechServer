@@ -45,6 +45,15 @@ const addSubProduct = async (
     return subProduct;
 };
 
+//Xoa subProduct
+const deleteSubProduct = async (_id) => {
+    const subProduct = await sub_product_model.findByIdAndDelete(_id);
+    if (subProduct) {
+        return true;
+    }
+    return false;
+}
+
 module.exports = {
-    getSubProducts, getSubProductsByIdProduct, addSubProduct, updateSubProduct, updateQuantitySubProduct
+    getSubProducts, getSubProductsByIdProduct, addSubProduct, updateSubProduct, updateQuantitySubProduct, deleteSubProduct
 };

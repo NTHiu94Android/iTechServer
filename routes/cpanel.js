@@ -114,8 +114,12 @@ router.post('/categories/:_id/update', checkAccessTokenMiddleware, multer.single
     try {
         const { _id } = req.params;
         const { name } = req.body;
-        const result = await cloudinary.uploader.upload(req.file.path);
-        const image = result.secure_url;
+        let image = req.body.image;
+        if (req.file) {
+            const result = await cloudinary.uploader.upload(req.file.path);
+            image = result.secure_url;
+        }
+
         //console.log('Info: ', name, image, idCategory, idBrand);
         if (!name || !image || !_id) {
             res.status(401).render('Error', { message: 'Not authorization' });
@@ -138,10 +142,18 @@ router.get('/categories/:_id/delete', checkAccessTokenMiddleware, async function
     try {
         const { _id } = req.params;
         if (!_id) {
-            res.status(401).render('Error', { message: 'Not authorization' });
-            return;
+            res.json({ status: false });
         } else {
             await category_controller.delete_category(_id);
+            const brands = await brand_controller.get_brand_by_id_category(_id);
+            for (let i = 0; i < brands.length; i++) {
+                const products = await product_controller.onGetProductByIdBrand(brands[i]._id);
+                for (let j = 0; j < products.length; j++) {
+                    await product_controller.onDeleteProduct(products[j]._id);
+                }
+                await brand_controller.delete_brand(brands[i]._id);
+            }
+
             res.json({ status: true });
         }
     } catch (error) {
@@ -229,8 +241,11 @@ router.post('/brands/:_id/update', checkAccessTokenMiddleware, multer.single('pi
     try {
         const { _id } = req.params;
         const { name, idCategory } = req.body;
-        const result = await cloudinary.uploader.upload(req.file.path);
-        const image = result.secure_url;
+        let image = req.body.image;
+        if (req.file) {
+            const result = await cloudinary.uploader.upload(req.file.path);
+            image = result.secure_url;
+        }
         //console.log('Info: ', name, image, idCategory, idBrand);
         if (!name || !image || !_id || !idCategory) {
             res.status(401).render('Error', { message: 'Not authorization' });
@@ -253,9 +268,12 @@ router.get('/brands/:_id/delete', checkAccessTokenMiddleware, async function (re
     try {
         const { _id } = req.params;
         if (!_id) {
-            res.status(401).render('Error', { message: 'Not authorization' });
-            return;
+            res.json({ status: false });
         } else {
+            const products = await product_controller.onGetProductByIdBrand(_id);
+            for (let j = 0; j < products.length; j++) {
+                await product_controller.onDeleteProduct(products[j]._id);
+            }
             await brand_controller.delete_brand(_id);
             res.json({ status: true });
         }

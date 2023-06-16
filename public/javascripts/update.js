@@ -1,6 +1,6 @@
 
-const domain = 'http://localhost:3000';
-//const domain = 'https://itech-server-hiuntps.onrender.com';
+//const domain = 'http://localhost:3000';
+const domain = 'https://itech-server-hiuntps.onrender.com';
 
 
 const fetchApi = async (url, option) => {

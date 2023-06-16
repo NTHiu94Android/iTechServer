@@ -74,7 +74,17 @@ const onAddSubProduct = async (
     }
 };
 
+//Xoa subProduct
+const onDeleteSubProduct = async (_id) => {
+    try {
+        const subProduct = await sub_product_service.deleteSubProduct(_id);
+        return subProduct;
+    } catch (error) {
+        console.log('Error delete sub product: ' + error.message);
+    }
+}
+
 module.exports = {
     onGetSubProducts, onGetSubProductsByIdProduct, onAddSubProduct, 
-    onUpdateSubProduct, onGetSubProductById, onUpdateQuantitySubProduct
+    onUpdateSubProduct, onGetSubProductById, onUpdateQuantitySubProduct, onDeleteSubProduct
 };

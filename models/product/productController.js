@@ -25,6 +25,23 @@ const onGetProductById = async (_id) => {
     }
 }
 
+//Lay san pham theo idbrand
+const onGetProductByIdBrand = async (_idBrand) => {
+    try {
+        const products = await onGetProducts();
+        if(!products) return null;
+        let result = [];
+        for (let i = 0; i < products.length; i++) {
+            if(products[i].idBrand == _idBrand){
+                result.push(products[i]);
+            }
+        }
+        return result;
+    } catch (error) {
+        console.log('Error get products: ' + error.message);
+    }
+}
+
 //Add product
 const onAddroduct = async (name, image, idCategory, idBrand) => {
     try {
@@ -56,5 +73,5 @@ const onDeleteProduct = async (_id) => {
 };
 
 module.exports = {
-    onAddroduct, onGetProducts, onUpdateProduct, onDeleteProduct, onGetProductById
+    onAddroduct, onGetProducts, onUpdateProduct, onDeleteProduct, onGetProductById, onGetProductByIdBrand
 };
