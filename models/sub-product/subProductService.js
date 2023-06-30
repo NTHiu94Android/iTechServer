@@ -26,6 +26,12 @@ const updateSubProduct = async (
     return subProduct;
 };
 
+//Cap nhat ngay cua subProduct
+const updateDateSubProduct = async (_id) => {
+    const subProduct = await sub_product_model.findByIdAndUpdate(_id, { date: Date.now() });
+    return subProduct;
+}
+
 //Cap nhat so luong subProduct
 const updateQuantitySubProduct = async (_id, quantity) => {
     const subProduct = await sub_product_model.findByIdAndUpdate(_id, { quantity });
@@ -55,5 +61,7 @@ const deleteSubProduct = async (_id) => {
 }
 
 module.exports = {
-    getSubProducts, getSubProductsByIdProduct, addSubProduct, updateSubProduct, updateQuantitySubProduct, deleteSubProduct
+    getSubProducts, getSubProductsByIdProduct, addSubProduct, 
+    updateSubProduct, updateQuantitySubProduct, updateDateSubProduct, 
+    deleteSubProduct
 };

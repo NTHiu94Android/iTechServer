@@ -1,12 +1,392 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="apple-touch-icon" sizes="76x76" href="images/apple-icon.png">
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <link rel="icon" type="image/x-icon" href="../assets/img/favicon/favicon.ico" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <title>iTech - Settings</title>
+    <!--     Fonts and icons     -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
+    <!-- Nucleo Icons -->
+    <link href="../assets/css/nucleo-icons.css" rel="stylesheet" />
+    <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
+    <!-- Font Awesome Icons -->
+    <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+    <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
+    <!-- CSS Files -->
+    <link id="pagestyle" href="../assets/css/argon-dashboard.css?v=2.0.4" rel="stylesheet" />
+    <script language="javascript" src="/javascripts/delete.js"></script>
+    <script language="javascript" src="/javascripts/update.js"></script>
+
 </head>
-<body>
-    profile
+
+<body class="g-sidenav-show bg-gray-100">
+    <div class="min-height-300 bg-primary position-absolute w-100"></div>
+    <aside
+        class="sidenav bg-white navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-4 "
+        id="sidenav-main">
+        <div class="sidenav-header">
+            <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none"
+                aria-hidden="true" id="iconSidenav"></i>
+            <a class="navbar-brand m-0" href=" https://demos.creative-tim.com/argon-dashboard/pages/dashboard.html "
+                target="_blank">
+                <img src="images/logos/logo.png" class="navbar-brand-img h-100" alt="main_logo">
+                <span class="ms-1 font-weight-bold">iTech</span>
+            </a>
+        </div>
+        <hr class="horizontal dark mt-0">
+        <div class="  w-auto " id="sidenav-collapse-main">
+            <ul class="navbar-nav">
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/home">
+                        <div
+                            class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                            <i class="ni ni-tv-2 text-primary text-sm opacity-10"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">Trang chủ</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link " href="/categories">
+                        <div
+                            class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                            <i class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">Loại sản phẩm</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link " href="/brands">
+                        <div
+                            class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                            <i class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">Thương hiệu</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link " href="/products">
+                        <div
+                            class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                            <i class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">Sản phẩm</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link " href="/sub-product">
+                        <div
+                            class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                            <i class="ni ni-collection text-info text-sm opacity-10"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">Chi tiết sản phẩm</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link " href="/customers">
+                        <div
+                            class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                            <i class="ni ni-credit-card text-success text-sm opacity-10"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">Khách hàng</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link " href="/orders">
+                        <div
+                            class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                            <i class="ni ni-app text-info text-sm opacity-10"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">Đơn hàng</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link active" href="/profile">
+                        <div
+                            class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                            <i class="ni ni-single-02 text-dark text-sm opacity-10"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">Trang cá nhân</span>
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+
+    </aside>
+    <main class="main-content position-relative border-radius-lg ">
+
+        <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl " id="navbarBlur"
+            data-scroll="false">
+            <div class="container-fluid py-1 px-3">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
+                        <li class="breadcrumb-item text-sm"><a class="opacity-5 text-white" href="javascript:;">Trang
+                                chủ</a></li>
+                        <li class="breadcrumb-item text-sm text-white active" aria-current="page">Trang cá nhân</li>
+                    </ol>
+                </nav>
+            </div>
+        </nav>
+
+        <!-- Content wrapper -->
+        <div class="content-wrapper">
+            <!-- Content -->
+
+            <div class="container-xxl flex-grow-1 container-p-y">
+                {{!-- <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Cài đặt tài khoản /</span> Tài
+                    khoản</h4> --}}
+
+                <div class="row">
+                    <div class="col-md-12">
+
+                        <div class="card mb-4">
+                            <h5 class="card-header">Thông tin cá nhân</h5>
+                            <!-- Account -->
+                            {{!-- <div class="card-body">
+                                <div class="d-flex align-items-start align-items-sm-center gap-4">
+                                    <img src="{{user.avatar}}" alt="user-avatar" class="d-block rounded" height="100"
+                                        width="100" id="image-view" />
+                                    <div class="button-wrapper">
+                                        <label for="image-file" class="btn btn-primary me-2 mb-4" tabindex="0">
+                                            <span class="d-none d-sm-block">Đổi avatar</span>
+                                            <i class="bx bx-upload d-block d-sm-none"></i>
+                                            <input type="file" id="image-file" onchange="onChangeFile()" name="picture"
+                                                placeholder="click" hidden />
+                                        </label>
+
+                                        <p class="text-muted mb-0">Ảnh JPG, PNG</p>
+                                    </div>
+                                </div>
+                            </div> --}}
+                            {{!--
+                            <hr class="my-0" /> --}}
+                            <div class="card-body">
+                                <form id="formAccountSettings" method="POST" action="/profile/update"
+                                    enctype="multipart/form-data">
+                                    <div class="d-flex align-items-start align-items-sm-center gap-4" style="margin-top: -20px;">
+                                        <img src="{{user.avatar}}" alt="user-avatar" class="d-block rounded"
+                                            height="100" width="100" id="image-view" />
+                                        <div class="button-wrapper">
+                                            <label for="image-file" class="btn btn-primary me-2 mb-4" tabindex="0">
+                                                <span class="d-none d-sm-block">Đổi avatar</span>
+                                                <i class="bx bx-upload d-block d-sm-none"></i>
+                                                <input type="file" id="image-file" onchange="onChangeFile()"
+                                                    name="picture" placeholder="click" hidden />
+                                            </label>
+
+                                            <p class="text-muted mb-0">Ảnh JPG, PNG</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-12" style="margin-top: 20px;">
+                                        <input type="text" value="{{user._id}}" name="_id" placeholder="click" hidden />
+                                        <div class="mb-3 col-md-12">
+                                            <label for="firstName" class="form-label">Họ tên</label>
+                                            <input class="form-control" type="text" id="firstName" name="name"
+                                                value="{{user.name}}" />
+                                        </div>
+                                        <div class="mb-3 col-md-12">
+                                            <label for="lastName" class="form-label">Ngày sinh</label>
+                                            <input class="form-control" type="text" name="birthday" id="lastName"
+                                                value="{{user.birthday}}" />
+                                        </div>
+
+                                        <div class="mb-3 col-md-12">
+                                            <label class="form-label" for="phoneNumber">Số điện thoại</label>
+                                            <div class="input-group input-group-merge">
+                                                {{!-- <span class="input-group-text">VN (+84)</span> --}}
+                                                <input type="text" id="phoneNumber" name="numberPhone"
+                                                    class="form-control" placeholder="202 555 0111"
+                                                    value="{{user.numberPhone}}" />
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-3 col-md-12">
+                                            <label class="form-label">Email</label>
+                                            <div class="input-group input-group-merge">
+                                                {{!-- <span class="input-group-text">VN (+84)</span> --}}
+                                                <input type="text" id="phoneNumber" name="email" class="form-control"
+                                                    placeholder="John@gmail.com" value="{{user.email}}" />
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-3 col-md-12">
+                                            <label for="address" class="form-label">Địa chỉ</label>
+                                            <input type="text" class="form-control" id="address" name="address"
+                                                placeholder="Address" value="{{user.address}}" />
+                                        </div>
+
+                                        <div class="mb-3 col-md-12">
+                                            <label class="form-label" for="country">Quốc gia</label>
+                                            <select id="country" class="select2 form-select">
+                                                <option value="">Viet Nam</option>
+                                                {{!-- <option value="Australia">Australia</option>
+                                                <option value="Bangladesh">VietNam</option>
+                                                <option value="Belarus">Belarus</option>
+                                                <option value="Brazil">Brazil</option>
+                                                <option value="Canada">Canada</option>
+                                                <option value="China">China</option>
+                                                <option value="France">France</option>
+                                                <option value="Germany">Germany</option>
+                                                <option value="India">India</option>
+                                                <option value="Indonesia">Indonesia</option>
+                                                <option value="Israel">Israel</option>
+                                                <option value="Italy">Italy</option>
+                                                <option value="Japan">Japan</option>
+                                                <option value="Korea">Korea, Republic of</option>
+                                                <option value="Mexico">Mexico</option>
+                                                <option value="Philippines">Philippines</option>
+                                                <option value="Russia">Russian Federation</option>
+                                                <option value="South Africa">South Africa</option>
+                                                <option value="Thailand">Thailand</option>
+                                                <option value="Turkey">Turkey</option>
+                                                <option value="Ukraine">Ukraine</option>
+                                                <option value="United Arab Emirates">United Arab Emirates</option>
+                                                <option value="United Kingdom">United Kingdom</option>
+                                                <option value="United States">United States</option> --}}
+                                            </select>
+                                        </div>
+                                        {{!-- <div class="mb-3 col-md-6">
+                                            <label for="language" class="form-label">Language</label>
+                                            <select id="language" class="select2 form-select">
+                                                <option value="">Select Language</option>
+                                                <option value="en">English</option>
+                                                <option value="fr">French</option>
+                                                <option value="de">German</option>
+                                                <option value="pt">Portuguese</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3 col-md-6">
+                                            <label for="timeZones" class="form-label">Timezone</label>
+                                            <select id="timeZones" class="select2 form-select">
+                                                <option value="">Select Timezone</option>
+                                                <option value="-12">(GMT-12:00) International Date Line West</option>
+                                                <option value="-11">(GMT-11:00) Midway Island, Samoa</option>
+                                                <option value="-10">(GMT-10:00) Hawaii</option>
+                                                <option value="-9">(GMT-09:00) Alaska</option>
+                                                <option value="-8">(GMT-08:00) Pacific Time (US & Canada)</option>
+                                                <option value="-8">(GMT-08:00) Tijuana, Baja California</option>
+                                                <option value="-7">(GMT-07:00) Arizona</option>
+                                                <option value="-7">(GMT-07:00) Chihuahua, La Paz, Mazatlan</option>
+                                                <option value="-7">(GMT-07:00) Mountain Time (US & Canada)</option>
+                                                <option value="-6">(GMT-06:00) Central America</option>
+                                                <option value="-6">(GMT-06:00) Central Time (US & Canada)</option>
+                                                <option value="-6">(GMT-06:00) Guadalajara, Mexico City, Monterrey
+                                                </option>
+                                                <option value="-6">(GMT-06:00) Saskatchewan</option>
+                                                <option value="-5">(GMT-05:00) Bogota, Lima, Quito, Rio Branco</option>
+                                                <option value="-5">(GMT-05:00) Eastern Time (US & Canada)</option>
+                                                <option value="-5">(GMT-05:00) Indiana (East)</option>
+                                                <option value="-4">(GMT-04:00) Atlantic Time (Canada)</option>
+                                                <option value="-4">(GMT-04:00) Caracas, La Paz</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3 col-md-6">
+                                            <label for="currency" class="form-label">Currency</label>
+                                            <select id="currency" class="select2 form-select">
+                                                <option value="">Select Currency</option>
+                                                <option value="usd">USD</option>
+                                                <option value="euro">Euro</option>
+                                                <option value="pound">Pound</option>
+                                                <option value="bitcoin">Bitcoin</option>
+                                            </select>
+                                        </div> --}}
+                                    </div>
+                                    <div class="mt-2">
+                                        <button type="submit" class="btn btn-primary me-2">Lưu thông tin</button>
+                                        <button type="reset" class="btn btn-outline-secondary">Hủy</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <!-- /Account -->
+                        </div>
+                        {{!-- <div class="card">
+                            <h5 class="card-header">Xóa tài khoản</h5>
+                            <div class="card-body">
+                                <div class="mb-3 col-12 mb-0">
+                                    <div class="alert alert-warning">
+                                        <h6 class="alert-heading fw-bold mb-1">Are you sure you want to delete your
+                                            account?</h6>
+                                        <p class="mb-0">Once you delete your account, there is no going back. Please be
+                                            certain.</p>
+                                    </div>
+                                </div>
+                                <form id="formAccountDeactivation" onsubmit="return false">
+                                    <div class="form-check mb-3">
+                                        <input class="form-check-input" type="checkbox" name="accountActivation"
+                                            id="accountActivation" />
+                                        <label class="form-check-label" for="accountActivation">I confirm my account
+                                            deactivation</label>
+                                    </div>
+                                    <button type="submit" class="btn btn-danger deactivate-account">Deactivate
+                                        Account</button>
+                                </form>
+                            </div>
+                        </div> --}}
+                    </div>
+                </div>
+            </div>
+            <!-- / Content -->
+
+            <!-- Footer -->
+            <footer class="content-footer footer bg-footer-theme">
+                <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
+                    <div class="mb-2 mb-md-0">
+                        ©
+                        <script>
+                            document.write(new Date().getFullYear());
+                        </script>
+                        , made with ❤️ by iTech
+                    </div>
+                    {{!-- <div>
+                        <a href="https://themeselection.com/license/" class="footer-link me-4"
+                            target="_blank">License</a>
+                        <a href="https://themeselection.com/" target="_blank" class="footer-link me-4">More Themes</a>
+
+                        <a href="https://themeselection.com/demo/sneat-bootstrap-html-admin-template/documentation/"
+                            target="_blank" class="footer-link me-4">Documentation</a>
+
+                        <a href="https://github.com/themeselection/sneat-html-admin-template-free/issues"
+                            target="_blank" class="footer-link me-4">Support</a>
+                    </div> --}}
+                </div>
+            </footer>
+            <!-- / Footer -->
+
+            <div class="content-backdrop fade"></div>
+        </div>
+    </main>
+
+    <script src="../assets/js/core/popper.min.js"></script>
+    <script src="../assets/js/core/bootstrap.min.js"></script>
+    <script src="../assets/js/plugins/perfect-scrollbar.min.js"></script>
+    <script src="../assets/js/plugins/smooth-scrollbar.min.js"></script>
+    <script src="../assets/js/plugins/chartjs.min.js"></script>
+    <script>
+        var win = navigator.platform.indexOf('Win') > -1;
+        if (win && document.querySelector('#sidenav-scrollbar')) {
+            var options = {
+                damping: '0.5'
+            }
+            Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
+        }
+    </script>
+    <!-- Github buttons -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
+    <script src="../assets/js/argon-dashboard.min.js?v=2.0.4"></script>
 </body>
+
 </html>

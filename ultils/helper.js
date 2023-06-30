@@ -1,7 +1,7 @@
 const Handlebars = require('handlebars');
 
 // Đăng ký helper 'eq'
-Handlebars.registerHelper('eq', function (a, b, options) {
+const hbs = Handlebars.registerHelper('eq', function (a, b, options) {
   if (a === b) {
     return options.fn(this);
   } else {
@@ -9,4 +9,4 @@ Handlebars.registerHelper('eq', function (a, b, options) {
   }
 });
 
-module.exports = Handlebars;
+module.exports = hbs;

@@ -65,6 +65,7 @@ router.post('/', async function (req, res, next) {
             //Luu accessToken vao session
             const accessToken = jwt.sign({ user }, 'shhhhh', { expiresIn: 80 * 24 * 60 * 60 });
             req.session.accessToken = accessToken;
+            req.session.user = user;
             console.log('accessToken: ', req.session.accessToken);
             res.redirect('home');
         } else {
@@ -75,9 +76,308 @@ router.post('/', async function (req, res, next) {
     }
 });
 
-//----------------------------------Home----------------------------------
-router.get('/home', checkAccessTokenMiddleware, function (req, res, next) {
-    res.render('home', { title: 'iTech - Admin Dashboard' });
+//----------------------------------Home - Thong ke----------------------------------
+router.get('/home', checkAccessTokenMiddleware, async function (req, res, next) {
+    try {
+        const orders = await order_controller.get_all_order();
+        let list = [];
+        let totalAll = 0;
+        //Lay doanh thu trong 7 ngay gan nhat (7 ngay truoc ngay hien tai) co trang thai la 'delivered'
+        for (let i = 0; i < 7; i++) {
+            let date = new Date();
+            date.setDate(date.getDate() - i);
+            let dateStr = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+            let total = 0;
+            for (let j = 0; j < orders.length; j++) {
+                if (orders[j].datePayment == dateStr && orders[j].status == 'Delivered') {
+                    total += orders[j].totalPrice;
+                }
+            }
+            totalAll += total;
+            list.push({ name: dateStr, value: total });
+        }
+        //console.log('list: ', list);
+        res.render('home', { title: 'iTech - Admin Dashboard', data: list, list: JSON.stringify(list), totalAll });
+    } catch (error) {
+        res.redirect('/');
+    }
+
+});
+
+//Lay tat ca don hang da giao
+router.get('/cpanel/get-orders-soil', checkAccessTokenMiddleware, async function (req, res, next) {
+    try {
+        const orders = await order_controller.get_all_order();
+        let list = [];
+        for (let i = 0; i < orders.length; i++) {
+            if (orders[i].status == 'cart' || orders[i].status == 'favorite' || orders[i].status != 'Delivered') {
+                continue;
+            } else {
+                list.push(orders[i]);
+            }
+        }
+        res.status(200).json({ data: list });
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
+//Lay tat ca don hang
+router.get('/cpanel/get-orders', checkAccessTokenMiddleware, async function (req, res, next) {
+    try {
+        const orders = await order_controller.get_all_order();
+        let list = [];
+        for (let i = 0; i < orders.length; i++) {
+            if (orders[i].status == 'cart' || orders[i].status == 'favorite') {
+                continue;
+            } else {
+                list.push(orders[i]);
+            }
+        }
+        res.status(200).json({ data: list });
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
+//Lay doanh thu trong hom nay
+router.get('/cpanel/today', checkAccessTokenMiddleware, async function (req, res, next) {
+    try {
+        const orders = await order_controller.get_all_order();
+        let total = 0;
+        let date = new Date();
+        let dateStr = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+        //console.log('dateStr: ', dateStr);
+        for (let j = 0; j < orders.length; j++) {
+            if (orders[j].datePayment == dateStr && orders[j].status == 'Delivered') {
+                total += orders[j].totalPrice;
+            }
+        }
+        //console.log('total: ', total);
+        res.status(200).json({ data: total });
+    } catch (error) {
+        console.log('error: ', error);
+        res.status(500).send(error.message);
+    }
+});
+
+//Lay tat ca san pham
+router.get('/cpanel/get-products', checkAccessTokenMiddleware, async function (req, res, next) {
+    try {
+        const products = await product_controller.onGetProducts();
+        res.json({ data: products });
+    } catch (error) {
+        res.json({ error: true, responeTime: new Date(), statusCode: 500, message: error.message });
+    }
+});
+
+//Lay tat ca user
+router.get('/cpanel/users', checkAccessTokenMiddleware, async function (req, res, next) {
+    try {
+        const users = await user_controller.get_users();
+        //Bo user co role = admin
+        let list = [];
+        for (let i = 0; i < users.length; i++) {
+            if (users[i].role != 'admin') {
+                list.push(users[i]);
+            }
+        }
+        res.status(200).json({ data: list });
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
+//update date subProduct
+router.get('/cpanel/update-date-subProduct', async function (req, res, next) {
+    try {
+        const subProducts = await sub_product_controller.onGetSubProducts();
+        for (let i = 0; i < subProducts.length; i++) {
+            await sub_product_controller.onUpdateDateSubProduct(subProducts[i]._id);
+        }
+        res.json({ error: false, responeTime: new Date(), statusCode: 200, message: 'Update date subProduct successfully' });
+    } catch (error) {
+        res.json({ error: true, responeTime: new Date(), statusCode: 500, message: error.message });
+    }
+});
+
+//Update date product
+router.get('/cpanel/update-date-product', async function (req, res, next) {
+    try {
+        const products = await product_controller.onGetProducts();
+        for (let i = 0; i < products.length; i++) {
+            await product_controller.onUpdateDateProduct(products[i]._id);
+        }
+        const products2 = await product_controller.onGetProducts();
+        res.json({ error: false, responeTime: new Date(), statusCode: 200, message: 'Update date product successfully', data: products2 });
+    } catch (error) {
+        res.json({ error: true, responeTime: new Date(), statusCode: 500, message: error.message });
+    }
+});
+
+//Update date user
+router.get('/cpanel/update-date-user', async function (req, res, next) {
+    try {
+        const users = await user_controller.get_users();
+        for (let i = 0; i < users.length; i++) {
+            await user_controller.updateDateRegister(users[i]._id);
+        }
+        const user2 = await user_controller.get_users();
+        res.json({ error: false, responeTime: new Date(), statusCode: 200, message: 'Update date user successfully', data: user2 });
+    } catch (error) {
+        res.json({ error: true, responeTime: new Date(), statusCode: 500, message: error.message });
+    }
+});
+
+//Tinh pham tram san pham hien tai so voi hom qua
+router.get('/cpanel/get-percent', checkAccessTokenMiddleware, async function (req, res, next) {
+    try {
+        const products = await product_controller.onGetProducts();
+        let total = 0;
+        let totalYesterday = 0;
+        let date = new Date();
+        let dateYesterday = new Date();
+        dateYesterday.setDate(dateYesterday.getDate() - 1);
+        let dateYesterday2 = new Date();
+        dateYesterday2.setDate(dateYesterday2.getDate() - 2);
+        //console.log('dateStr: ', date + ' - ' + dateYesterday + ' - ' + dateYesterday2);
+        for (let j = 0; j < products.length; j++) {
+            let dateProduct = new Date(products[j].dateInput);
+            if (dateProduct <= date && dateProduct > dateYesterday) {
+                total++;
+            }
+            if (dateProduct <= dateYesterday && dateProduct > dateYesterday2) {
+                totalYesterday++;
+            }
+        }
+        // console.log('total: ', total);
+        // console.log('totalYesterday: ', totalYesterday);
+        let percent = 0;
+        //console.log('total: ', total + ' - totalYesterday: ', totalYesterday);
+        if (totalYesterday != 0) {
+            percent = (total - totalYesterday) / totalYesterday * 100;
+        }
+        //console.log('percent: ', percent);
+        res.status(200).json({ data: percent });
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
+//Tinh pham tram khach hang hien tai so voi tuan truoc
+router.get('/cpanel/get-percent-customer', checkAccessTokenMiddleware, async function (req, res, next) {
+    try {
+        const users = await user_controller.get_users();
+        let total = 0;
+        let totalLastWeek = 0;
+        let date = new Date();
+        let dateLastWeek = new Date();
+        dateLastWeek.setDate(date.getDate() - 7);
+        let dateLastWeek2 = new Date();
+        dateLastWeek2.setDate(date.getDate() - 14);
+        //console.log('dateStr: ', date + ' - ' + dateLastWeek + ' - ' + dateLastWeek2);
+        for (let j = 0; j < users.length; j++) {
+            if (users[j].role == 'user') {
+                const dateRegister = new Date(users[j].dateRegister);
+                if (dateRegister <= date && dateRegister >= dateLastWeek) {
+                    total += 1;
+                }
+                if (dateRegister <= dateLastWeek && dateRegister >= dateLastWeek2) {
+                    //console.log(dateRegister >= dateLastWeek2);
+                    totalLastWeek += 1;
+                }
+            }
+        }
+        // console.log('total: ', total);
+        // console.log('totalLastWeek: ', totalLastWeek);
+        let percent = 0;
+        if (totalLastWeek != 0) {
+            percent = (total - totalLastWeek) / totalLastWeek * 100;
+        }
+        //console.log('percent: ', percent);
+        res.status(200).json({ data: percent });
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
+//Tinh phan tram don hang hien tai so voi thang truoc
+router.get('/cpanel/get-percent-order', checkAccessTokenMiddleware, async function (req, res, next) {
+    try {
+        const orders = await order_controller.get_all_order();
+        let total = 0;
+        let totalLastMonth = 0;
+        let date = new Date();
+        let dateStr = date.getMonth()+1 + '/' + date.getFullYear();
+        let dateLastMonth = new Date();
+        dateLastMonth.setMonth(dateLastMonth.getMonth() - 1);
+        let dateStrLastMonth = dateLastMonth.getMonth()+1 + '/' + dateLastMonth.getFullYear();
+        //console.log('dateStr: ', dateStr + ' - ' + dateStrLastMonth);
+        for (let j = 0; j < orders.length; j++) {
+            if (orders[j].status == 'cart' || orders[j].status == 'favorite') {
+                continue;
+            }else{
+                //console.log('order: ', orders[j]._id);
+                //console.log('datePayment: ', orders[j].datePayment);
+                if (orders[j].datePayment.includes(dateStr)) {
+                    total += 1;
+                    //console.log('datePayment: ', orders[j]._id);
+                }
+                if (orders[j].datePayment.includes(dateStrLastMonth)) {
+                    totalLastMonth += 1;
+                    //console.log('datePayment last: ', orders[j]._id);
+                }
+            }
+
+        }
+        // console.log('total: ', total);
+        // console.log('totalLastMonth: ', totalLastMonth);
+        let percent = 0;
+        if (totalLastMonth != 0) {
+            percent = (total - totalLastMonth) / totalLastMonth * 100;
+        }
+        //console.log('percent: ', percent);
+        res.status(200).json({ data: percent });
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
+//Tinh phan tram don hang da ban hien tai so voi thang truoc
+router.get('/cpanel/get-percent-order-sold', checkAccessTokenMiddleware, async function (req, res, next) {
+    try {
+        const orders = await order_controller.get_all_order();
+        let total = 0;
+        let totalLastMonth = 0;
+        let date = new Date();
+        let dateStr = date.getMonth()+1 + '/' + date.getFullYear();
+        let dateLastMonth = new Date();
+        dateLastMonth.setMonth(dateLastMonth.getMonth() - 1);
+        let dateStrLastMonth = dateLastMonth.getMonth()+1 + '/' + dateLastMonth.getFullYear();
+        //console.log('dateStr: ', dateStr);
+        for (let j = 0; j < orders.length; j++) {
+            if (orders[j].status != 'Delivered') {
+                continue;
+            }else{
+                if (orders[j].datePayment.includes(dateStr)) {
+                    total ++;
+                }
+                if (orders[j].datePayment.includes(dateStrLastMonth)) {
+                    totalLastMonth ++;
+                }
+            }
+        }
+        // console.log('total: ', total);
+        // console.log('totalLastMonth: ', totalLastMonth);
+        let percent = 0;
+        if (totalLastMonth != 0) {
+            percent = (total - totalLastMonth) / totalLastMonth * 100;
+        }
+        //console.log('percent: ', percent);
+        res.status(200).json({ data: percent });
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
 });
 
 //----------------------------------category----------------------------------
@@ -86,12 +386,13 @@ router.get('/categories', checkAccessTokenMiddleware, async function (req, res, 
     try {
         const categories = await category_controller.get_all_category();
         if (!categories) {
-            res.status(401).render('Error', { message: 'Not authorization' });
+            res.redirect('/');
             return;
         }
         res.render('categories', { title: 'iTech - Category', categories: categories });
     } catch (error) {
-        res.status(500).send(error.message);
+        console.log('Error get categories', error.message);
+        res.redirect('/categories');
     }
 });
 
@@ -106,7 +407,8 @@ router.get('/categories/:_id/update', checkAccessTokenMiddleware, async function
             }
         }
     } catch (error) {
-        res.status(500).send(error.message);
+        console.log('Error get categories', error.message);
+        res.redirect('/categories');
     }
 });
 
@@ -133,7 +435,8 @@ router.post('/categories/:_id/update', checkAccessTokenMiddleware, multer.single
             res.redirect('/categories');
         }
     } catch (error) {
-        res.status(500).send(error.message);
+        console.log('Error update category', error.message);
+        res.redirect('/categories');
     }
 });
 
@@ -166,7 +469,8 @@ router.get('/categories/insert', checkAccessTokenMiddleware, async function (req
     try {
         res.render('category-insert', { title: 'iTech - Category insert' });
     } catch (error) {
-        res.status(500).send(error.message);
+        console.log('Error get categories', error.message);
+        res.redirect('/categories');
     }
 });
 
@@ -192,7 +496,8 @@ router.post('/categories/insert', checkAccessTokenMiddleware, multer.single('pic
         res.redirect('/categories');
 
     } catch (error) {
-        res.status(500).send(error.message);
+        console.log('Error insert category', error.message);
+        res.redirect('/categories');
     }
 });
 
@@ -213,7 +518,8 @@ router.get('/brands', checkAccessTokenMiddleware, async function (req, res, next
         }
         res.render('brands', { title: 'iTech - Brand', brands: list });
     } catch (error) {
-        res.status(500).send(error.message);
+        console.log('Error get brands', error.message);
+        res.redirect('/brands');
     }
 });
 
@@ -237,7 +543,8 @@ router.get('/brands/:_id/update', checkAccessTokenMiddleware, async function (re
         }
         res.render('brand-update', { title: 'iTech - Brand', brand: brand, categories: categories });
     } catch (error) {
-        res.status(500).send(error.message);
+        console.log('Error get brands', error.message);
+        res.redirect('/brands');
     }
 });
 
@@ -263,7 +570,8 @@ router.post('/brands/:_id/update', checkAccessTokenMiddleware, multer.single('pi
         res.redirect('/brands');
 
     } catch (error) {
-        res.status(500).send(error.message);
+        console.log('Error update brand', error.message);
+        res.redirect('/brands');
     }
 });
 
@@ -292,7 +600,8 @@ router.get('/brands/insert', checkAccessTokenMiddleware, async function (req, re
         const categories = await category_controller.get_all_category();
         res.render('brand-insert', { title: 'iTech - Brand insert', categories: categories });
     } catch (error) {
-        res.status(500).send(error.message);
+        console.log('Error get brands', error.message);
+        res.redirect('/brands');
     }
 });
 
@@ -317,7 +626,8 @@ router.post('/brands/insert', checkAccessTokenMiddleware, multer.single('picture
         }
         res.redirect('/brands');
     } catch (error) {
-        res.status(500).send(error.message);
+        console.log('Error insert brand', error.message);
+        res.redirect('/brands');
     }
 });
 
@@ -340,7 +650,8 @@ router.get('/products', checkAccessTokenMiddleware, async function (req, res, ne
 
         res.render('products', { title: 'iTechPro - Product', products: products });
     } catch (error) {
-        res.status(500).send(error.message);
+        console.log('Error get products', error.message);
+        res.redirect('/products');
     }
 });
 
@@ -393,7 +704,8 @@ router.get('/products/:_id/product-update', checkAccessTokenMiddleware, async fu
         const title = 'iTechPro - Product Update';
         res.render('product-update', { title, product, brands, categories });
     } catch (error) {
-        res.status(500).send(error.message);
+        console.log('Error update product', error.message);
+        res.redirect('/products');
     }
 });
 
@@ -415,7 +727,8 @@ router.post('/products/:_id/product-update', checkAccessTokenMiddleware, multer.
         }
         res.redirect('/products');
     } catch (error) {
-        res.status(500).send(error.message);
+        console.log('Error update product', error.message);
+        res.redirect('/products');
     }
 });
 
@@ -440,7 +753,8 @@ router.get('/products/product-insert', checkAccessTokenMiddleware, async functio
         const title = 'iTechPro - Product Add';
         res.render('product-insert', { title, categories, brands: listBrands });
     } catch (error) {
-        res.status(500).send(error.message);
+        console.log('Error insert product', error.message);
+        res.redirect('/products');
     }
 });
 
@@ -461,9 +775,11 @@ router.post('/products/product-insert', checkAccessTokenMiddleware, multer.singl
         await picture_controller.add_picture(image, subProduct._id, "", "");
         res.redirect('/products');
     } catch (error) {
-        res.status(500).send(error.message);
+        console.log('Error insert product', error.message);
+        res.redirect('/products');
     }
 });
+
 
 //-------------------------------------------San pham chi tiet-----------------------------------
 //Lay danh sach san pham chi tiet
@@ -486,7 +802,8 @@ router.get('/sub-product', checkAccessTokenMiddleware, async function (req, res,
             return;
         }
     } catch (error) {
-        res.status(500).send(error.message);
+        console.log('Error get sub product', error.message);
+        res.redirect('/sub-product');
     }
 });
 
@@ -501,7 +818,8 @@ router.get('/sub-products/sub-product-insert', checkAccessTokenMiddleware, async
             return;
         }
     } catch (error) {
-        res.status(500).send(error.message);
+        console.log('Error insert sub product', error.message);
+        res.redirect('/sub-products/sub-product-insert');
     }
 });
 
@@ -524,9 +842,10 @@ router.post('/sub-products/sub-product-insert', checkAccessTokenMiddleware, mult
             const image = result.secure_url;
             await picture_controller.add_picture(image, subProduct._id, "", "");
         }
-        res.redirect('/sub-products');
+        res.redirect('/sub-product');
     } catch (error) {
-        res.status(500).send(error.message);
+        console.log('Error insert sub product', error.message);
+        res.redirect('/sub-products/sub-product-insert');
     }
 });
 
@@ -555,7 +874,8 @@ router.get('/sub-products/:_id/sub-product-update', checkAccessTokenMiddleware, 
             return;
         }
     } catch (error) {
-        res.status(500).send(error.message);
+        console.log('Error update sub product', error.message);
+        res.redirect('/sub-product');
     }
 });
 
@@ -589,7 +909,8 @@ router.post('/sub-products/:_id/sub-product-update', checkAccessTokenMiddleware,
         }
 
     } catch (error) {
-        res.status(500).send(error.message);
+        console.log('Error update sub product', error.message);
+        res.redirect('/sub-product');
     }
 });
 
@@ -623,7 +944,8 @@ router.get('/orders', checkAccessTokenMiddleware, async function (req, res, next
             return;
         }
     } catch (error) {
-        res.status(500).send(error.message);
+        console.log('Error get all order', error.message);
+        res.redirect('/orders');
     }
 });
 
@@ -669,7 +991,8 @@ router.get('/orders/:_idOrder/update', checkAccessTokenMiddleware, async functio
 
         return res.redirect('/orders');
     } catch (error) {
-        res.status(500).send(error.message);
+        console.log('Error update order', error.message);
+        res.redirect('/orders');
     }
 });
 
@@ -733,7 +1056,8 @@ router.get('/orders/:_idOrder/order-detail', checkAccessTokenMiddleware, async f
 
         res.render('order-detail', { title: 'iTech - Order detail', order, orderDetails: list, user });
     } catch (error) {
-        res.status(500).send(error.message);
+        console.log('error: ', error);
+        res.redirect('/orders');
     }
 });
 
@@ -765,9 +1089,77 @@ router.get('/customers', checkAccessTokenMiddleware, async function (req, res, n
         }
         res.render('customers', { title: 'iTech - Customers', customers: list });
     } catch (error) {
-        res.status(500).send(error.message);
+        console.log('Get customers error: ', error);
+        res.redirect('/customers');
     }
 });
+
+
+//-----------------------------Profile----------------------------------
+router.get('/profile', checkAccessTokenMiddleware, async function (req, res, next) {
+    try {
+        //console.log(req.session.user._id);
+        const userId = req.session.user._id;
+        let user = await user_controller.get_user(userId);
+        const address = await address_controller.get_address_by_idUser(userId);
+        if(address){
+            for(let i = 0; i < address.length; i++){
+                if(address[i].status == true){
+                    user.address = address[i].body;
+                    break;
+                }
+            }
+        }
+        //console.log('User', user);
+        res.render('profile', { title: 'iTech - Profile', user });
+    } catch (error) {
+        res.redirect('/profile');
+    }
+});
+
+router.post('/profile/update', checkAccessTokenMiddleware, multer.single('picture'), async function (req, res, next) {
+    try {
+        const { _id, email, name, birthday, numberPhone, address } = req.body;
+        //_idUser, email, name, birthday, numberPhone, avatar
+        let avatar = '';
+        if (req.file) {
+            const result = await cloudinary.uploader.upload(req.file.path);
+            avatar = result.secure_url;
+        }else{
+            avatar = req.session.user.avatar;
+        }
+        console.log('Avatar', avatar);
+        const user = await user_controller.update_user(_id, email, name, birthday, numberPhone, avatar);
+        if (!user) {
+            console.log('Error update user');
+            return res.redirect('/profile');
+        }
+        //console.log('User: ', user);
+        //res.session.user = user;
+        //console.log('User req.session: ', req.session.user);
+        //_id, body, status, numberPhone, idUser
+        const listddress = await address_controller.get_address_by_idUser(_id);
+        if(listddress){
+            for(let i = 0; i < listddress.length; i++){
+                if(listddress[i].status == true){
+                    const addressUpdate = await address_controller.update_address(listddress[i]._id, address, true, numberPhone, _id);
+                    if (!addressUpdate) {
+                        console.log('Error update address');
+                        return res.redirect('/profile');
+                    }
+                    break;
+                }
+            }
+        }
+        res.redirect('/profile');
+    } catch (error) {
+        console.log('Error update profile', error.message);
+        res.redirect('/profile');
+    }
+});
+
+
+
 
 
 

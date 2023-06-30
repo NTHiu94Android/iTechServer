@@ -110,12 +110,12 @@
         </li>
 
         <li class="nav-item">
-          <a class="nav-link " href="/profile.html">
+          <a class="nav-link " href="/profile">
             <div
               class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-single-02 text-dark text-sm opacity-10"></i>
             </div>
-            <span class="nav-link-text ms-1">Profile</span>
+            <span class="nav-link-text ms-1">Trang cá nhân</span>
           </a>
         </li>
 
@@ -143,7 +143,8 @@
       <div class="row">
         <div class="col-12">
           <div class="card mb-4">
-            <div class="card-header pb-3 p-3 d-flex " style="display: flex; flex-direction: row; justify-content: flex-end;">
+            <div class="card-header pb-3 p-3 d-flex "
+              style="display: flex; flex-direction: row; justify-content: flex-end;">
               <div class="col-9 text-end">
                 <button class="btn btn-outline-primary btn-sm mb-0">
                   <a href="/brands/insert">Thêm thương hiệu</a></button>
@@ -154,16 +155,19 @@
                 <table class="table align-items-center mb-0">
                   <thead>
                     <tr>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">ID thương hiệu</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">ID thương
+                        hiệu</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Hình ảnh</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Tên thương hiệu</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Loại sản phẩm</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Tên thương
+                        hiệu</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Loại sản phẩm
+                      </th>
                     </tr>
                   </thead>
 
                   <tbody>
                     {{#each brands}}
-                    
+
                     <tr>
                       <td style="align-middle text-center text-sm">
                         <span class="text-secondary text-xs font-weight-bold"
@@ -187,7 +191,7 @@
                         <span class="text-secondary text-xs font-weight-bold"
                           style="margin-top: 8px; margin-bottom: 8px;">{{this.nameCategory}}</span>
                       </td>
-                      
+
 
                       <td style=" align-middle text-center text-sm">
                         <button onclick="editBrand('{{this._id}}')" class="btn btn-xs mb-3 mt-3 btn-outline-secondary">
@@ -224,7 +228,7 @@
     }
   </script>
 
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
   <!-- Github buttons -->
   <script async defer src="https://buttons.github.io/buttons.js"></script>

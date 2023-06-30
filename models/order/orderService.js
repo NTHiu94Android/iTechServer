@@ -28,7 +28,8 @@ const update_order = async (
     _id, datePayment, status
 ) => {
     const order_update = await order_model.findByIdAndUpdate(
-        _id, { datePayment, status }, { new: true }
+        { _id: _id },
+        { datePayment: datePayment, status: status }
     );
     return order_update;
 };

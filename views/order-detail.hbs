@@ -111,12 +111,12 @@
         </li>
 
         <li class="nav-item">
-          <a class="nav-link " href="/profile.html">
+          <a class="nav-link" href="/profile">
             <div
               class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-single-02 text-dark text-sm opacity-10"></i>
             </div>
-            <span class="nav-link-text ms-1">Profile</span>
+            <span class="nav-link-text ms-1">Trang cá nhân</span>
           </a>
         </li>
 
@@ -147,6 +147,41 @@
             <div class="card-body px-0 pt-0 pb-2">
               <div class="table-responsive p-4">
 
+                {{!-- Thanh tien trinh --}}
+                <h6>Tình trạng đơn hàng</h6>
+
+                <div class="tientrinhtext" style="margin-bottom: 10px; margin-top: 20px;">
+                  <div class="row-center fl1">
+                  <img src="/images/logos/logo.png" alt="Progress Image" style="width: 30px; height: 30px; " />
+                  </div>
+                  <div class="row-center fl1">
+                  <img src="/images/logos/logo.png" alt="Progress Image" style="width: 30px; height: 30px;" />
+                  </div>
+                  <div class="row-center fl1">
+                  <img src="/images/logos/logo.png" alt="Progress Image" style="width: 30px; height: 30px;" />
+                  </div>
+                  <div class="row-center fl1">
+                  <img src="/images/logos/logo.png" alt="Progress Image" style="width: 30px; height: 30px;" />
+                  </div>
+                </div>
+
+                <div class="progress-bar">
+                  <div class="progress">
+                    <div class="progress-label">
+                      {{!-- <img src="/images/logos/logo.png" alt="Progress Image" />
+                      <span class="label-text">Progress Label</span> --}}
+                    </div>
+                  </div>
+                </div>
+
+                <div class="tientrinhtext" style="margin-bottom: 40px;">
+                  <span class="fl1 row-center">Đang chờ xử lý</span>
+                  <span class="fl1 row-center">Đã xác nhân</span>
+                  <span class="fl1 row-center">Đã giao hàng</span>
+                  <span class="fl1 row-center">Đã hủy</span>
+                </div>
+
+
                 {{!-- Thong tin nguoi nhan --}}
                 <h6>Thông tin người nhận</h6>
                 <div class="row-spbw">
@@ -159,7 +194,7 @@
                 <div class="row-spbw">
                   <span class="fl1">Mã DH: {{order._id}}</span>
                   <span class="fl1" style="margin-left: 10px;">Ngày đặt hàng: {{order.dateCreate}}</span>
-                  <span class="fl1">Trạng thái: {{order.status}}</span>
+                  <span class="fl1">Trạng thái: <span id="status" style="margin-left: 20px; color: black;">{{order.status}}</span></span>
                 </div>
 
                 {{!-- DHCT --}}
@@ -178,7 +213,8 @@
                           còn lại</th>
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Giá tiền
                         </th>
-                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Giá khuyến
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Giá
+                          khuyến
                           mãi</th>
                       </tr>
                     </thead>
@@ -276,6 +312,26 @@
         damping: '0.5'
       }
       Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
+    }
+  </script>
+
+  <script>
+    function updateProgressBar(percent) {
+      const progress = document.querySelector('.progress');
+      progress.style.width = percent + '%';
+    }
+
+    const status = $('#status').html();
+    console.log('status: ', status);
+    // Ví dụ cập nhật giá trị tiến trình là 50%:
+    if (status == 'Processing') {
+      updateProgressBar(25);
+    } else if (status == 'Delivering') {
+      updateProgressBar(50);
+    } else if (status == 'Delivered') {
+      updateProgressBar(75);
+    } else {
+      updateProgressBar(100);
     }
   </script>
 

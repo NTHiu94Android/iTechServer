@@ -112,12 +112,12 @@
         </li>
 
         <li class="nav-item">
-          <a class="nav-link " href="/profile.html">
+          <a class="nav-link" href="/profile">
             <div
               class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-single-02 text-dark text-sm opacity-10"></i>
             </div>
-            <span class="nav-link-text ms-1">Profile</span>
+            <span class="nav-link-text ms-1">Trang cá nhân</span>
           </a>
         </li>
 
@@ -165,7 +165,8 @@
                       </th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Trạng thái
                       </th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Thanh toán</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Thanh toán
+                      </th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Ngày tạo</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Người đặt
                         hàng</th>
@@ -176,14 +177,30 @@
                     {{#each orders}}
                     <tr>
                       <td style="align-middle text-center text-sm">
-                          <span class="text-secondary text-xs font-weight-bold"
-                            style="margin-top: 8px; margin-bottom: 8px;">ID:{{this._id}}</span>
+                        <span class="text-secondary text-xs font-weight-bold"
+                          style="margin-top: 8px; margin-bottom: 8px;">ID:{{this._id}}</span>
                       </td>
                       <td style="align-middle text-center text-sm">
-                          <span class="text-secondary text-xs font-weight-bold"
-                            style="margin-top: 8px; margin-bottom: 8px;">{{this.totalPrice}} $</span>
+                        <span class="text-secondary text-xs font-weight-bold"
+                          style="margin-top: 8px; margin-bottom: 8px;">{{this.totalPrice}} $</span>
                       </td>
                       <td style="align-middle text-center text-sm">
+
+                        {{!-- {{#isEqual this.status 'Delivered'}}
+                        <div class="d-flex px-2 py-1 justify-content-center align-items-center"
+                          style="width: 90px; background-color: gold; padding: 8px; border-radius: 10px;">
+                          <span class="text-secondary text-xs font-weight-bold"
+                            style="margin-top: 8px; margin-bottom: 8px; color: black;">{{this.status}}</span>
+                        </div>
+                        {{else}}
+                        <div class="d-flex px-2 py-1 justify-content-center align-items-center"
+                          style="width: 90px; background-color: red; padding: 8px; border-radius: 10px;">
+                          <span class="text-secondary text-xs font-weight-bold"
+                            style="margin-top: 8px; margin-bottom: 8px; color: black;">{{this.status}}</span>
+                        </div>
+
+                        {{/isEqual}} --}}
+
                         <div class="d-flex px-2 py-1 justify-content-center align-items-center"
                           style="width: 90px; background-color: gold; padding: 8px; border-radius: 10px;">
                           <span class="text-secondary text-xs font-weight-bold"
@@ -191,12 +208,12 @@
                         </div>
                       </td>
                       <td style="align-middle text-center text-sm">
-                          <span class="text-secondary text-xs font-weight-bold"
-                            style="margin-top: 8px; margin-bottom: 8px;">{{this.paymentMethod}}</span>
+                        <span class="text-secondary text-xs font-weight-bold"
+                          style="margin-top: 8px; margin-bottom: 8px;">{{this.paymentMethod}}</span>
                       </td>
                       <td style="align-middle text-center text-sm">
-                          <span class="text-secondary text-xs font-weight-bold"
-                            style="margin-top: 8px; margin-bottom: 8px;">{{this.dateCreate}}</span>
+                        <span class="text-secondary text-xs font-weight-bold"
+                          style="margin-top: 8px; margin-bottom: 8px;">{{this.dateCreate}}</span>
                       </td>
                       <td style="align-middle text-center text-sm">
                         <div class="d-flex px-2 py-1" style="align-items: center;">

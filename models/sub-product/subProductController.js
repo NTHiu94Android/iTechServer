@@ -48,6 +48,16 @@ const onUpdateSubProduct = async (
     }
 };
 
+//Cap nhat ngay cua subProduct
+const onUpdateDateSubProduct = async (_id) => {
+    try {
+        const subProduct = await sub_product_service.updateDateSubProduct(_id);
+        return subProduct;
+    } catch (error) {
+        console.log('Error update date sub product: ' + error.message);
+    }
+};
+
 //Cap nhat so luong subProduct
 const onUpdateQuantitySubProduct = async (_id, quantity) => {
     try {
@@ -86,5 +96,6 @@ const onDeleteSubProduct = async (_id) => {
 
 module.exports = {
     onGetSubProducts, onGetSubProductsByIdProduct, onAddSubProduct, 
-    onUpdateSubProduct, onGetSubProductById, onUpdateQuantitySubProduct, onDeleteSubProduct
+    onUpdateSubProduct, onGetSubProductById, onUpdateQuantitySubProduct, onUpdateDateSubProduct,
+    onDeleteSubProduct
 };

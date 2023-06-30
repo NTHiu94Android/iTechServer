@@ -53,6 +53,15 @@ const login = async (username, email, password, fcmtoken) => {
     }
 };
 
+const updateDateRegister = async (_idUser) => {
+    try {
+        const user = await userService.updateDateRegister(_idUser);
+        return user;
+    } catch (error) {
+        console.log('Error updateDateRegister: ' + error.message);
+    }
+};
+
 const updateFcmToken = async (_idUser, tokenFcm) => {
     try {
         const user = await userService.updateFcmToken(_idUser, tokenFcm);
@@ -160,5 +169,6 @@ const change_password = async ( id, password, new_password, confirm_password) =>
 module.exports = { 
     get_user, get_users, login, register, 
     update_user, delete_user, forgot_password, reset_password,
-    get_users_by_username, change_password, updateFcmToken
+    get_users_by_username, change_password, updateFcmToken,
+    updateDateRegister
 }

@@ -62,6 +62,16 @@ const onUpdateProduct = async (_id, name, image, idCategory, idBrand) => {
     }
 };
 
+//Cap nhat ngay cua san pham
+const onUpdateDateProduct = async (_id) => {
+    try {
+        const product = await product_service.update_date_product(_id);
+        return product;
+    } catch (error) {
+        console.log('Error update date product: ' + error.message);
+    }
+};
+
 //Xoa san pham
 const onDeleteProduct = async (_id) => {
     try {
@@ -73,5 +83,5 @@ const onDeleteProduct = async (_id) => {
 };
 
 module.exports = {
-    onAddroduct, onGetProducts, onUpdateProduct, onDeleteProduct, onGetProductById, onGetProductByIdBrand
+    onAddroduct, onGetProducts, onUpdateProduct, onDeleteProduct, onGetProductById, onGetProductByIdBrand, onUpdateDateProduct
 };

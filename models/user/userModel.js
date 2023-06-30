@@ -15,7 +15,7 @@ const user_model = new Schema({
   idFavorite: {type: Object},
 
   loginType: { type: String },
-  
+  dateRegister: { type: Date, default: Date.now },
 
   //token
   resetPasswordToken: { type: String, require: false, default: null },

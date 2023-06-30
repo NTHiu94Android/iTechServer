@@ -25,6 +25,14 @@ const update_product = async (_id, name, image, idCategory, idBrand) => {
     return product;
 };
 
+//Cap nhat ngay cua san pham
+const update_date_product = async (_id) => {
+    const product = await product_model.findById(_id);
+    product.dateInput = Date.now();
+    await product.save();
+    return product;
+};
+
 //Xoa san pham
 const delete_product = async (_id) => {
     const product = await product_model.findById(_id);
@@ -35,5 +43,5 @@ const delete_product = async (_id) => {
 };
 
 module.exports = { 
-    add_product, getProducts, update_product, delete_product,
+    add_product, getProducts, update_product, delete_product, update_date_product
 };
