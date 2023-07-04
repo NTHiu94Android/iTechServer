@@ -108,6 +108,20 @@ const handleDelivered = async (_idOrder) => {
 
 }
 
+const handleCancel = async (_idOrder) => {
+    //Them hieu ung loading cho button
+    const button = document.getElementById('btn-cancel');
+    button.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...`;
+    button.disabled = true;
+    
+    const url = `${domain}/orders/${_idOrder}/cancel`;
+    await fetch(url);
+    setTimeout(() => {
+        window.location.reload();
+    }, 1000);
+
+}
+
 const onChangeFile = () => {
     const file = document.getElementById('image-file').files[0];
     const reader = new FileReader();

@@ -102,5 +102,11 @@ a {
   margin-top: 10px;
 }
 
+.status-order-detail {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
 
 

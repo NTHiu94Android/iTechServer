@@ -76,6 +76,9 @@ router.post('/', async function (req, res, next) {
     }
 });
 
+
+
+
 //----------------------------------Home - Thong ke----------------------------------
 router.get('/home', checkAccessTokenMiddleware, async function (req, res, next) {
     try {
@@ -256,6 +259,8 @@ router.get('/cpanel/get-percent', checkAccessTokenMiddleware, async function (re
         //console.log('total: ', total + ' - totalYesterday: ', totalYesterday);
         if (totalYesterday != 0) {
             percent = (total - totalYesterday) / totalYesterday * 100;
+            percent = Math.round(percent * 100) / 100;
+            percent.toFixed(2);
         }
         //console.log('percent: ', percent);
         res.status(200).json({ data: percent });
@@ -293,6 +298,8 @@ router.get('/cpanel/get-percent-customer', checkAccessTokenMiddleware, async fun
         let percent = 0;
         if (totalLastWeek != 0) {
             percent = (total - totalLastWeek) / totalLastWeek * 100;
+            percent = Math.round(percent * 100) / 100;
+            percent.toFixed(2);
         }
         //console.log('percent: ', percent);
         res.status(200).json({ data: percent });
@@ -308,15 +315,15 @@ router.get('/cpanel/get-percent-order', checkAccessTokenMiddleware, async functi
         let total = 0;
         let totalLastMonth = 0;
         let date = new Date();
-        let dateStr = date.getMonth()+1 + '/' + date.getFullYear();
+        let dateStr = date.getMonth() + 1 + '/' + date.getFullYear();
         let dateLastMonth = new Date();
         dateLastMonth.setMonth(dateLastMonth.getMonth() - 1);
-        let dateStrLastMonth = dateLastMonth.getMonth()+1 + '/' + dateLastMonth.getFullYear();
+        let dateStrLastMonth = dateLastMonth.getMonth() + 1 + '/' + dateLastMonth.getFullYear();
         //console.log('dateStr: ', dateStr + ' - ' + dateStrLastMonth);
         for (let j = 0; j < orders.length; j++) {
             if (orders[j].status == 'cart' || orders[j].status == 'favorite') {
                 continue;
-            }else{
+            } else {
                 //console.log('order: ', orders[j]._id);
                 //console.log('datePayment: ', orders[j].datePayment);
                 if (orders[j].datePayment.includes(dateStr)) {
@@ -335,6 +342,8 @@ router.get('/cpanel/get-percent-order', checkAccessTokenMiddleware, async functi
         let percent = 0;
         if (totalLastMonth != 0) {
             percent = (total - totalLastMonth) / totalLastMonth * 100;
+            percent = Math.round(percent * 100) / 100;
+            percent.toFixed(2);
         }
         //console.log('percent: ', percent);
         res.status(200).json({ data: percent });
@@ -350,20 +359,20 @@ router.get('/cpanel/get-percent-order-sold', checkAccessTokenMiddleware, async f
         let total = 0;
         let totalLastMonth = 0;
         let date = new Date();
-        let dateStr = date.getMonth()+1 + '/' + date.getFullYear();
+        let dateStr = date.getMonth() + 1 + '/' + date.getFullYear();
         let dateLastMonth = new Date();
         dateLastMonth.setMonth(dateLastMonth.getMonth() - 1);
-        let dateStrLastMonth = dateLastMonth.getMonth()+1 + '/' + dateLastMonth.getFullYear();
+        let dateStrLastMonth = dateLastMonth.getMonth() + 1 + '/' + dateLastMonth.getFullYear();
         //console.log('dateStr: ', dateStr);
         for (let j = 0; j < orders.length; j++) {
             if (orders[j].status != 'Delivered') {
                 continue;
-            }else{
+            } else {
                 if (orders[j].datePayment.includes(dateStr)) {
-                    total ++;
+                    total++;
                 }
                 if (orders[j].datePayment.includes(dateStrLastMonth)) {
-                    totalLastMonth ++;
+                    totalLastMonth++;
                 }
             }
         }
@@ -372,6 +381,8 @@ router.get('/cpanel/get-percent-order-sold', checkAccessTokenMiddleware, async f
         let percent = 0;
         if (totalLastMonth != 0) {
             percent = (total - totalLastMonth) / totalLastMonth * 100;
+            percent = Math.round(percent * 100) / 100;
+            percent.toFixed(2);
         }
         //console.log('percent: ', percent);
         res.status(200).json({ data: percent });
@@ -379,6 +390,10 @@ router.get('/cpanel/get-percent-order-sold', checkAccessTokenMiddleware, async f
         res.status(500).send(error.message);
     }
 });
+
+
+
+
 
 //----------------------------------category----------------------------------
 //-Danh sach category
@@ -500,6 +515,9 @@ router.post('/categories/insert', checkAccessTokenMiddleware, multer.single('pic
         res.redirect('/categories');
     }
 });
+
+
+
 
 //----------------------------------Brand----------------------------------
 //-Danh sach brand
@@ -630,6 +648,9 @@ router.post('/brands/insert', checkAccessTokenMiddleware, multer.single('picture
         res.redirect('/brands');
     }
 });
+
+
+
 
 
 //----------------------------------San pham----------------------------------
@@ -781,6 +802,9 @@ router.post('/products/product-insert', checkAccessTokenMiddleware, multer.singl
 });
 
 
+
+
+
 //-------------------------------------------San pham chi tiet-----------------------------------
 //Lay danh sach san pham chi tiet
 router.get('/sub-product', checkAccessTokenMiddleware, async function (req, res, next) {
@@ -914,6 +938,9 @@ router.post('/sub-products/:_id/sub-product-update', checkAccessTokenMiddleware,
     }
 });
 
+
+
+
 //-------------------------------------------Don hang-----------------------------------
 //Lay danh sach don hang
 router.get('/orders', checkAccessTokenMiddleware, async function (req, res, next) {
@@ -923,18 +950,13 @@ router.get('/orders', checkAccessTokenMiddleware, async function (req, res, next
         if (orders) {
             let list = [];
             for (let i = 0; i < orders.length; i++) {
-                const user = await user_controller.get_user(orders[i].idUser);
-                //console.log('User', user.name);
-                orders[i].nameUser = user.name;
-                orders[i].avatarUser = user.avatar;
-                orders[i].phoneUser = user.numberPhone;
-                //list.push(orders[i]);
                 if (orders[i].status == 'cart' || orders[i].status == 'favorite') {
                     continue;
                 } else {
                     const user = await user_controller.get_user(orders[i].idUser);
                     orders[i].nameUser = user.name;
                     orders[i].avatarUser = user.avatar;
+                    orders[i].phoneUser = user.numberPhone;
                     list.push(orders[i]);
                 }
             }
@@ -995,6 +1017,42 @@ router.get('/orders/:_idOrder/update', checkAccessTokenMiddleware, async functio
         res.redirect('/orders');
     }
 });
+
+//Huy don hang
+router.get('/orders/:_idOrder/cancel', checkAccessTokenMiddleware, async function (req, res, next) {
+    try {
+        const { _idOrder } = req.params;
+        //Lay chi tiet don hang
+        const orderDetails = await order_detail_controller.get_order_detail_by_idOrder(_idOrder);
+        if (!orderDetails) {
+            return res.status(401).render('error', { message: 'Not authorization' });
+        }
+        //Cap nhat trang thai don hang
+        //Cap nhat don hang
+        const date = new Date();
+        const day = date.getDate();
+        const month = date.getMonth() + 1;
+        const year = date.getFullYear();
+        const dayNow = day + '/' + month + '/' + year;
+        const orderUpdate = await order_controller.update_order(_idOrder, dayNow, 'Canceled');
+
+        //Gui thong bao den nguoi dung
+        const data = {
+            title: 'iTech - Order',
+            body: `Đơn hàng ${_idOrder} đã huỷ`,
+            image: ''
+        }
+        await notification.onSendData(orderUpdate.idUser, data);
+
+        return res.redirect('/orders');
+    } catch (error) {
+        console.log('Error update order', error.message);
+        res.redirect('/orders');
+    }
+});
+
+
+
 
 
 //-----------------------------Don hang chi tiet----------------------------------
@@ -1061,6 +1119,10 @@ router.get('/orders/:_idOrder/order-detail', checkAccessTokenMiddleware, async f
     }
 });
 
+
+
+
+
 //-----------------------------Customer----------------------------------
 //Lay danh sach khach hang
 router.get('/customers', checkAccessTokenMiddleware, async function (req, res, next) {
@@ -1095,6 +1157,10 @@ router.get('/customers', checkAccessTokenMiddleware, async function (req, res, n
 });
 
 
+
+
+
+
 //-----------------------------Profile----------------------------------
 router.get('/profile', checkAccessTokenMiddleware, async function (req, res, next) {
     try {
@@ -1102,9 +1168,9 @@ router.get('/profile', checkAccessTokenMiddleware, async function (req, res, nex
         const userId = req.session.user._id;
         let user = await user_controller.get_user(userId);
         const address = await address_controller.get_address_by_idUser(userId);
-        if(address){
-            for(let i = 0; i < address.length; i++){
-                if(address[i].status == true){
+        if (address) {
+            for (let i = 0; i < address.length; i++) {
+                if (address[i].status == true) {
                     user.address = address[i].body;
                     break;
                 }
@@ -1125,7 +1191,7 @@ router.post('/profile/update', checkAccessTokenMiddleware, multer.single('pictur
         if (req.file) {
             const result = await cloudinary.uploader.upload(req.file.path);
             avatar = result.secure_url;
-        }else{
+        } else {
             avatar = req.session.user.avatar;
         }
         console.log('Avatar', avatar);
@@ -1139,9 +1205,9 @@ router.post('/profile/update', checkAccessTokenMiddleware, multer.single('pictur
         //console.log('User req.session: ', req.session.user);
         //_id, body, status, numberPhone, idUser
         const listddress = await address_controller.get_address_by_idUser(_id);
-        if(listddress){
-            for(let i = 0; i < listddress.length; i++){
-                if(listddress[i].status == true){
+        if (listddress) {
+            for (let i = 0; i < listddress.length; i++) {
+                if (listddress[i].status == true) {
                     const addressUpdate = await address_controller.update_address(listddress[i]._id, address, true, numberPhone, _id);
                     if (!addressUpdate) {
                         console.log('Error update address');
@@ -1162,8 +1228,112 @@ router.post('/profile/update', checkAccessTokenMiddleware, multer.single('pictur
 
 
 
+//-----------------------------Search----------------------------------
+router.get('/search', checkAccessTokenMiddleware, async function (req, res, next) {
+    try {
+        const { keyword, name } = req.query;
+        if (name == 'category') {
+            const categories = await category_controller.get_all_category();
+            //Lay categories theo keyword
+            let listCate = [];
+            for (let i = 0; i < categories.length; i++) {
+                if (categories[i].name.toLowerCase().includes(keyword.toLowerCase())) {
+                    listCate.push(categories[i]);
+                }
+            }
+            res.render('categories', { title: 'iTech - Categories', categories: listCate });
+        } else if (name == 'brand') {
+            const brands = await brand_controller.get_all_brand();
+            //Lay brands theo keyword
+            let listBrand = [];
+            for (let i = 0; i < brands.length; i++) {
+                if (brands[i].name.toLowerCase().includes(keyword.toLowerCase())) {
+                    const category = await category_controller.get_category_by_id(brands[i].idCategory);
+                    brands[i].nameCategory = category.name;
+                    listBrand.push(brands[i]);
+                }
+            }
+            res.render('brands', { title: 'iTech - Brands', brands: listBrand });
+        } else if (name == 'customer') {
+            const customers = await user_controller.get_users();
+            //Lay customers theo keyword
+            let listCustomer = [];
+            for (let i = 0; i < customers.length; i++) {
+                if (customers[i].role == 'user') {
+                    if (customers[i].name.toLowerCase().includes(keyword.toLowerCase())) {
+                        const address = await address_controller.get_address_by_idUser(customers[i]._id);
+                        if (!address) {
+                            return res.redirect('/customers');
+                        }
+                        for (let j = 0; j < address.length; j++) {
+                            if (address[j].status == true) {
+                                customers[i].address = address[j].body;
+                                break;
+                            }
+                        }
+                        listCustomer.push(customers[i]);
+                    }
+                }
 
+            }
+            res.render('customers', { title: 'iTech - Customers', customers: listCustomer });
+        } else if (name == 'product') {
+            const products = await product_controller.onGetProducts();
+            //Lay products theo keyword
+            let listProduct = [];
+            for (let i = 0; i < products.length; i++) {
+                if (products[i].name.toLowerCase().includes(keyword.toLowerCase())) {
+                    const subProducts = await sub_product_controller.onGetSubProductsByIdProduct(products[i]._id);
+                    products[i].subProducts = subProducts;
+                    products[i].price = subProducts[0].price;
+                    products[i].sale = subProducts[0].sale;
+                    listProduct.push(products[i]);
+                }
+            }
+            res.render('products', { title: 'iTech - Products', products: listProduct });
+        } else if (name == 'sub-product') {
+            const sub_products = await sub_product_controller.onGetSubProducts();
+            //Lay sub_products theo keyword
+            let listSubProduct = [];
+            for (let i = 0; i < sub_products.length; i++) {
+                const product = await product_controller.onGetProductById(sub_products[i].idProduct);
+                if (product) {
+                    if(product.name.toLowerCase().includes(keyword.toLowerCase())){
+                        sub_products[i].nameProduct = product.name;
+                        sub_products[i].image = product.image;
+                        listSubProduct.push(sub_products[i]);
+                    }
+                }
+            }
+            res.render('sub-product', { title: 'iTech - Sub Products', subProducts: listSubProduct });
+        } else if (name == 'order') {
+            const orders = await order_controller.get_all_order();
+            //Lay orders theo keyword
+            let listOrder = [];
+            for (let i = 0; i < orders.length; i++) {
+                if (orders[i].status == 'cart' || orders[i].status == 'favorite') {
+                    continue;
+                } else {
+                    let id = orders[i]._id.toString();
+                    if (id.toLowerCase().includes(keyword.toLowerCase())) {
+                        const user = await user_controller.get_user(orders[i].idUser);
+                        orders[i].nameUser = user.name;
+                        orders[i].avatarUser = user.avatar;
+                        orders[i].phoneUser = user.numberPhone;
+                        listOrder.push(orders[i]);
+                    }
+                }
 
+            }
+            res.render('orders', { title: 'iTech - Orders', orders: listOrder });
+        } else {
+            return res.redirect('/home');
+        }
+    } catch (error) {
+        console.log('Get search error: ', error);
+        res.redirect('/home');
+    }
+});
 
 
 

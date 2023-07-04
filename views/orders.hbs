@@ -137,16 +137,26 @@
             <li class="breadcrumb-item text-sm text-white active" aria-current="page">Đơn hàng</li>
           </ol>
         </nav>
-        {{!-- <form action="/products">
+        <form action="/search" method="GET">
           <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
             <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+              <input type="hidden" name="name" value="order">
               <div class="input-group">
                 <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
-                <input type="text" name="name" class="form-control" placeholder="Tìm kiếm sản phẩm ..">
+                <input type="text" name="keyword" class="form-control" placeholder="Nhập mã đơn hàng .." onkeydown="handleEnter(event)">
               </div>
             </div>
           </div>
-        </form> --}}
+        </form>
+        <script>
+          function handleEnter(event) {
+            if (event.keyCode === 13) {
+              event.preventDefault();
+              const keyword = event.target.value;
+              window.location.href = '/search' + '?keyword=' + keyword + '&name=order';
+            }
+          }
+        </script>
       </div>
     </nav>
     <!-- End Navbar -->
@@ -201,10 +211,10 @@
 
                         {{/isEqual}} --}}
 
-                        <div class="d-flex px-2 py-1 justify-content-center align-items-center"
+                        <div id="bgStatus" class="d-flex px-2 py-1 justify-content-center align-items-center bgStatus"
                           style="width: 90px; background-color: gold; padding: 8px; border-radius: 10px;">
-                          <span class="text-secondary text-xs font-weight-bold"
-                            style="margin-top: 8px; margin-bottom: 8px; color: black;">{{this.status}}</span>
+                          <span id="status" class=" text-xs  status"
+                            style="margin-top: 8px; margin-bottom: 8px; color: white; font-weight: 800;">{{this.status}}</span>
                         </div>
                       </td>
                       <td style="align-middle text-center text-sm">
@@ -260,6 +270,26 @@
       }
       Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
     }
+  </script>
+
+  <script>
+    let status = document.querySelectorAll('.status');
+    let bgStatus = document.querySelectorAll('.bgStatus');
+
+    const statuses = Array.from(status).map(span => span.textContent);
+
+    for(let i = 0; i < statuses.length; i++) {
+      if(statuses[i] === 'Delivered') {
+        bgStatus[i].style.backgroundColor = 'green';
+      } else if(statuses[i] === 'Processing') {
+        bgStatus[i].style.backgroundColor = 'gold';
+      } else if(statuses[i] === 'Shipping') {
+        bgStatus[i].style.backgroundColor = 'blue';
+      } else if(statuses[i] === 'Canceled') {
+        bgStatus[i].style.backgroundColor = 'red';
+      }
+    }
+
   </script>
 
   <script>

@@ -152,16 +152,16 @@
 
                 <div class="tientrinhtext" style="margin-bottom: 10px; margin-top: 20px;">
                   <div class="row-center fl1">
-                  <img src="/images/logos/logo.png" alt="Progress Image" style="width: 30px; height: 30px; " />
+                    <img src="/images/logos/logo.png" alt="Progress Image" style="width: 30px; height: 30px; " />
                   </div>
                   <div class="row-center fl1">
-                  <img src="/images/logos/logo.png" alt="Progress Image" style="width: 30px; height: 30px;" />
+                    <img src="/images/logos/logo.png" alt="Progress Image" style="width: 30px; height: 30px;" />
                   </div>
                   <div class="row-center fl1">
-                  <img src="/images/logos/logo.png" alt="Progress Image" style="width: 30px; height: 30px;" />
+                    <img src="/images/logos/logo.png" alt="Progress Image" style="width: 30px; height: 30px;" />
                   </div>
                   <div class="row-center fl1">
-                  <img src="/images/logos/logo.png" alt="Progress Image" style="width: 30px; height: 30px;" />
+                    <img src="/images/logos/logo.png" alt="Progress Image" style="width: 30px; height: 30px;" />
                   </div>
                 </div>
 
@@ -194,7 +194,8 @@
                 <div class="row-spbw">
                   <span class="fl1">Mã DH: {{order._id}}</span>
                   <span class="fl1" style="margin-left: 10px;">Ngày đặt hàng: {{order.dateCreate}}</span>
-                  <span class="fl1">Trạng thái: <span id="status" style="margin-left: 20px; color: black;">{{order.status}}</span></span>
+                  <span class="fl1">Trạng thái: <span id="status"
+                      style="margin-left: 20px; color: black;">{{order.status}}</span></span>
                 </div>
 
                 {{!-- DHCT --}}
@@ -265,18 +266,26 @@
 
                 {{!-- Tong tien --}}
                 <div
-                  style="margin-top: 30px; display: flex; flex-direction: row; justify-content: space-between; align-items: flex-end;">
+                  style="margin-top: 30px; display: flex; flex-direction: row; justify-content: space-between;">
                   {{#if order.check}}
-                  <button id="btn-delivered" style="width: 200px; height: 50px; padding: 10px; border-radius: 10px; 
+                  <div style="display: flex; flex-direction: column; align-items: flex-start;">
+                    <button id="btn-delivered" style="width: 200px; height: 50px; padding: 10px; border-radius: 10px; 
                                     background-color: #f5365c; color: white; border: none;"
-                    onclick="handleDelivered('{{order._id}}')">
-                    Xác nhận đơn hàng
-                  </button>
+                      onclick="handleDelivered('{{order._id}}')">
+                      Xác nhận đơn hàng
+                    </button>
+                    <button id="btn-cancel" style="width: 200px; height: 50px; padding: 10px; border-radius: 10px; 
+                                    background-color: #948d8d; color: white; border: none; margin-top: 10px;"
+                      onclick="handleCancel('{{order._id}}')">
+                      Hủy đơn hàng
+
+                  </div>
                   {{else}}
 
                   <div style="margin-top: 20px; color: red; font-weight: bold; font-size: 16px;">
-                    Đơn hàng đã được xác nhận
+                    Đơn hàng <span id="statusOrder"></span>
                   </div>
+
 
                   {{/if}}
                   <div style="display: flex; flex-direction: column; align-items: flex-end;">
@@ -316,30 +325,40 @@
   </script>
 
   <script>
+    const progress = document.querySelector('.progress');
     function updateProgressBar(percent) {
-      const progress = document.querySelector('.progress');
       progress.style.width = percent + '%';
     }
 
     const status = $('#status').html();
+    const status2 = $('#status');
+    const statusOrder = $('#statusOrder');
     console.log('status: ', status);
     // Ví dụ cập nhật giá trị tiến trình là 50%:
     if (status == 'Processing') {
       updateProgressBar(25);
+      status2.html('Đang chờ xử lý');
+      status2.css('color', 'gold');
+      progress.style.backgroundColor = 'gold';
     } else if (status == 'Delivering') {
       updateProgressBar(50);
+      statusOrder.html('đang giao hàng');
+      status2.html('Đang giao hàng');
     } else if (status == 'Delivered') {
       updateProgressBar(75);
+      statusOrder.html('đã được giao');
+      statusOrder.css('color', 'green');
+      status2.html('Đã giao hàng');
+      status2.css('color', 'green');
+      progress.style.backgroundColor = 'green';
     } else {
+      statusOrder.html('đã hủy');
+      statusOrder.css('color', 'red');
+      status2.html('Đã hủy');
+      status2.css('color', 'red');
+      progress.style.backgroundColor = 'red';
       updateProgressBar(100);
     }
-  </script>
-
-  <script>
-    function gotoOrderDetail(_idOrder) {
-      window.location.href = `http://localhost:3000/orders/${_idOrder}/order-detail`;
-    }
-
   </script>
   <!-- Github buttons -->
   <script async defer src="https://buttons.github.io/buttons.js"></script>

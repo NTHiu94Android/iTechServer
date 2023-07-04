@@ -136,6 +136,26 @@
             <li class="breadcrumb-item text-sm text-white active" aria-current="page">Loại sản phẩm</li>
           </ol>
         </nav>
+        <form action="/search" method="GET">
+          <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
+            <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+              <input type="hidden" name="name" value="category">
+              <div class="input-group">
+                <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
+                <input type="text" name="keyword" class="form-control" placeholder="Nhập tên loại sản phẩm .." onkeydown="handleEnter(event)">
+              </div>
+            </div>
+          </div>
+        </form>
+        <script>
+          function handleEnter(event) {
+            if (event.keyCode === 13) {
+              event.preventDefault();
+              const keyword = event.target.value;
+              window.location.href = '/search' + '?keyword=' + keyword + '&name=category';
+            }
+          }
+        </script>
       </div>
     </nav>
     <!-- End Navbar -->
