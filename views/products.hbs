@@ -247,10 +247,10 @@
                         </div>
                         {{/each}} --}}
 
-                        <button onclick="edit('{{this._id}}')" class="btn btn-xs mb-3 mt-3 btn-outline-secondary">
+                        <button onclick="editProduct('{{this._id}}')" class="btn btn-xs mb-3 mt-3 btn-outline-secondary">
                           Sửa
                         </button>
-                        <button onclick="onDelete('{{this._id}}')" class="btn btn-xs mb-3 mt-3 btn-outline-danger">
+                        <button onclick="deleteProduct('{{this._id}}')" class="btn btn-xs mb-3 mt-3 btn-outline-danger">
                           Xóa
                         </button>
                       </td>
@@ -280,6 +280,7 @@
       Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
     }
   </script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
   <!-- Github buttons -->
   <script async defer src="https://buttons.github.io/buttons.js"></script>
   <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->

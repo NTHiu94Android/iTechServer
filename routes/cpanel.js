@@ -431,8 +431,10 @@ router.post('/categories/:_id/update', checkAccessTokenMiddleware, multer.single
     try {
         const { _id } = req.params;
         const { name } = req.body;
-        let image = req.body.image;
-        if (req.file) {
+        let image = '';
+        if (!req.file) {
+            image = 'https://media.sproutsocial.com/uploads/2017/02/10x-featured-social-media-image-size.png';
+        }else{
             const result = await cloudinary.uploader.upload(req.file.path);
             image = result.secure_url;
         }
@@ -492,12 +494,13 @@ router.get('/categories/insert', checkAccessTokenMiddleware, async function (req
 router.post('/categories/insert', checkAccessTokenMiddleware, multer.single('picture'), async function (req, res, next) {
     try {
         const { name } = req.body;
+        let image = '';
         if (!req.file) {
-            res.status(401).redirect('/categories/insert');
-            return;
+            image = 'https://media.sproutsocial.com/uploads/2017/02/10x-featured-social-media-image-size.png';
+        }else{
+            const result = await cloudinary.uploader.upload(req.file.path);
+            image = result.secure_url;
         }
-        const result = await cloudinary.uploader.upload(req.file.path);
-        const image = result.secure_url;
         //console.log('Info: ', name, image, idCategory, idBrand);
         if (!name || !image) {
             res.status(401).render('Error', { message: 'Not authorization' });
@@ -570,8 +573,10 @@ router.post('/brands/:_id/update', checkAccessTokenMiddleware, multer.single('pi
     try {
         const { _id } = req.params;
         const { name, idCategory } = req.body;
-        let image = req.body.image;
-        if (req.file) {
+        let image = '';
+        if (!req.file) {
+            image = 'https://media.sproutsocial.com/uploads/2017/02/10x-featured-social-media-image-size.png';
+        }else{
             const result = await cloudinary.uploader.upload(req.file.path);
             image = result.secure_url;
         }
@@ -626,12 +631,13 @@ router.get('/brands/insert', checkAccessTokenMiddleware, async function (req, re
 router.post('/brands/insert', checkAccessTokenMiddleware, multer.single('picture'), async function (req, res, next) {
     try {
         const { name, idCategory } = req.body;
+        let image = '';
         if (!req.file) {
-            res.status(401).redirect('/brands/insert');
-            return;
+            image = 'https://media.sproutsocial.com/uploads/2017/02/10x-featured-social-media-image-size.png';
+        }else{
+            const result = await cloudinary.uploader.upload(req.file.path);
+            image = result.secure_url;
         }
-        const result = await cloudinary.uploader.upload(req.file.path);
-        const image = result.secure_url;
         //console.log('Info: ', name, image, idCategory, idBrand);
         if (!name || !image || !idCategory) {
             res.status(401).redirect('/brands/insert')
@@ -734,8 +740,14 @@ router.post('/products/:_id/product-update', checkAccessTokenMiddleware, multer.
     try {
         const { _id } = req.params;
         const { name, idCategory, idBrand } = req.body;
-        const result = await cloudinary.uploader.upload(req.file.path);
-        const image = result.secure_url;
+        const prod = await product_controller.onGetProductById(_id);
+        let image = '';
+        if (!req.file) {
+            image = prod.image;
+        }else{
+            const result = await cloudinary.uploader.upload(req.file.path);
+            image = result.secure_url;
+        }
         //console.log('Info: ', name, image, idCategory, idBrand);
         if (!name || !image || !idCategory || !idBrand) {
             res.status(401).render('Error', { message: 'Not authorization' });
@@ -784,11 +796,12 @@ router.post('/products/product-insert', checkAccessTokenMiddleware, multer.singl
         const {
             name, idCategory, idBrand, price, description, quantity, color, sale, ram, rom, cpu, screen
         } = req.body
-        const result = await cloudinary.uploader.upload(req.file.path);
-        const image = result.secure_url;
-        if (!image) {
-            res.status(401).render('Error', { message: 'Upload image fail' });
-            return;
+        let image = '';
+        if (!req.file) {
+            image = 'https://media.sproutsocial.com/uploads/2017/02/10x-featured-social-media-image-size.png';
+        }else{
+            const result = await cloudinary.uploader.upload(req.file.path);
+            image = result.secure_url;
         }
         const product = await product_controller.onAddroduct(name, image, idCategory, idBrand);
         const subProduct = await sub_product_controller
@@ -797,6 +810,19 @@ router.post('/products/product-insert', checkAccessTokenMiddleware, multer.singl
         res.redirect('/products');
     } catch (error) {
         console.log('Error insert product', error.message);
+        res.redirect('/products');
+    }
+});
+
+//Xoa san pham
+router.get('/products/:_id/delete', checkAccessTokenMiddleware, async function (req, res, next) {
+    try {
+        const { _id } = req.params;
+        const result = await product_controller.onDeleteProduct(_id);
+        console.log('Result delete product: ', result);
+        res.json({status: result})
+    } catch (error) {
+        console.log('Error delete product', error.message);
         res.redirect('/products');
     }
 });
@@ -858,14 +884,16 @@ router.post('/sub-products/sub-product-insert', checkAccessTokenMiddleware, mult
         }
         const files = req.files;
         if (!files) {
-            res.status(401).render('Error', { message: 'Not authorization' });
-            return;
-        }
-        for (let i = 0; i < files.length; i++) {
-            const result = await cloudinary.uploader.upload(files[i].path);
-            const image = result.secure_url;
+            const image = 'https://media.sproutsocial.com/uploads/2017/02/10x-featured-social-media-image-size.png';
             await picture_controller.add_picture(image, subProduct._id, "", "");
+        }else{
+            for (let i = 0; i < files.length; i++) {
+                const result = await cloudinary.uploader.upload(files[i].path);
+                const image = result.secure_url;
+                await picture_controller.add_picture(image, subProduct._id, "", "");
+            }
         }
+        
         res.redirect('/sub-product');
     } catch (error) {
         console.log('Error insert sub product', error.message);
@@ -907,19 +935,19 @@ router.post('/sub-products/:_id/sub-product-update', checkAccessTokenMiddleware,
     try {
         const { price, ram, rom, quantity, sale, cpu, screen, subProduct } = req.body;
         const { _id } = req.params;
-        const files = req.files; // Danh sách các tệp đã được tải lên
-        const result = await Promise.all(
-            files.map(async (file) => {
-                const uploadResult = await cloudinary.uploader.upload(file.path);
-                return uploadResult.secure_url;
-            })
-        );
-        console.log('Result', result);
-        //Them hinh anh
-        for (let i = 0; i < result.length; i++) {
-            const picture = await picture_controller.add_picture(result[i], _id, "", "");
-            console.log('Picture', picture);
-        }
+        // const files = req.files; // Danh sách các tệp đã được tải lên
+        // const result = await Promise.all(
+        //     files.map(async (file) => {
+        //         const uploadResult = await cloudinary.uploader.upload(file.path);
+        //         return uploadResult.secure_url;
+        //     })
+        // );
+        // console.log('Result', result);
+        // //Them hinh anh
+        // for (let i = 0; i < result.length; i++) {
+        //     const picture = await picture_controller.add_picture(result[i], _id, "", "");
+        //     console.log('Picture', picture);
+        // }
         //cap nhat subProduct
         const subProductUpdate = await sub_product_controller
             .onUpdateSubProduct(_id, price, subProduct.description, quantity, subProduct.color,
@@ -934,6 +962,19 @@ router.post('/sub-products/:_id/sub-product-update', checkAccessTokenMiddleware,
 
     } catch (error) {
         console.log('Error update sub product', error.message);
+        res.redirect('/sub-product');
+    }
+});
+
+//Xoa san pham chi tiet
+router.get('/sub-products/:_id/delete', checkAccessTokenMiddleware, async function (req, res, next) {
+    try {
+        const { _id } = req.params;
+        const result = await sub_product_controller.onDeleteSubProduct(_id);
+        console.log('Result delete sub product', result);
+        res.json({ status: result });
+    } catch (error) {
+        console.log('Error delete sub product', error.message);
         res.redirect('/sub-product');
     }
 });
