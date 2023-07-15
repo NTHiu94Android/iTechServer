@@ -54,7 +54,7 @@ app.use('/products', require('./routes/products'));
 app.use('/promotions', require('./routes/promotions'));
 app.use('/reviews', require('./routes/reviews'));
 app.use('/sub-products', require('./routes/sub-products'));
-app.use('/notifications', require('./routes/notifications'));
+app.use('/notifications', require('./routes/notification'));
 
 app.use('/', require('./routes/cpanel'));
 
