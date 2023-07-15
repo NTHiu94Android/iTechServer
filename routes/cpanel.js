@@ -1035,7 +1035,7 @@ router.get('/orders/:_idOrder/update', checkAccessTokenMiddleware, async functio
         //Gui thong bao den nguoi dung
         const data = {
             title: 'iTech - Order',
-            body: `Đơn hàng ${_idOrder} đã được xác nhận`,
+            body: `Order ${_idOrder} has been confirmed`,
             image: '',
             idSender: '',
             idReceiver: orderUpdate.idUser,
@@ -1071,7 +1071,7 @@ router.get('/orders/:_idOrder/cancel', checkAccessTokenMiddleware, async functio
         //Gui thong bao den nguoi dung
         const data = {
             title: 'iTech - Order',
-            body: `Đơn hàng ${_idOrder} đã huỷ`,
+            body: `Order ${_idOrder} has been canceled`,
             image: '',
             idSender: '',
             idReceiver: orderUpdate.idUser,

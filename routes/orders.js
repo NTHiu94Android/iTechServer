@@ -16,7 +16,7 @@ router.post('/api/add-order', [authen], async function (req, res, next) {
         //Gui thong bao den nguoi dung
         const notifi = {
             title: 'iTech - Order',
-            body: `Đơn hàng ${order._id} đã đặt thành công.`,
+            body: `Order ${order._id} placed successfully.`,
             image: '',
             idSender: '',
             idReceiver: idUser
