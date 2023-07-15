@@ -7,7 +7,7 @@
   <link rel="icon" type="image/png" href="images/favicon.png">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
   <title>
-    iTech - Add Product
+    iTech - Add Product  
   </title>
   <!--     Fonts and icons     -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
@@ -309,7 +309,9 @@
     }
     //Lay brand theo idCategory
     const getBrands = async (idCategory) => {
-      const response = await fetchApi(`http://localhost:3000/brands/cpanel/get-brand-by-id-category/${idCategory}`, {
+      const domain = 'https://itech-server-datn.onrender.com';
+      const domain2 = 'http://localhost:3000';
+      const response = await fetchApi(`${domain2}/brands/cpanel/get-brand-by-id-category/${idCategory}`, {
         method: 'GET'
       });
       console.log(response.data);

@@ -18,6 +18,7 @@ const review_controller = require('../models/review/reviewController');
 const address_controller = require('../models/address/addressController');
 const picture_controller = require('../models/picture/pictureController');
 const promotion_controller = require('../models/promotion/promotionController');
+const notification_controller = require('../models/notification/notificationController');
 
 //------------------ Middleware để kiểm tra accessToken --------------------
 const checkAccessTokenMiddleware = (req, res, next) => {
@@ -931,23 +932,10 @@ router.get('/sub-products/:_id/sub-product-update', checkAccessTokenMiddleware, 
     }
 });
 
-router.post('/sub-products/:_id/sub-product-update', checkAccessTokenMiddleware, multer.array('pictures', 10), async function (req, res, next) {
+router.post('/sub-products/:_id/sub-product-update', checkAccessTokenMiddleware, async function (req, res, next) {
     try {
         const { price, ram, rom, quantity, sale, cpu, screen, subProduct } = req.body;
         const { _id } = req.params;
-        // const files = req.files; // Danh sách các tệp đã được tải lên
-        // const result = await Promise.all(
-        //     files.map(async (file) => {
-        //         const uploadResult = await cloudinary.uploader.upload(file.path);
-        //         return uploadResult.secure_url;
-        //     })
-        // );
-        // console.log('Result', result);
-        // //Them hinh anh
-        // for (let i = 0; i < result.length; i++) {
-        //     const picture = await picture_controller.add_picture(result[i], _id, "", "");
-        //     console.log('Picture', picture);
-        // }
         //cap nhat subProduct
         const subProductUpdate = await sub_product_controller
             .onUpdateSubProduct(_id, price, subProduct.description, quantity, subProduct.color,
@@ -1048,8 +1036,11 @@ router.get('/orders/:_idOrder/update', checkAccessTokenMiddleware, async functio
         const data = {
             title: 'iTech - Order',
             body: `Đơn hàng ${_idOrder} đã được xác nhận`,
-            image: ''
+            image: '',
+            idSender: '',
+            idReceiver: orderUpdate.idUser,
         }
+        await notification_controller.onAddNotification(data);
         await notification.onSendData(orderUpdate.idUser, data);
 
         return res.redirect('/orders');
@@ -1081,8 +1072,11 @@ router.get('/orders/:_idOrder/cancel', checkAccessTokenMiddleware, async functio
         const data = {
             title: 'iTech - Order',
             body: `Đơn hàng ${_idOrder} đã huỷ`,
-            image: ''
+            image: '',
+            idSender: '',
+            idReceiver: orderUpdate.idUser,
         }
+        await notification_controller.onAddNotification(data);
         await notification.onSendData(orderUpdate.idUser, data);
 
         return res.redirect('/orders');

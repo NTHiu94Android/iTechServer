@@ -2,6 +2,9 @@ var express = require('express');
 var router = express.Router();
 const authen = require('../middleware/auth');
 const order_controller = require('../models/order/orderController');
+const notification_controller = require('../models/notification/notificationController');
+
+const notification = require('../ultils/send-notifi');
 
 //Tạo order
 //http://localhost:3000/order/api/create-order
@@ -10,6 +13,16 @@ router.post('/api/add-order', [authen], async function (req, res, next) {
         const { dateCreate, datePayment, totalPrice, status, paymentMethod, address, idUser } = req.body;
         const order = await order_controller
             .add_order(dateCreate, datePayment, totalPrice, status, paymentMethod, address, idUser);
+        //Gui thong bao den nguoi dung
+        const notifi = {
+            title: 'iTech - Order',
+            body: `Đơn hàng ${order._id} đã đặt thành công.`,
+            image: '',
+            idSender: '',
+            idReceiver: idUser
+        }
+        await notification_controller.onAddNotification(notifi);
+        await notification.onSendData(idUser, notifi);
         res.json({ error: false, responeTime: new Date(), statusCode: 200, data: order });
     } catch (error) {
         res.json({ error: true, responeTime: new Date(), statusCode: 500, message: error.message });
