@@ -58,4 +58,16 @@ router.post('/api/update-order-detail', authen, async (req, res) => {
     }
 });
 
+//Update order_detail to order
+router.post('/api/update-order-detail-to-order', authen, async (req, res) => {
+    try {
+        const { _id, idOrder } = req.body;
+        const order_detail_update = await order_detail_controller
+            .update_order_detail_to_order(_id, idOrder);
+        res.json({ error: false, responeTime: new Date(), statusCode: 200, data: order_detail_update });
+    } catch (error) {
+        res.json({ error: true, responeTime: new Date(), statusCode: 500, message: error.message });
+    }
+});
+
 module.exports = router;

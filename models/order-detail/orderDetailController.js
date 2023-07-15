@@ -54,7 +54,19 @@ const update_order_detail = async (_id, quantity, price, isCmt, idOrder, idSubPr
     }
 };
 
+//Update order_detail to order
+const update_order_detail_to_order = async (_id, idOrder) => {
+    try {
+        const order_detail_update = await order_detail_service
+            .update_order_detail_to_order(_id, idOrder);
+        return order_detail_update;
+    } catch (error) {
+        console.log('Error update order detail to order: ' + error.message);
+    }
+};
+
 module.exports = {
     add_order_detail, get_order_detail_by_idOrder,
     delete_order_detail, update_order_detail, get_all_order_detail,
+    update_order_detail_to_order,
 };

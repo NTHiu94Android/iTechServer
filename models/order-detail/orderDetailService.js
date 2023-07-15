@@ -33,7 +33,14 @@ const update_order_detail = async (_id, quantity, price, isCmt, idOrder, idSubPr
     return order_detail_update;
 };
 
+//Update order_detail to order
+const update_order_detail_to_order = async (_id, idOrder) => {
+    const order_detail_update = order_detail_model.findByIdAndUpdate(_id,{ idOrder});
+    return order_detail_update; 
+};
+
 module.exports = {
     add_order_detail, get_order_detail_by_idOrder,
-    delete_order_detail, update_order_detail, get_all_order_detail
+    delete_order_detail, update_order_detail, get_all_order_detail,
+    update_order_detail_to_order
 };
