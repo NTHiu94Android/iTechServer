@@ -294,7 +294,9 @@
 
   <script>
     function gotoOrderDetail(_idOrder) {
-      window.location.href = `http://localhost:3000/orders/${_idOrder}/order-detail`;
+      const domain = 'https://itech-server-datn.onrender.com';
+      //const domain2 = 'http://localhost:3000';
+      window.location.href = `${domain}/orders/${_idOrder}/order-detail`;
     }
   </script>
   <!-- Github buttons -->

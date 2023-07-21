@@ -211,10 +211,17 @@
                           class="btn btn-xs mb-3 mt-3 btn-outline-secondary">
                           Sửa
                         </button>
+                        {{#if this.isActive}}
                         <button onclick="deleteCategory('{{this._id}}')"
                           class="btn btn-xs mb-3 mt-3 btn-outline-danger">
-                          Xóa
+                          Ngưng kinh doanh
                         </button>
+                        {{else}}
+                        <button onclick="restoreCategory('{{this._id}}')"
+                          class="btn btn-xs mb-3 mt-3 btn-outline-secondary">
+                          Đã ngưng kinh doanh
+                        </button>
+                        {{/if}}
                       </td>
                     </tr>
                     {{/each}}

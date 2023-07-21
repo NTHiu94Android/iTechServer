@@ -405,6 +405,25 @@ router.get('/categories', checkAccessTokenMiddleware, async function (req, res, 
             res.redirect('/');
             return;
         }
+        for (let i = 0; i < categories.length; i++) {
+            let quantity = 0;
+            const brands = await brand_controller.get_brand_by_id_category(categories[i]._id);
+            for (let j = 0; j < brands.length; j++) {
+                const products = await product_controller.onGetProductByIdBrand(brands[j]._id);
+                for (let k = 0; k < products.length; k++) {
+                    const subProducts = await sub_product_controller.onGetSubProductsByIdProduct(products[k]._id);
+                    for (let l = 0; l < subProducts.length; l++) {
+                        quantity += subProducts[l].quantity;
+                    }
+                }
+            }
+            if(quantity == 0){
+                categories[i].isActive = false;
+            }else{
+                categories[i].isActive = true;
+            }
+        }
+        console.log('categories: ', categories[4].isActive);
         res.render('categories', { title: 'iTech - Category', categories: categories });
     } catch (error) {
         console.log('Error get categories', error.message);
@@ -468,10 +487,10 @@ router.get('/categories/:_id/delete', checkAccessTokenMiddleware, async function
             await category_controller.delete_category(_id);
             const brands = await brand_controller.get_brand_by_id_category(_id);
             for (let i = 0; i < brands.length; i++) {
-                const products = await product_controller.onGetProductByIdBrand(brands[i]._id);
-                for (let j = 0; j < products.length; j++) {
-                    await product_controller.onDeleteProduct(products[j]._id);
-                }
+                // const products = await product_controller.onGetProductByIdBrand(brands[i]._id);
+                // for (let j = 0; j < products.length; j++) {
+                //     await product_controller.onDeleteProductAndUpdateSubProduct(products[j]._id);
+                // }
                 await brand_controller.delete_brand(brands[i]._id);
             }
 
@@ -536,8 +555,22 @@ router.get('/brands', checkAccessTokenMiddleware, async function (req, res, next
         for (let i = 0; i < brands.length; i++) {
             const category = await category_controller.get_category_by_id(brands[i].idCategory);
             brands[i].nameCategory = category.name;
+            const products = await product_controller.onGetProductByIdBrand(brands[i]._id);
+            let quantity = 0;
+            for (let j = 0; j < products.length; j++) {
+                const subProducts = await sub_product_controller.onGetSubProductsByIdProduct(products[j]._id);
+                for (let k = 0; k < subProducts.length; k++) {
+                    quantity += subProducts[k].quantity;
+                }
+            }
+            if(quantity > 0){
+                brands[i].isActive = true;
+            }else{
+                brands[i].isActive = false;
+            }
             list.push(brands[i]);
         }
+        console.log('List brand: ', list);
         res.render('brands', { title: 'iTech - Brand', brands: list });
     } catch (error) {
         console.log('Error get brands', error.message);
@@ -606,10 +639,10 @@ router.get('/brands/:_id/delete', checkAccessTokenMiddleware, async function (re
         if (!_id) {
             res.json({ status: false });
         } else {
-            const products = await product_controller.onGetProductByIdBrand(_id);
-            for (let j = 0; j < products.length; j++) {
-                await product_controller.onDeleteProduct(products[j]._id);
-            }
+            // const products = await product_controller.onGetProductByIdBrand(_id);
+            // for (let j = 0; j < products.length; j++) {
+            //     await product_controller.onDeleteProductAndUpdateSubProduct(products[j]._id);
+            // }
             await brand_controller.delete_brand(_id);
             res.json({ status: true });
         }
@@ -669,11 +702,21 @@ router.get('/products', checkAccessTokenMiddleware, async function (req, res, ne
             res.status(401).render('Error', { message: 'Not authorization' });
             return;
         }
+        
         for (let i = 0; i < products.length; i++) {
             const subProducts = await sub_product_controller.onGetSubProductsByIdProduct(products[i]._id);
             products[i].subProducts = subProducts;
             products[i].price = subProducts[0].price;
             products[i].sale = subProducts[0].sale;
+            let quantity = 0;
+            for (let j = 0; j < subProducts.length; j++) {
+                quantity += subProducts[j].quantity;
+            }
+            if(quantity > 0){
+                products[i].isActive = true;
+            }else{
+                products[i].isActive = false;
+            }
         }
 
         res.render('products', { title: 'iTechPro - Product', products: products });
@@ -819,7 +862,7 @@ router.post('/products/product-insert', checkAccessTokenMiddleware, multer.singl
 router.get('/products/:_id/delete', checkAccessTokenMiddleware, async function (req, res, next) {
     try {
         const { _id } = req.params;
-        const result = await product_controller.onDeleteProduct(_id);
+        const result = await product_controller.onDeleteProductAndUpdateSubProduct(_id);
         console.log('Result delete product: ', result);
         res.json({status: result})
     } catch (error) {

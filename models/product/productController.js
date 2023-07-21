@@ -82,6 +82,17 @@ const onDeleteProduct = async (_id) => {
     }
 };
 
+//Xoa sp va cap nhat lai so luong sub product ve 0
+const onDeleteProductAndUpdateSubProduct = async (_id) => {
+    try {
+        const product = await product_service.update_sub_product(_id);
+        return product;
+    } catch (error) {
+        console.log('Error delete product: ' + error.message);
+    }
+};
+
 module.exports = {
-    onAddroduct, onGetProducts, onUpdateProduct, onDeleteProduct, onGetProductById, onGetProductByIdBrand, onUpdateDateProduct
+    onAddroduct, onGetProducts, onUpdateProduct, onDeleteProduct, onGetProductById, 
+    onGetProductByIdBrand, onUpdateDateProduct, onDeleteProductAndUpdateSubProduct
 };

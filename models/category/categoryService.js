@@ -22,7 +22,7 @@ const update_category = async (_id, name, image) => {
 
 //Xoa category theo id
 const delete_category = async (_id) => {
-    const category = await category_model.findOneAndDelete({ _id: _id });
+    const category = await category_model.findById({ _id: _id });
     const brands = await brand_model.find({ idCategory: _id });
     if (brands) {
         for (let i = 0; i < brands.length; i++) {

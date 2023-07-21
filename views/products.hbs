@@ -182,9 +182,9 @@
                       {{!-- text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 --}}
                       {{!-- text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2 --}}
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Số lượng</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Khuyến mãi
+                      {{!-- <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Khuyến mãi
                       </th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Giá bán</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Giá bán</th> --}}
                     </tr>
                   </thead>
 
@@ -222,7 +222,7 @@
                         <span class="text-secondary text-xs font-weight-bold">{{this.quantity}}</span>
                         {{/each}}
                       </td>
-                      <td style="white-space:pre-line">
+                      {{!-- <td style="white-space:pre-line">
                         {{#each this.subProducts}}
                         <span class="text-secondary text-xs font-weight-bold">-{{this.sale}}%</span>
                         {{/each}}
@@ -231,7 +231,7 @@
                         {{#each this.subProducts}}
                         <span class="text-secondary text-xs font-weight-bold">{{this.price}}$</span>
                         {{/each}}
-                      </td>
+                      </td> --}}
 
                       <td style="">
                         {{!-- {{#each this.subProducts}}
@@ -250,9 +250,17 @@
                         <button onclick="editProduct('{{this._id}}')" class="btn btn-xs mb-3 mt-3 btn-outline-secondary">
                           Sửa
                         </button>
-                        <button onclick="deleteProduct('{{this._id}}')" class="btn btn-xs mb-3 mt-3 btn-outline-danger">
-                          Xóa
+                        {{#if this.isActive}}
+                        <button onclick="deleteCategory('{{this._id}}')"
+                          class="btn btn-xs mb-3 mt-3 btn-outline-danger">
+                          Ngưng kinh doanh
                         </button>
+                        {{else}}
+                        <button onclick="restoreCategory('{{this._id}}')"
+                          class="btn btn-xs mb-3 mt-3 btn-outline-secondary">
+                          Đã ngưng kinh doanh
+                        </button>
+                        {{/if}}
                       </td>
                     </tr>
                     {{/each}}

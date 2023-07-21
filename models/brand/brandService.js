@@ -39,12 +39,12 @@ const update_brand = async (id, name, image, idCategory) => {
 
 // delete brand
 const delete_brand = async (id) => {
-    const brands = await brand_model.findByIdAndDelete(id);
+    const brands = await brand_model.findById(id);
     const products = await product_model.find({ idBrand: id });
     if(products){
         for(let i = 0; i < products.length; i++){
             console.log(products[i].name);
-            await product_service.delete_product(products[i]._id);
+            await product_service.update_sub_product(products[i]._id);
         }
     }
     if(brands){
