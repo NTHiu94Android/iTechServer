@@ -423,7 +423,7 @@ router.get('/categories', checkAccessTokenMiddleware, async function (req, res, 
                 categories[i].isActive = true;
             }
         }
-        console.log('categories: ', categories[4].isActive);
+        //console.log('categories: ', categories[4].isActive);
         res.render('categories', { title: 'iTech - Category', categories: categories });
     } catch (error) {
         console.log('Error get categories', error.message);
