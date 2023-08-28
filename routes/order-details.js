@@ -5,7 +5,7 @@ const order_detail_controller = require('../models/order-detail/orderDetailContr
 const authen = require('../middleware/auth');
 
 //Lay order_detail theo idOrder
-router.get('/api/get-order-detail-by-idOrder/:idOrder', authen, async (req, res) => {
+router.get('/api/get-order-detail-by-idOrder/:idOrder', async (req, res) => {
     try {
         const order_details = await order_detail_controller
             .get_order_detail_by_idOrder(req.params.idOrder);
@@ -16,7 +16,7 @@ router.get('/api/get-order-detail-by-idOrder/:idOrder', authen, async (req, res)
 });
 
 //Lay tat ca order_detail
-router.get('/api/get-all-order-detail', authen, async (req, res) => {
+router.get('/api/get-all-order-detail', async (req, res) => {
     try {
         const order_details = await order_detail_controller.get_all_order_detail();
         res.json({ error: false, responeTime: new Date(), statusCode: 200, data: order_details });

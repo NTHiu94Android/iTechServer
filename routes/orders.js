@@ -31,7 +31,7 @@ router.post('/api/add-order', [authen], async function (req, res, next) {
 
 //Lấy order theo idUser
 //https://itech-server-hiuntps.onrender.com/order/api/get-order-by-idUser/:idUser
-router.get('/api/get-orders-by-idUser/:idUser', [authen], async function (req, res, next) {
+router.get('/api/get-orders-by-idUser/:idUser', async function (req, res, next) {
     try {
         const { idUser } = req.params;
         const order = await order_controller.get_order_by_idUser(idUser);
