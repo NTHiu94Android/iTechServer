@@ -7,7 +7,7 @@ const notification_controller = require('../models/notification/notificationCont
 const notification = require('../ultils/send-notifi');
 
 //Tạo order
-//http://localhost:3000/order/api/create-order
+//https://itech-server-hiuntps.onrender.com/order/api/create-order
 router.post('/api/add-order', [authen], async function (req, res, next) {
     try {
         const { dateCreate, datePayment, totalPrice, status, paymentMethod, address, idUser } = req.body;
@@ -30,7 +30,7 @@ router.post('/api/add-order', [authen], async function (req, res, next) {
 });
 
 //Lấy order theo idUser
-//http://localhost:3000/order/api/get-order-by-idUser/:idUser
+//https://itech-server-hiuntps.onrender.com/order/api/get-order-by-idUser/:idUser
 router.get('/api/get-orders-by-idUser/:idUser', [authen], async function (req, res, next) {
     try {
         const { idUser } = req.params;

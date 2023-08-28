@@ -5,8 +5,8 @@ const product_controller = require('../models/product/productController');
 const authen = require('../middleware/auth');
 
 //Lấy tất cả sản phẩm
-//http://localhost:3000/product/api/get-products
-router.get('/api/get-products', [authen], async function (req, res, next) {
+//https://itech-server-hiuntps.onrender.com/product/api/get-products
+router.get('/api/get-products', async function (req, res, next) {
     try {
         const products = await product_controller.onGetProducts();
         res.json({ error: false, responeTime: new Date(), statusCode: 200, data: products });
@@ -18,7 +18,7 @@ router.get('/api/get-products', [authen], async function (req, res, next) {
 //----------------------CPANEL----------------------//
 
 //Thêm sản phẩm
-//http://localhost:3000/product/cpanel/add-product
+//https://itech-server-hiuntps.onrender.com/product/cpanel/add-product
 router.post('/cpanel/add-product', [authen], async function (req, res, next) {
     try {
         const {name, image, idCategory, idBrand} = req.body;

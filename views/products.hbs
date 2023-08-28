@@ -178,13 +178,6 @@
                       </th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Tên sản phẩm
                       </th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Màu sắc</th>
-                      {{!-- text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 --}}
-                      {{!-- text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2 --}}
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Số lượng</th>
-                      {{!-- <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Khuyến mãi
-                      </th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Giá bán</th> --}}
                     </tr>
                   </thead>
 
@@ -211,7 +204,7 @@
                       </td>
                       {{!-- white-space:pre-line --}}
                       {{!-- align-middle text-center text-sm --}}
-                      <td style=" white-space:pre-line">
+                      {{!-- <td style=" white-space:pre-line">
                         {{#each this.subProducts}}
                         <span class="text-secondary text-xs font-weight-bold"
                           style="margin-top: 8px; margin-bottom: 8px;">{{this.color}}</span>
@@ -221,7 +214,7 @@
                         {{#each this.subProducts}}
                         <span class="text-secondary text-xs font-weight-bold">{{this.quantity}}</span>
                         {{/each}}
-                      </td>
+                      </td> --}}
                       {{!-- <td style="white-space:pre-line">
                         {{#each this.subProducts}}
                         <span class="text-secondary text-xs font-weight-bold">-{{this.sale}}%</span>
@@ -250,7 +243,11 @@
                         <button onclick="editProduct('{{this._id}}')" class="btn btn-xs mb-3 mt-3 btn-outline-secondary">
                           Sửa
                         </button>
-                        {{#if this.isActive}}
+                        <button onclick="deleteCategory('{{this._id}}')"
+                          class="btn btn-xs mb-3 mt-3 btn-outline-danger">
+                          Ngưng kinh doanh
+                        </button>
+                        {{!-- {{#if this.isActive}}
                         <button onclick="deleteCategory('{{this._id}}')"
                           class="btn btn-xs mb-3 mt-3 btn-outline-danger">
                           Ngưng kinh doanh
@@ -260,7 +257,7 @@
                           class="btn btn-xs mb-3 mt-3 btn-outline-secondary">
                           Đã ngưng kinh doanh
                         </button>
-                        {{/if}}
+                        {{/if}} --}}
                       </td>
                     </tr>
                     {{/each}}

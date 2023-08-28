@@ -98,6 +98,7 @@ router.get('/home', checkAccessTokenMiddleware, async function (req, res, next) 
                 }
             }
             totalAll += total;
+            total = total.toFixed(2);
             list.push({ name: dateStr, value: total });
         }
         //console.log('list: ', list);
@@ -140,27 +141,6 @@ router.get('/cpanel/get-orders', checkAccessTokenMiddleware, async function (req
         }
         res.status(200).json({ data: list });
     } catch (error) {
-        res.status(500).send(error.message);
-    }
-});
-
-//Lay doanh thu trong hom nay
-router.get('/cpanel/today', checkAccessTokenMiddleware, async function (req, res, next) {
-    try {
-        const orders = await order_controller.get_all_order();
-        let total = 0;
-        let date = new Date();
-        let dateStr = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
-        //console.log('dateStr: ', dateStr);
-        for (let j = 0; j < orders.length; j++) {
-            if (orders[j].datePayment == dateStr && orders[j].status == 'Delivered') {
-                total += orders[j].totalPrice;
-            }
-        }
-        //console.log('total: ', total);
-        res.status(200).json({ data: total });
-    } catch (error) {
-        console.log('error: ', error);
         res.status(500).send(error.message);
     }
 });
@@ -233,6 +213,27 @@ router.get('/cpanel/update-date-user', async function (req, res, next) {
     }
 });
 
+//Lay doanh thu trong hom nay
+router.get('/cpanel/today', checkAccessTokenMiddleware, async function (req, res, next) {
+    try {
+        const orders = await order_controller.get_all_order();
+        let total = 0;
+        let date = new Date();
+        let dateStr = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+        //console.log('dateStr: ', dateStr);
+        for (let j = 0; j < orders.length; j++) {
+            if (orders[j].datePayment == dateStr && orders[j].status == 'Delivered') {
+                total += orders[j].totalPrice;
+            }
+        }
+        //console.log('total: ', total);
+        res.status(200).json({ data: total.toFixed(2) });
+    } catch (error) {
+        console.log('error: ', error);
+        res.status(500).send(error.message);
+    }
+});
+
 //Tinh pham tram san pham hien tai so voi hom qua
 router.get('/cpanel/get-percent', checkAccessTokenMiddleware, async function (req, res, next) {
     try {
@@ -262,6 +263,8 @@ router.get('/cpanel/get-percent', checkAccessTokenMiddleware, async function (re
             percent = (total - totalYesterday) / totalYesterday * 100;
             percent = Math.round(percent * 100) / 100;
             percent.toFixed(2);
+        }else{
+            percent = 100;
         }
         //console.log('percent: ', percent);
         res.status(200).json({ data: percent });
@@ -301,6 +304,8 @@ router.get('/cpanel/get-percent-customer', checkAccessTokenMiddleware, async fun
             percent = (total - totalLastWeek) / totalLastWeek * 100;
             percent = Math.round(percent * 100) / 100;
             percent.toFixed(2);
+        }else{
+            percent = 100;
         }
         //console.log('percent: ', percent);
         res.status(200).json({ data: percent });
@@ -315,6 +320,8 @@ router.get('/cpanel/get-percent-order', checkAccessTokenMiddleware, async functi
         const orders = await order_controller.get_all_order();
         let total = 0;
         let totalLastMonth = 0;
+        let totalMoney = 0;
+        let totalMoneyLastMonth = 0;
         let date = new Date();
         let dateStr = date.getMonth() + 1 + '/' + date.getFullYear();
         let dateLastMonth = new Date();
@@ -329,25 +336,36 @@ router.get('/cpanel/get-percent-order', checkAccessTokenMiddleware, async functi
                 //console.log('datePayment: ', orders[j].datePayment);
                 if (orders[j].datePayment.includes(dateStr)) {
                     total += 1;
+                    totalMoney += orders[j].totalPrice;
                     //console.log('datePayment: ', orders[j]._id);
                 }
                 if (orders[j].datePayment.includes(dateStrLastMonth)) {
                     totalLastMonth += 1;
+                    totalMoneyLastMonth += orders[j].totalPrice;
                     //console.log('datePayment last: ', orders[j]._id);
                 }
             }
-
         }
         // console.log('total: ', total);
         // console.log('totalLastMonth: ', totalLastMonth);
         let percent = 0;
+        let percentMoney = 0;
         if (totalLastMonth != 0) {
             percent = (total - totalLastMonth) / totalLastMonth * 100;
             percent = Math.round(percent * 100) / 100;
             percent.toFixed(2);
+        }else{
+            percent = 100;
+        }
+        if(totalMoneyLastMonth != 0){
+            percentMoney = (totalMoney - totalMoneyLastMonth) / totalMoneyLastMonth * 100;
+            percentMoney = Math.round(percentMoney * 100) / 100;
+            percentMoney.toFixed(2);
+        }else{
+            percentMoney = 100;
         }
         //console.log('percent: ', percent);
-        res.status(200).json({ data: percent });
+        res.status(200).json({ data: percent, dataMoney: percentMoney, totalMoney: totalMoney.toFixed(2), totalMoneyLastMonth: totalMoneyLastMonth.toFixed(2) });
     } catch (error) {
         res.status(500).send(error.message);
     }
@@ -384,6 +402,8 @@ router.get('/cpanel/get-percent-order-sold', checkAccessTokenMiddleware, async f
             percent = (total - totalLastMonth) / totalLastMonth * 100;
             percent = Math.round(percent * 100) / 100;
             percent.toFixed(2);
+        }else{
+            percent = 100;
         }
         //console.log('percent: ', percent);
         res.status(200).json({ data: percent });
@@ -405,24 +425,24 @@ router.get('/categories', checkAccessTokenMiddleware, async function (req, res, 
             res.redirect('/');
             return;
         }
-        for (let i = 0; i < categories.length; i++) {
-            let quantity = 0;
-            const brands = await brand_controller.get_brand_by_id_category(categories[i]._id);
-            for (let j = 0; j < brands.length; j++) {
-                const products = await product_controller.onGetProductByIdBrand(brands[j]._id);
-                for (let k = 0; k < products.length; k++) {
-                    const subProducts = await sub_product_controller.onGetSubProductsByIdProduct(products[k]._id);
-                    for (let l = 0; l < subProducts.length; l++) {
-                        quantity += subProducts[l].quantity;
-                    }
-                }
-            }
-            if (quantity == 0) {
-                categories[i].isActive = false;
-            } else {
-                categories[i].isActive = true;
-            }
-        }
+        // for (let i = 0; i < categories.length; i++) {
+        //     let quantity = 0;
+        //     const brands = await brand_controller.get_brand_by_id_category(categories[i]._id);
+        //     for (let j = 0; j < brands.length; j++) {
+        //         const products = await product_controller.onGetProductByIdBrand(brands[j]._id);
+        //         for (let k = 0; k < products.length; k++) {
+        //             const subProducts = await sub_product_controller.onGetSubProductsByIdProduct(products[k]._id);
+        //             for (let l = 0; l < subProducts.length; l++) {
+        //                 quantity += subProducts[l].quantity;
+        //             }
+        //         }
+        //     }
+        //     if (quantity == 0) {
+        //         categories[i].isActive = false;
+        //     } else {
+        //         categories[i].isActive = true;
+        //     }
+        // }
         //console.log('categories: ', categories[4].isActive);
         res.render('categories', { title: 'iTech - Category', categories: categories });
     } catch (error) {
@@ -555,19 +575,19 @@ router.get('/brands', checkAccessTokenMiddleware, async function (req, res, next
         for (let i = 0; i < brands.length; i++) {
             const category = await category_controller.get_category_by_id(brands[i].idCategory);
             brands[i].nameCategory = category.name;
-            const products = await product_controller.onGetProductByIdBrand(brands[i]._id);
-            let quantity = 0;
-            for (let j = 0; j < products.length; j++) {
-                const subProducts = await sub_product_controller.onGetSubProductsByIdProduct(products[j]._id);
-                for (let k = 0; k < subProducts.length; k++) {
-                    quantity += subProducts[k].quantity;
-                }
-            }
-            if (quantity > 0) {
-                brands[i].isActive = true;
-            } else {
-                brands[i].isActive = false;
-            }
+            // const products = await product_controller.onGetProductByIdBrand(brands[i]._id);
+            // let quantity = 0;
+            // for (let j = 0; j < products.length; j++) {
+            //     const subProducts = await sub_product_controller.onGetSubProductsByIdProduct(products[j]._id);
+            //     for (let k = 0; k < subProducts.length; k++) {
+            //         quantity += subProducts[k].quantity;
+            //     }
+            // }
+            // if (quantity > 0) {
+            //     brands[i].isActive = true;
+            // } else {
+            //     brands[i].isActive = false;
+            // }
             list.push(brands[i]);
         }
         console.log('List brand: ', list);
@@ -703,21 +723,21 @@ router.get('/products', checkAccessTokenMiddleware, async function (req, res, ne
             return;
         }
 
-        for (let i = 0; i < products.length; i++) {
-            const subProducts = await sub_product_controller.onGetSubProductsByIdProduct(products[i]._id);
-            products[i].subProducts = subProducts;
-            products[i].price = subProducts[0].price;
-            products[i].sale = subProducts[0].sale;
-            let quantity = 0;
-            for (let j = 0; j < subProducts.length; j++) {
-                quantity += subProducts[j].quantity;
-            }
-            if (quantity > 0) {
-                products[i].isActive = true;
-            } else {
-                products[i].isActive = false;
-            }
-        }
+        // for (let i = 0; i < products.length; i++) {
+        //     const subProducts = await sub_product_controller.onGetSubProductsByIdProduct(products[i]._id);
+        //     products[i].subProducts = subProducts;
+        //     products[i].price = subProducts[0].price;
+        //     products[i].sale = subProducts[0].sale;
+        //     // let quantity = 0;
+        //     // for (let j = 0; j < subProducts.length; j++) {
+        //     //     quantity += subProducts[j].quantity;
+        //     // }
+        //     // if (quantity > 0) {
+        //     //     products[i].isActive = true;
+        //     // } else {
+        //     //     products[i].isActive = false;
+        //     // }
+        // }
 
         res.render('products', { title: 'iTechPro - Product', products: products });
     } catch (error) {
@@ -852,6 +872,8 @@ router.post('/products/product-insert', checkAccessTokenMiddleware, multer.singl
             .onAddSubProduct(price, description, quantity, color, sale, ram, rom, screen, cpu, "", "", "", product._id);
         await picture_controller.add_picture(image, subProduct._id, "", "");
         res.redirect('/products');
+        // const products = await product_controller.onGetProducts();
+        // res.render('sub-product-insert', { title: 'iTech - Thêm sản phẩm chi tiết', products });
     } catch (error) {
         console.log('Error insert product', error.message);
         res.redirect('/products');

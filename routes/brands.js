@@ -5,7 +5,7 @@ const brand_controller = require('../models/brand/brandController');
 const authen = require('../middleware/auth');
 
 //Lay brand theo idCategory
-router.get('/api/get-brand-by-id-category/:idCategory', [authen], async (req, res) => {
+router.get('/api/get-brand-by-id-category/:idCategory', async (req, res) => {
     try {
         const brands = await brand_controller.get_brand_by_id_category(req.params.idCategory);
         res.json({ error: false, responeTime: new Date(), statusCode: 200, data: brands });

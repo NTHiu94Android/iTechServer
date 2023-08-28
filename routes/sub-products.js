@@ -7,7 +7,7 @@ const authen = require('../middleware/auth');
 //----------------------Api-----------------------------------------
 
 //Lay tat ca subProducts
-router.get('/api/get-all-sub-products', [authen], async (req, res) => {
+router.get('/api/get-all-sub-products',  async (req, res) => {
     try {
         const subProducts = await sub_product_controller.onGetSubProducts();
         res.json({ error: false, responeTime: new Date(), statusCode: 200, data: subProducts });

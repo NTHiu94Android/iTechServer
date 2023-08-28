@@ -1,7 +1,4 @@
-
-//const domain = 'http://localhost:3000';
 const domain = 'https://itech-server-hiuntps.onrender.com';
-
 
 const fetchApi = async (url, option) => {
     const res = await fetch(url, option);
@@ -234,7 +231,7 @@ const onChangeFiles = () => {
 //     .then(res => {
 //         if (res.status === 'success') {
 //         alert('Xác nhận đơn hàng thành công');
-//         window.location.href = 'http://localhost:3000/orders';
+//         window.location.href = 'https://itech-server-hiuntps.onrender.com/orders';
 //         }
 //     })
 //     .catch(err => console.log(err));

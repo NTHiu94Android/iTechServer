@@ -5,7 +5,7 @@ const address_controller = require('../models/address/addressController');
 const authen = require('../middleware/auth');
 
 //Lay address theo idUser
-//http://localhost:3000/address/api/get-address-by-idUser/:idUser
+//https://itech-server-hiuntps.onrender.com/address/api/get-address-by-idUser/:idUser
 router.get('/api/get-address-by-idUser/:idUser', [authen], async function (req, res, next) {
     try {
         const { idUser } = req.params;
@@ -17,7 +17,7 @@ router.get('/api/get-address-by-idUser/:idUser', [authen], async function (req, 
 });
 
 //Them address
-//http://localhost:3000/address/api/add-address
+//https://itech-server-hiuntps.onrender.com/address/api/add-address
 router.post('/api/add-address', [authen], async function (req, res, next) {
     try {
         const { body, status, numberPhone, idUser } = req.body;
@@ -29,7 +29,7 @@ router.post('/api/add-address', [authen], async function (req, res, next) {
 });
 
 //Cap nhat address
-//http://localhost:3000/address/api/update-address
+//https://itech-server-hiuntps.onrender.com/address/api/update-address
 router.post('/api/update-address', [authen], async function (req, res, next) {
     try {
         const { _id, body, status, numberPhone, idUser } = req.body;
@@ -41,7 +41,7 @@ router.post('/api/update-address', [authen], async function (req, res, next) {
 });
 
 //Xoa address
-//http://localhost:3000/address/api/delete-address
+//https://itech-server-hiuntps.onrender.com/address/api/delete-address
 router.get('/api/delete-address/:_id', [authen], async function (req, res, next) {
     try {
         const { _id } = req.params;

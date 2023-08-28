@@ -26,7 +26,7 @@ router.get('/api/get-user-by-id/:id', [authen], async function (req, res, next) 
 });
 
 //Lay danh sach user
-//http://localhost:3000/users/api/get-all-user  
+//https://itech-server-hiuntps.onrender.com/users/api/get-all-user  
 router.get('/api/get-all-user', [authen], async function (req, res, next) {
   try {
     const users = await user_controller.get_users();
@@ -37,7 +37,7 @@ router.get('/api/get-all-user', [authen], async function (req, res, next) {
 });
 
 //Đăng nhập user
-//http://localhost:3000/users/api/login
+//https://itech-server-hiuntps.onrender.com/users/api/login
 router.post('/api/login', async function (req, res, next) {
   try {
     const { username, email, password, fcmToken } = req.body;
@@ -61,7 +61,7 @@ router.post('/api/login', async function (req, res, next) {
 });
 
 //Cap nhat fcmToken
-//http://localhost:3000/users/api/update-fcm-token
+//https://itech-server-hiuntps.onrender.com/users/api/update-fcm-token
 router.post('/api/update-fcm-token', [authen], async function (req, res, next) {
   try {
     const { id, fcmToken } = req.body;
@@ -73,7 +73,7 @@ router.post('/api/update-fcm-token', [authen], async function (req, res, next) {
 });
 
 //Đăng ký user tao luon cart va favorite cua user
-//http://localhost:3000/users/api/register
+//https://itech-server-hiuntps.onrender.com/users/api/register
 router.post('/api/register', async function (req, res, next) {
   try {
     const {username,  email, password, name, birthday, numberPhone, avatar } = req.body;
@@ -105,7 +105,7 @@ router.post('/api/register', async function (req, res, next) {
 });
 
 //Cap nhat thong tin
-//http://localhost:3000/users/api/update-profile
+//https://itech-server-hiuntps.onrender.com/users/api/update-profile
 router.post('/api/update-profile', [authen], async function (req, res, next) {
   try {
     const { id, email, name, birthday, numberPhone, avatar } = req.body;
@@ -117,7 +117,7 @@ router.post('/api/update-profile', [authen], async function (req, res, next) {
 });
 
 //Đổi mật khẩu
-//http://localhost:3000/users/api/change-password
+//https://itech-server-hiuntps.onrender.com/users/api/change-password
 router.post('/api/change-password', [authen], async function (req, res, next) {
   try {
     const { id, password, new_password, confirm_password } = req.body;
@@ -129,7 +129,7 @@ router.post('/api/change-password', [authen], async function (req, res, next) {
 });
 
 //forgot password
-//http://localhost:3000/users/api/forgot-password
+//https://itech-server-hiuntps.onrender.com/users/api/forgot-password
 router.post('/api/forgot-password', async function (req, res, next) {
   try {
     const { email } = req.body;
@@ -141,7 +141,7 @@ router.post('/api/forgot-password', async function (req, res, next) {
 });
 
 //reset password
-//http://localhost:3000/users/api/reset-password
+//https://itech-server-hiuntps.onrender.com/users/api/reset-password
 router.post('/api/reset-password', async function (req, res, next) {
   try {
     const { token, password, confirm_password} = req.body;
@@ -153,7 +153,7 @@ router.post('/api/reset-password', async function (req, res, next) {
 });
 
 //reset password cpanel
-//http://localhost:3000/users/cpanel/reset-password/:token
+//https://itech-server-hiuntps.onrender.com/users/cpanel/reset-password/:token
 router.get('/cpanel/reset-password/:token', async function (req, res, next) {
   try {
     const { token } = req.params;

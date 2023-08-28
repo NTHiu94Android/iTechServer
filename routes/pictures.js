@@ -9,8 +9,8 @@ const authen = require('../middleware/auth');
 const picture_controller = require('../models/picture/pictureController');
 
 //Lay tat ca picture
-//http://localhost:3000/picture/api/get-all-picture
-router.get('/api/get-all-picture', [authen], async (req, res) => {
+//https://itech-server-hiuntps.onrender.com/picture/api/get-all-picture
+router.get('/api/get-all-picture', async (req, res) => {
    try{
       const pictures = await picture_controller.get_all_picture();
       res.json({ error: false, responeTime: new Date(), statusCode: 200, data: pictures });
@@ -20,8 +20,8 @@ router.get('/api/get-all-picture', [authen], async (req, res) => {
 });
 
 //Lay picture theo id
-//http://localhost:3000/picture/api/get_picture_by_id/5f9f1b0b0b2b2c2b8c8c8c8c
-router.get('/api/get-picture-by-id/:id', [authen], async (req, res) => {
+//https://itech-server-hiuntps.onrender.com/picture/api/get_picture_by_id/5f9f1b0b0b2b2c2b8c8c8c8c
+router.get('/api/get-picture-by-id/:id', async (req, res) => {
    try{
       const id = req.params.id;
       const picture = await picture_controller.get_picture(id);
@@ -32,8 +32,8 @@ router.get('/api/get-picture-by-id/:id', [authen], async (req, res) => {
 });
 
 //Lay pictures theo idProduct
-//http://localhost:3000/picture//get-pictures-by-idProduct/5f9f1b0b0b2b2c2b8c8c8c8c
-router.get('/api/get-pictures-by-idSubProduct/:idSubProduct', [authen], async (req, res) => {
+//https://itech-server-hiuntps.onrender.com/picture//get-pictures-by-idProduct/5f9f1b0b0b2b2c2b8c8c8c8c
+router.get('/api/get-pictures-by-idSubProduct/:idSubProduct', async (req, res) => {
    try{
       const idSubProduct = req.params.idSubProduct;
       const pictures = await picture_controller.get_pictures_by_idProduct(idSubProduct);
@@ -44,8 +44,8 @@ router.get('/api/get-pictures-by-idSubProduct/:idSubProduct', [authen], async (r
 });
 
 //Lay pictures theo idReview
-//http://localhost:3000/picture//get-pictures-by-idReview/5f9f1b0b0b2b2c2b8c8c8c8c
-router.get('/api/get-pictures-by-idReview/:idReview', [authen], async (req, res) => {
+//https://itech-server-hiuntps.onrender.com/picture//get-pictures-by-idReview/5f9f1b0b0b2b2c2b8c8c8c8c
+router.get('/api/get-pictures-by-idReview/:idReview',async (req, res) => {
     try{
         const idReview = req.params.idReview;
         const pictures = await picture_controller.get_pictures_by_idReview(idReview);
@@ -56,7 +56,7 @@ router.get('/api/get-pictures-by-idReview/:idReview', [authen], async (req, res)
 });
 
 // Them picture
-//http://localhost:3000/picture/api/add-picture
+//https://itech-server-hiuntps.onrender.com/picture/api/add-picture
 router.post('/api/add-picture', async (req, res) => {
    try{
       const { url, idSubProduct, idReview } = req.body;
@@ -68,7 +68,7 @@ router.post('/api/add-picture', async (req, res) => {
 });
 
 //Upload picture
-//http://localhost:3000/pictures/api/upload-picture
+//https://itech-server-hiuntps.onrender.com/pictures/api/upload-picture
 router.post('/api/upload-picture', multer.single('picture'), async function (req, res) {
     try {
         const result = await cloudinary.uploader.upload(req.file.path);

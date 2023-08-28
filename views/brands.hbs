@@ -218,7 +218,11 @@
                         <button onclick="editBrand('{{this._id}}')" class="btn btn-xs mb-3 mt-3 btn-outline-secondary">
                           Sửa
                         </button>
-                        {{#if this.isActive}}
+                        <button onclick="deleteBrand('{{this._id}}')"
+                          class="btn btn-xs mb-3 mt-3 btn-outline-danger">
+                          Ngưng kinh doanh
+                        </button>
+                        {{!-- {{#if this.isActive}}
                         <button onclick="deleteBrand('{{this._id}}')"
                           class="btn btn-xs mb-3 mt-3 btn-outline-danger">
                           Ngưng kinh doanh
@@ -228,7 +232,7 @@
                           class="btn btn-xs mb-3 mt-3 btn-outline-secondary">
                           Đã ngưng kinh doanh
                         </button>
-                        {{/if}}
+                        {{/if}} --}}
                       </td>
                     </tr>
                     {{/each}}

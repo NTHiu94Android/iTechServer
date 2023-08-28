@@ -144,12 +144,12 @@
               <div class="row">
                 <div class="col-8">
                   <div class="numbers">
-                    <p class="text-sm mb-0 text-uppercase font-weight-bold">Tổng sản phẩm</p>
+                    <p class="text-sm mb-0 text-uppercase font-weight-bold">Doanh thu trong tháng</p>
                     <h5 class="font-weight-bolder" id="total-products">
                     </h5>
                     <p class="mb-0">
-                      <span class="text-success text-sm font-weight-bolder" id="percent">+55%</span>
-                      since yesterday
+                      <span class="text-sm font-weight-bolder" id="percent">+55%</span>
+                      since last month
                     </p>
                   </div>
                 </div>
@@ -173,7 +173,7 @@
 
                     </h5>
                     <p class="mb-0">
-                      <span class="text-success text-sm font-weight-bolder" id="percent-customer">+3%</span>
+                      <span class="text-sm font-weight-bolder" id="percent-customer">+3%</span>
                       since last week
                     </p>
                   </div>
@@ -197,7 +197,7 @@
                     <h5 class="font-weight-bolder" id="total-orders">
                     </h5>
                     <p class="mb-0">
-                      <span class="text-success text-sm font-weight-bolder" id="percent-order">+5%</span> than last month
+                      <span class="text-sm font-weight-bolder" id="percent-order">+5%</span> than last month
                     </p>
                   </div>
                 </div>
@@ -220,7 +220,7 @@
                     <h5 class="font-weight-bolder" id="total-sold">
                     </h5>
                     <p class="mb-0">
-                      <span class="text-danger text-sm font-weight-bolder" id="percent-order-sold">-2%</span>
+                      <span class="text-sm font-weight-bolder" id="percent-order-sold">-2%</span>
                       since last quarter
                     </p>
                   </div>
@@ -241,8 +241,8 @@
           <div class="card z-index-2 h-100">
             <div class="card-header pb-0 pt-3 bg-transparent">
               <h6 class="text-capitalize">Tổng doanh thu trong 7 ngày trở lại đây</h6>
-              <p class="text-sm mb-0">
-                <i class="fa fa-arrow-up text-success"></i>
+              {{!-- <p class="text-sm mb-0">
+                <i class="fa fa-arrow-up text-success"></i> --}}
               <h4 id="total-10" class="fw-bold">
                 </h3>
                 </p>
@@ -460,19 +460,6 @@
     var percentOrder = $('#percent-order');
     var percentOrderSold = $('#percent-order-sold');
 
-    function GetPercent() {
-      return fetch(`${domain}/cpanel/get-percent`)
-        .then(response => response.json())
-        .then(data => {
-          return data;
-        })
-    };
-    async function OnGetPercent() {
-      let percentArr = await GetPercent();
-      percent.text(percentArr.data + '%');
-    }
-    OnGetPercent();
-
     function GetPercentCustomer() {
       return fetch(`${domain}/cpanel/get-percent-customer`)
         .then(response => response.json())
@@ -482,7 +469,11 @@
     };
     async function OnGetPercentCustomer() {
       let percentCustomerArr = await GetPercentCustomer();
-      percentCustomer.text(percentCustomerArr.data + '%');
+      if(percentCustomerArr.data > 0) {
+        percentCustomer.text('+ ' + percentCustomerArr.data + '%');
+      }else{
+        percentCustomer.text(percentCustomerArr.data + '%');
+      }
     }
     OnGetPercentCustomer();
 
@@ -495,7 +486,25 @@
     };
     async function OnGetPercentOrder() {
       let percentOrderArr = await GetPercentOrder();
-      percentOrder.text(percentOrderArr.data + '%');
+      if(percentOrderArr.dataMoney > 0) {
+        percentOrder.text('+ ' + percentOrderArr.data + '%');
+      }else{
+        percentOrder.text(percentOrderArr.data + '%');
+      }
+      if(percentOrderArr.dataMoney > 0) {
+        percent.text('+ ' + percentOrderArr.dataMoney + '%');
+      }else{
+        percent.text(percentOrderArr.dataMoney + '%');
+      }
+      if(percentOrderArr.totalMoney > 0) {
+        products.text(convertVND(percentOrderArr.totalMoney + '$'));
+      }else{
+        products.text(percentOrderArr.totalMoney + '$');
+      }
+      //percentOrder.text(percentOrderArr.data + '%');
+      //percent.text(percentOrderArr.dataMoney + '%');
+      //products.text(percentOrderArr.totalMoney + '$');
+      //alert(percentOrderArr.totalMoney + '-----' + percentOrderArr.dataMoney);
     }
     OnGetPercentOrder();
 
@@ -508,7 +517,11 @@
     };
     async function OnGetPercentOrderSold() {
       let percentOrderSoldArr = await GetPercentOrderSold();
-      percentOrderSold.text(percentOrderSoldArr.data + '%');
+      if(percentOrderSoldArr.data > 0) {
+        percentOrderSold.text('+ ' + percentOrderSoldArr.data + '%');
+      }else{
+        percentOrderSold.text(percentOrderSoldArr.data + '%');
+      }
     }
     OnGetPercentOrderSold();
 
