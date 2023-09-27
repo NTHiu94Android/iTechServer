@@ -17,10 +17,38 @@
   <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
   <!-- CSS Files -->
   <link id="pagestyle" href="../assets/css/argon-dashboard.css?v=2.0.4" rel="stylesheet" />
+
+
+
+  <meta name="google-signin-client_id" content="275391777759-ai2ii7gib7h6uqc5grt7k8omcer1j2fo.apps.googleusercontent.com">
+  <script src="https://www.gstatic.com/firebasejs/ui/6.0.1/firebase-ui-auth.js"></script>
+  <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/6.0.1/firebase-ui-auth.css" />
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
+
+
 </head>
 
 <body class="g-sidenav-show   bg-gray-100">
   <div class="min-height-300 bg-primary position-absolute w-100"></div>
+   <div class="g-signin2" data-onsuccess="onSignIn">Dang nhap</div>
+   <script>
+      function onSignIn(googleUser) {
+          console.log('onSignIn');
+          const profile = googleUser.getBasicProfile();
+          alert('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+          console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+          console.log('Name: ' + profile.getName());
+          console.log('Image URL: ' + profile.getImageUrl());
+          console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+      }
+      function signOut() {
+          alert('signOut');
+          var auth2 = gapi.auth2.getAuthInstance();
+          auth2.signOut().then(function () {
+              console.log('User signed out.');
+          });
+      }
+  </script>
   <aside
     class="sidenav bg-white navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-4 "
     id="sidenav-main">
