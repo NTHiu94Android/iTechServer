@@ -28,6 +28,7 @@
   <meta name="referrer" content="strict-origin">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="referrer" content="unsafe-url">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jsonwebtoken/9.0.2/decode.min.js" integrity="sha512-GpSRYoyqsNcWKPthJkC3EuuxAfzKu8eJgWU58GYH6pvRe1IaRjIJmY6a7eTLIfux4vsy0tkuQ/WgAxtR66siUw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 
 </head>
@@ -68,6 +69,13 @@
       console.log('Family Name: ' + responsePayload.family_name);
       console.log("Image URL: " + responsePayload.picture);
       console.log("Email: " + responsePayload.email);
+    }
+    function decodeJwtResponse(response) {
+      // Giải mã JWT
+      const decoded = jwt_decode(response.credential);
+
+      // Trả về thông tin giải mã
+      return decoded;
     }
   </script>
 
