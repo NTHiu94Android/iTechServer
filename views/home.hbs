@@ -42,6 +42,7 @@
       data-client_id="275391777759-ai2ii7gib7h6uqc5grt7k8omcer1j2fo.apps.googleusercontent.com"
       data-context="signin"
       data-ux_mode="popup"
+      data-callback="handleCredentialResponse"
       data-login_uri="http://localhost:8020/hoi-dap"
       data-auto_prompt="false">
   </div>
@@ -54,6 +55,21 @@
       data-size="large"
       data-logo_alignment="left">
   </div>
+
+  <script>
+    function handleCredentialResponse(response) {
+      // decodeJwtResponse() is a custom function defined by you
+      // to decode the credential response.
+      const responsePayload = decodeJwtResponse(response.credential);
+
+      console.log("ID: " + responsePayload.sub);
+      console.log('Full Name: ' + responsePayload.name);
+      console.log('Given Name: ' + responsePayload.given_name);
+      console.log('Family Name: ' + responsePayload.family_name);
+      console.log("Image URL: " + responsePayload.picture);
+      console.log("Email: " + responsePayload.email);
+    }
+  </script>
 
 {{!-- ----------------------------------------------- --}}
 
